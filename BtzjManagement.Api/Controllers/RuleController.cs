@@ -22,7 +22,7 @@ namespace BtzjManagement.Api.Controllers
         [HttpGet("MenuTreeList")]
         public List<v_SysMenu> MenuTreeList(bool isFilterDisabledMenu = false)
         {
-            var list = _ruleService.MenuTreeList(null, isFilterDisabledMenu);
+            var list = _ruleService.MenuTreeList(0 , isFilterDisabledMenu);
             return list;
         }
     }

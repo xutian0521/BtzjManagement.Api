@@ -6,6 +6,8 @@ using BtzjManagement.Api.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Oracle.ManagedDataAccess.Client;
+using System.Data;
 
 namespace BtzjManagement.Api.Services
 {
@@ -22,16 +24,19 @@ namespace BtzjManagement.Api.Services
         /// <param name="pId">菜单id, 取根目录下所有树菜单 传0</param>
         /// <param name="isFilterDisabledMenu">是否过滤掉禁用菜单</param>
         /// <returns></returns>
-        public List<v_SysMenu> MenuTreeList(Guid? pId, bool isFilterDisabledMenu)
+        public List<v_SysMenu> MenuTreeList(int pId, bool isFilterDisabledMenu)
         {
-            string sql = "SELECT *  sys_menu ";
+            string sql = "SELECT * from sys_menu ";
             string sql_orderBy = " ORDER BY menu_order ";
-            string sql_where = "WHERE parent_id=@parent_id ";
+            string sql_where = "WHERE parent_id=:parent_id ";
             if (isFilterDisabledMenu)
             {
                 sql_where += " AND IsEnable= 1 ";
             }
-            var list = OracleConnector.Conn().Query<D_SysMenu>(sql + sql_where + sql_orderBy, new { parent_id = pId }).ToList();
+            DynamicParameters parameters = new DynamicParameters();
+
+            string sqlAll = sql + sql_where + sql_orderBy;
+            var list = OracleConnector.Conn().Query<D_SysMenu>(sqlAll, new { parent_id= pId }).ToList();
             var menuList = new List<v_SysMenu>();
 
             if (list.Count() <= 0)

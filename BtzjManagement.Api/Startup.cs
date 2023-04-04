@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BtzjManagement.Api.Services;
 
 namespace BtzjManagement.Api
 {
@@ -47,11 +48,13 @@ namespace BtzjManagement.Api
                         .AllowCredentials();
             }));
             OracleConnector._connectionString = Configuration.GetConnectionString("conn");
+            services.AddSingleton<RuleService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors("AppCors");
             app.UseAESEncryption();
             app.UseRouting();
 

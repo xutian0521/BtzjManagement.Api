@@ -1,6 +1,7 @@
-﻿using Dapper.Contrib.Extensions;
+﻿
 using System;
-
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BtzjManagement.Api.Models.DBModel
 {
@@ -8,9 +9,9 @@ namespace BtzjManagement.Api.Models.DBModel
     public class D_SysMenu
     {
         [Key]
-        public Guid menu_id { get; set; }
+        public int menu_id { get; set; }
         public string menu_name { get; set; }
-        public Guid? parent_id { get; set; }
+        public int parent_id { get; set; }
         public string menu_url { get; set; }
         public string menu_icon { get; set; }
         public int menu_order { get; set; }
