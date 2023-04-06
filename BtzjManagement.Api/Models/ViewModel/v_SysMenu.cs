@@ -5,13 +5,15 @@ namespace BtzjManagement.Api.Models.ViewModel
 {
     public class v_SysMenu
     {
-        public int menu_id { get; set; }
-        public string menu_name { get; set; }
-        public int parent_id { get; set; }
-        public string menu_url { get; set; }
-        public string menu_icon { get; set; }
-        public int menu_order { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Alias { get; set; }
+        public int PId { get; set; }
+        public string Path { get; set; }
+        public string Icon { get; set; }
+        public int SortId { get; set; }
         public int IsEnable { get; set; }
+        public string Remark { get; set; }
         public List<v_SysMenu> Subs { get; set; } = new List<v_SysMenu>();
     }
 }

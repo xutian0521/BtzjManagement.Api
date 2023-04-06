@@ -27,8 +27,8 @@ namespace BtzjManagement.Api.Services
         public List<v_SysMenu> MenuTreeList(int pId, bool isFilterDisabledMenu)
         {
             string sql = "SELECT * from sys_menu ";
-            string sql_orderBy = " ORDER BY menu_order ";
-            string sql_where = "WHERE parent_id=:parent_id ";
+            string sql_orderBy = " ORDER BY sortid ";
+            string sql_where = "WHERE pid=:pid ";
             if (isFilterDisabledMenu)
             {
                 sql_where += " AND IsEnable= 1 ";
@@ -36,7 +36,7 @@ namespace BtzjManagement.Api.Services
             DynamicParameters parameters = new DynamicParameters();
 
             string sqlAll = sql + sql_where + sql_orderBy;
-            var list = OracleConnector.Conn().Query<D_SysMenu>(sqlAll, new { parent_id= pId }).ToList();
+            var list = OracleConnector.Conn().Query<D_SysMenu>(sqlAll, new { pid = pId }).ToList();
             var menuList = new List<v_SysMenu>();
 
             if (list.Count() <= 0)
@@ -49,14 +49,16 @@ namespace BtzjManagement.Api.Services
                 {
                     var menu = new v_SysMenu()
                     {
-                        menu_id = item.menu_id,
-                        menu_name = item.menu_name,
-                        menu_icon = item.menu_icon,
+                        Id = item.Id,
+                        Name = item.Name,
+                        Icon = item.Icon,
                         IsEnable = item.IsEnable,
-                        parent_id = item.parent_id,
-                        menu_url = item.menu_url,
-                        menu_order = item.menu_order,
-                        Subs = MenuTreeList(item.menu_id, isFilterDisabledMenu)
+                        PId = item.PId,
+                        Path = item.Path,
+                        SortId = item.SortId,
+                        Alias = item.Alias,
+                        Remark = item.Remark,
+                        Subs = MenuTreeList(item.Id, isFilterDisabledMenu)
                     };
                     menuList.Add(menu);
                 });
