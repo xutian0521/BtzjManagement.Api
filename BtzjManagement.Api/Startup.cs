@@ -48,7 +48,14 @@ namespace BtzjManagement.Api
                         .AllowCredentials();
             }));
             OracleConnector._connectionString = Configuration.GetConnectionString("conn");
+            try
+            {
+                System.Text.Encoding.RegisterProvider(System.Text.CodePagesEncodingProvider.Instance);
+                SybaseConnector.connectionString = Configuration.GetConnectionString("sybseConn");
+            }
+            catch { }
             services.AddSingleton<RuleService>();
+            services.AddSingleton<SybaseService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
