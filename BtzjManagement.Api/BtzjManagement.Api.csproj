@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 	<ItemGroup>
+		<PackageReference Include="Dapper.Contrib" Version="2.0.78" />
 		<PackageReference Include="AdoNetCore.AseClient" Version="0.19.2" />
 		<PackageReference Include="JWT" Version="4.0.0" />
 		<PackageReference Include="Dapper" Version="2.0.78" />

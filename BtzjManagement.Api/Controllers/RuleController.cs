@@ -20,10 +20,10 @@ namespace BtzjManagement.Api.Controllers
         /// <param name="isFilterDisabledMenu">是否过滤掉禁用菜单</param>
         /// <returns></returns>
         [HttpGet("MenuTreeList")]
-        public List<v_SysMenu> MenuTreeList(bool isFilterDisabledMenu = false)
+        public v_ApiResult MenuTreeList(bool isFilterDisabledMenu = false)
         {
             var list = _ruleService.MenuTreeList(0 , isFilterDisabledMenu);
-            return list;
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
     }
 }
