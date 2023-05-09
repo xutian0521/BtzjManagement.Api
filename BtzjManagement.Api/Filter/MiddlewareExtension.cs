@@ -25,6 +25,10 @@ namespace BtzjManagement.Api.Filter
                     {
 
                         string requestQueryRaw = context.Request.QueryString.ToString();
+                        if (string.IsNullOrEmpty(requestQueryRaw))
+                        {
+                            context.Items.Add("GetRequestIsEmpty", "1");
+                        }
                         StringBuilder sb = new StringBuilder();
                         foreach (var item in context.Request.Query)
                         {
@@ -50,7 +54,7 @@ namespace BtzjManagement.Api.Filter
                         if (decryptSuccess)
                         {
                             context.Items.Add("RequestQueryRaw", requestQueryRaw);
-                            context.Items.Add("AES", "1");
+                            context.Items.Add("AESDecryptionSuccessful", "1");
                         }
 
                     }
@@ -65,7 +69,10 @@ namespace BtzjManagement.Api.Filter
                         }
                         // 这里读取过body  Position是读取过几次  而此操作优于控制器先行 控制器只会读取Position为零次的
                         context.Request.Body.Position = 0;
-
+                        if (string.IsNullOrEmpty(requestBodyRaw))
+                        {
+                            context.Items.Add("PostRequestIsEmpty", "1");
+                        }
                         string dec = "";
                         dec = AESHelper.DecryptByAES(requestBodyRaw);
                         decryptSuccess = true;
@@ -80,7 +87,7 @@ namespace BtzjManagement.Api.Filter
                         if (decryptSuccess)
                         {
                             context.Items.Add("RequestBodyRaw", requestBodyRaw);
-                            context.Items.Add("AES", "1");
+                            context.Items.Add("AESDecryptionSuccessful", "1");
                         }
 
                     }
@@ -106,7 +113,7 @@ namespace BtzjManagement.Api.Filter
                 //var doubleStr = str + str + "hello";
                 StringBuilder Enc = new StringBuilder();
                 //string Enc = "";
-                if (!context.Items.TryGetValue("MarkNotEncrypted", out object _vlaue))
+                if (!context.Items.TryGetValue("ResponseNotEncrypted", out object _vlaue))
                 {
                     Enc.Append(context.Response.StatusCode == StatusCodes.Status200OK ? AESHelper.EncryptByAES(str) : str);
 

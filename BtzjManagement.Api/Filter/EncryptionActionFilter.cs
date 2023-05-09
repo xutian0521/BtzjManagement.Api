@@ -8,11 +8,16 @@ namespace BtzjManagement.Api.Filter
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
+            //空参数
+            if (context.HttpContext.Items.TryGetValue("GetRequestIsEmpty", out object _vlaue1) || context.HttpContext.Items.TryGetValue("PostRequestIsEmpty", out object _vlaue2))
+            {
+                return;
+            }
             //需要加密
             if (context.ActionDescriptor.EndpointMetadata.Any(x => x.GetType() == typeof(EncryptionAttribute)))
             {
                 //中间件标记AES
-                if (context.HttpContext.Items.TryGetValue("AES", out object _vlaue))
+                if (context.HttpContext.Items.TryGetValue("AESDecryptionSuccessful", out object _vlaue))
                 {
                     return;
                 }
@@ -20,7 +25,7 @@ namespace BtzjManagement.Api.Filter
             else //不需要加密
             {
                 //中间件标记AES
-                if (context.HttpContext.Items.TryGetValue("AES", out object _vlaue))
+                if (context.HttpContext.Items.TryGetValue("AESDecryptionSuccessful", out object _vlaue))
                 {
                     context.HttpContext.Response.StatusCode = 200;
                     context.Result = new ContentResult()
@@ -37,21 +42,30 @@ namespace BtzjManagement.Api.Filter
             //需要加密
             if (context.ActionDescriptor.EndpointMetadata.Any(x => x.GetType() == typeof(EncryptionAttribute)))
             {
-                //中间件没有解密成功且没有标记AES
-                if (!context.HttpContext.Items.TryGetValue("AES", out object _vlaue))
+                //空参数
+                if (context.HttpContext.Items.TryGetValue("GetRequestIsEmpty", out object _vlaue1) || context.HttpContext.Items.TryGetValue("PostRequestIsEmpty", out object _vlaue2))
                 {
-                    context.HttpContext.Items.Add("MarkNotEncrypted", "1");
-                    context.HttpContext.Response.StatusCode = 200;
-                    context.Result = new ContentResult()
-                    {
-                        Content = "非法请求,参数需要加密"
-                    };
                     return;
                 }
+                else //有参数
+                {
+                    //中间件没有解密成功且没有标记AES
+                    if (!context.HttpContext.Items.TryGetValue("AESDecryptionSuccessful", out object _vlaue))
+                    {
+                        context.HttpContext.Items.Add("ResponseNotEncrypted", "1");
+                        context.HttpContext.Response.StatusCode = 200;
+                        context.Result = new ContentResult()
+                        {
+                            Content = "非法请求,参数需要加密"
+                        };
+                        return;
+                    }
+                }
+
             }
             else //不需要加密
             {
-                context.HttpContext.Items.Add("MarkNotEncrypted", "1");
+                context.HttpContext.Items.Add("ResponseNotEncrypted", "1");
             }
         }
     }
