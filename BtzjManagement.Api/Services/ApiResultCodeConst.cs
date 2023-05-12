@@ -6,5 +6,6 @@
     public class ApiResultCodeConst
     {
         public const int SUCCESS = 1;
+        public const int ERROR = 500;
     }
 }
