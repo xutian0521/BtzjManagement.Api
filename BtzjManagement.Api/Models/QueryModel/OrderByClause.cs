@@ -1,7 +1,7 @@
 ﻿
 using BtzjManagement.Api.Enum;
 
-namespace BtzjManagement.Api.Models
+namespace BtzjManagement.Api.Models.QueryModel
 {
     /// <summary>
     /// 排序实体

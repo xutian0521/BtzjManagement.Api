@@ -36,5 +36,25 @@ namespace BtzjManagement.Api.Utils
             }
             return str;
         }
+
+        /// <summary>
+        /// 单位账号左边补零
+        /// </summary>
+        /// <param name="dwzh">单位账号</param>
+        /// <param name="lenth">填充后达到几位数长度的字符串</param>
+        /// <returns></returns>
+        public static string PaddingDwzh(int dwzh,int lenth)
+        {
+            //int billNo = 10;
+            string billNo_ = dwzh.ToString();
+            //指定billNo为6位，不足位数时左边补零
+            billNo_ = billNo_.PadLeft(lenth, '0');
+            return billNo_;
+        }
+
+        public static DateTime? StringToDate(string dtStr)
+        {
+            return DateTime.TryParse(dtStr, out DateTime tt) ? Convert.ToDateTime(dtStr) : null;
+        }
     }
 }

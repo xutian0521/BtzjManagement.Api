@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using BtzjManagement.Api.Models.QueryModel;
+using System.Collections.Generic;
 
-namespace BtzjManagement.Api.Models
+namespace BtzjManagement.Api.Model.QueryModel
 {
     /// <summary>
     /// 查询集合

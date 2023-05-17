@@ -30,6 +30,7 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
+                _transferService.SysEnumInitStructure();
                 _transferService.CorporationBasicInfoInitStructure();
                 _transferService.CorporationAcctInfoInitStructure();
             }
@@ -50,6 +51,7 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
+                _transferService.SysEnumInitData();
                 _transferService.CorporationBasicInfoInitData();
                 _transferService.CorporationAcctInfoInitData();
             }

@@ -12,6 +12,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BtzjManagement.Api.Services;
+using Newtonsoft.Json.Serialization;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace BtzjManagement.Api
 {
@@ -32,12 +35,20 @@ namespace BtzjManagement.Api
             {
                 option.Filters.Add<UserAuthorizeFilter>();
                 option.Filters.Add<EncryptionActionFilter>();
-            })
-            .AddJsonOptions(options =>
-                //格式化日期时间格式
-                options.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter()));
-            ;
-            services.AddControllers();
+            });
+            services.AddControllers().AddNewtonsoftJson(options =>
+            {
+                //修改属性名称的序列化方式，首字母小写
+                //options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+                //修改时间的序列化方式
+                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" });
+                //忽略循环引用
+                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //解决命名不一致问题,不使用驼峰样式的key
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                //我们将 NullValueHandling 设置为 Ignore，表示在序列化时忽略 null 值。如果您希望将 null 值序列化为 JSON 字符串 "null"，则可以将其设置为 Include。
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
+            }); ;
 
             services.AddCors(options => options.AddPolicy("AppCors", policy =>
             {
@@ -58,6 +69,9 @@ namespace BtzjManagement.Api
             services.AddSingleton<RuleService>();
             services.AddSingleton<SybaseService>();
             services.AddSingleton<DataTransferService>();
+            services.AddSingleton<CorporationService>();
+            services.AddSingleton<SysEnumService>();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

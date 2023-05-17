@@ -34,7 +34,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 下次应缴日期
         /// </summary>
-        public DateTime NEXTPAYMTH { get; set; }
+        public DateTime? NEXTPAYMTH { get; set; }
         /// <summary>
         /// 单位缴存比例
         /// </summary>

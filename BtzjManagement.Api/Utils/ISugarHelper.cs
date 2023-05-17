@@ -1,4 +1,4 @@
-﻿using BtzjManagement.Api.Models;
+﻿using BtzjManagement.Api.Model.QueryModel;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -23,7 +23,7 @@ namespace BtzjManagement.Api.Utils
         /// </summary> 
         /// <param name="serviceAction">代码段</param> 
         /// <param name="level">事务级别</param>
-        void InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted);
+        bool InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted);
         #endregion
 
         #region 数据库管理

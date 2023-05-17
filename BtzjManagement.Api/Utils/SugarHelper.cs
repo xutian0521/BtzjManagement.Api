@@ -1,5 +1,6 @@
 ﻿using BtzjManagement.Api.Enum;
-using BtzjManagement.Api.Models;
+using BtzjManagement.Api.Model.QueryModel;
+using BtzjManagement.Api.Models.QueryModel;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -60,23 +61,24 @@ namespace BtzjManagement.Api.Utils
 
         /// <summary>
         /// 事务操作
-        /// 注意:代码段里面如果调用本身类其它方法或其它类方法必须带着var db = SugerHandler.Instance()这个db走，不带着走事务回滚会不成功
+        /// 注意:action 中使用的 dbcontext 必须和调动InvokeTransactionScope的 dbcontext 是同一个，否则事务不起作用
         /// </summary> 
         /// <param name="serviceAction">代码段</param> 
         /// <param name="level">事务级别</param>
-        public void InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted)
+        public bool InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted)
         {
+            var result = false;
             lock (_tranLock)
             {
                 try
                 {
-
                     if (DbContext.Ado.Transaction == null)
                     {
                         DbContext.Ado.BeginTran(level);
                     }
                     serviceAction();
                     DbContext.Ado.CommitTran();
+                    result = true;
                 }
                 catch (Exception ex)
                 {
@@ -89,7 +91,7 @@ namespace BtzjManagement.Api.Utils
                     DbContext.Dispose();
                 }
             }
-
+            return result;
         }
         #endregion
 
@@ -1259,7 +1261,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1305,7 +1307,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1352,7 +1354,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1399,7 +1401,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1447,7 +1449,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1495,7 +1497,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1545,7 +1547,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1596,7 +1598,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                up = up.Where(conds);
+                up = up.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1693,7 +1695,7 @@ namespace BtzjManagement.Api.Utils
                 if (query.Conditions != null)
                 {
                     var conds = ParseCondition(query.Conditions);
-                    up = up.Where(conds);
+                    up = up.Where(x => true).Where(conds);
                 }
 
                 if (query.OrderBys != null)
@@ -1732,7 +1734,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                listDatas = listDatas.Where(conds);
+                listDatas = listDatas.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1829,7 +1831,7 @@ namespace BtzjManagement.Api.Utils
             if (query.Conditions != null)
             {
                 var conds = ParseCondition(query.Conditions);
-                listDatas = listDatas.Where(conds);
+                listDatas = listDatas.Where(x => true).Where(conds);
             }
 
             if (query.OrderBys != null)
@@ -1869,7 +1871,7 @@ namespace BtzjManagement.Api.Utils
                 if (query.Conditions != null)
                 {
                     var conds = ParseCondition(query.Conditions);
-                    up = up.Where(conds);
+                    up = up.Where(x => true).Where(conds);
                 }
 
                 if (query.OrderBys != null)
@@ -2195,12 +2197,12 @@ namespace BtzjManagement.Api.Utils
         private List<IConditionalModel> ParseCondition(List<QueryCondition> contitons)
         {
             var conds = new List<IConditionalModel>();
-            contitons.Insert(0, new QueryCondition
-            {
-                Operator = QueryOperator.Equal,
-                Key = "1",
-                Value = "1"
-            });
+            //contitons.Insert(0, new QueryCondition
+            //{
+            //    Operator = QueryOperator.Equal,
+            //    Key = "1",
+            //    Value = "1"
+            //});
 
             #region Or条件组装  
             var orConditional = new ConditionalCollections { ConditionalList = new List<KeyValuePair<WhereType, ConditionalModel>>() };
