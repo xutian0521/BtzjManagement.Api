@@ -18,16 +18,19 @@ namespace BtzjManagement.Api.Controllers
     [Route("api/Corporation")]
     [ApiController]
     [Encryption]
-    public class CorporationController : ControllerBase
+    public class CorporationController : BaseController
     {
-        IConfiguration _configuration;
         CorporationService _corporationService;
-        public CorporationController(IConfiguration configuration,CorporationService corporationService)
+        public CorporationController(IConfiguration configuration, CorporationService corporationService) : base(configuration)
         {
-            _configuration = configuration;
             _corporationService = corporationService;
         }
 
+        /// <summary>
+        /// 按月汇缴单位开户
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
         [AcceptVerbs("POST")]
         [Route("CreateCorporation")]
         public v_ApiResult CreateCorporation(P_In_Corporation_Add pmodel)
@@ -37,79 +40,37 @@ namespace BtzjManagement.Api.Controllers
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var sugarHelper = SugarHelper.Instance();
-
-                var newDwzhInt = _corporationService.NextDwzhInt();
-                var dwzh = Common.PaddingDwzh(newDwzhInt, 4);
-                var custId = Common.PaddingDwzh(newDwzhInt, 8);
-                var city_cent = _configuration.GetValue<string>("CityCent");
-
-                if (string.IsNullOrEmpty(pmodel.DWMC))
-                {
-                    result.Message = "单位名称不能为空";
-                    return result;
-                }
-
-                if(sugarHelper.IsExist<D_CORPORATION_BASICINFO>(x=>x.DWMC == pmodel.DWMC.Trim()))
-                {
-                    result.Message = "当前单位名称已存在";
-                    return result;
-                }
-
-                //单位基本信息
-                D_CORPORATION_BASICINFO basicModel = new D_CORPORATION_BASICINFO
-                {
-                    BASICACCTBRCH = pmodel.BASICACCTBRCH,
-                    BASICACCTMC = pmodel.BASICACCTMC,
-                    BASICACCTNO = pmodel.BASICACCTNO,
-                    CUSTID = custId,
-                    DWDZ = pmodel.DWDZ,
-                    DWFRDBXM = pmodel.DWFRDBXM,
-                    DWFRDBZJHM = pmodel.DWFRDBZJHM,
-                    DWFRDBZJLX = pmodel.DWFRDBZJLX,
-                    DWFXR = pmodel.DWFXR,
-                    DWMC = pmodel.DWMC,
-                    DWSLRQ = pmodel.DWSLRQ /*Common.StringToDate(pmodel.DWSLRQ)*/,
-                    DWXZ = pmodel.DWXZ,
-                    DWYB = pmodel.DWYB,
-                    JBRGDDHHM = pmodel.JBRGDDHHM,
-                    JBRSJHM = pmodel.JBRSJHM,
-                    JBRXM = pmodel.JBRXM,
-                    JBRZJHM = pmodel.JBRZJHM,
-                    JBRZJLX = pmodel.JBRZJLX,
-                    USCCID = pmodel.USCCID,
-                    CITY_CENTNO = city_cent
-                };
-
-                //单位账户信息
-                D_CORPORATION_ACCTINFO acctModel = new D_CORPORATION_ACCTINFO
-                {
-                    CITY_CENTNO = city_cent,
-                    CALC_METHOD = pmodel.CALC_METHOD,
-                    CUSTID = custId,
-                    DWFCRS = 0,
-                    DWJCBL = pmodel.DWJCBL,
-                    DWJCRS = 0,
-                    DWZGRS = 0,
-                    DWZH = dwzh,
-                    FROMFLAG = pmodel.FROMFLAG,
-                    FACTINCOME = 0,
-                    MONTHPAYTOTALAMT = 0,
-                    NEXTPAYMTH = pmodel.NEXTPAYMTH,
-                    REGHANDBAL = 0,
-                    STYHZH = pmodel.STYHZH,
-                    STYHDM = pmodel.STYHDM,
-                    STYHMC = pmodel.STYHMC,
-                    DWZHYE = 0,
-                };
-                var rInsert = sugarHelper.InvokeTransactionScope(() => { sugarHelper.Add(basicModel); sugarHelper.Add(acctModel); });
-
-                result.Code = rInsert ? ApiResultCodeConst.SUCCESS : ApiResultCodeConst.ERROR;
+                return _corporationService.CreateCorporation(pmodel, CityCent());
             }
             catch (Exception ex)
             {
                 result.Message = ex.Message;
             }
+            return result;
+        }
+
+        /// <summary>
+        /// 单位信息筛选下拉列表
+        /// </summary>
+        /// <param name="dwzh">单位账号</param>
+        /// <param name="dwmc">单位名称</param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("CorporationSelectList")]
+        public v_ApiResult CorporationSelectList(string dwzh, string dwmc)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var list = _corporationService.CorporationSelectList(dwzh, dwmc);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Content = list;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
             return result;
         }
     }

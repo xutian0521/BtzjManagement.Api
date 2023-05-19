@@ -52,9 +52,14 @@ namespace BtzjManagement.Api.Utils
             return billNo_;
         }
 
-        public static DateTime? StringToDate(string dtStr)
+       /// <summary>
+       /// 获取全局唯一业务流水号
+       /// </summary>
+       /// <returns></returns>
+        public static string UniqueYwlsh()
         {
-            return DateTime.TryParse(dtStr, out DateTime tt) ? Convert.ToDateTime(dtStr) : null;
+            var snowId = SqlSugar.SnowFlakeSingle.Instance.NextId();//获取雪花id
+            return $"{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{snowId}";
         }
     }
 }

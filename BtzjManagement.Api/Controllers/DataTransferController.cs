@@ -2,6 +2,7 @@
 using BtzjManagement.Api.Models.ViewModel;
 using BtzjManagement.Api.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,10 @@ namespace BtzjManagement.Api.Controllers
     [ApiController]
     [Encryption]
     [Route("api/DataTransfer")]
-    public class DataTransferController : Controller
+    public class DataTransferController : BaseController
     {
         DataTransferService _transferService;
-        public DataTransferController(DataTransferService transferService)
+        public DataTransferController(IConfiguration configuration, DataTransferService transferService) : base(configuration)
         {
             _transferService = transferService;
         }
@@ -30,9 +31,11 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-                _transferService.SysEnumInitStructure();
-                _transferService.CorporationBasicInfoInitStructure();
-                _transferService.CorporationAcctInfoInitStructure();
+                //_transferService.SysEnumInitStructure();
+                //_transferService.CorporationBasicInfoInitStructure();
+                //_transferService.CorporationAcctInfoInitStructure();
+                _transferService.GrkhInitStructure();
+                _transferService.Grkh_ItemInitStructure();
             }
             catch (Exception ex)
             {
@@ -51,9 +54,9 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-                _transferService.SysEnumInitData();
-                _transferService.CorporationBasicInfoInitData();
-                _transferService.CorporationAcctInfoInitData();
+                _transferService.SysEnumInitData(CityCent());
+                _transferService.CorporationBasicInfoInitData(CityCent());
+                _transferService.CorporationAcctInfoInitData(CityCent());
             }
             catch (Exception ex)
             {

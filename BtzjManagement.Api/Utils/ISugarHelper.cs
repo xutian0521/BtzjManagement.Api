@@ -23,7 +23,7 @@ namespace BtzjManagement.Api.Utils
         /// </summary> 
         /// <param name="serviceAction">代码段</param> 
         /// <param name="level">事务级别</param>
-        bool InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted);
+        void InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted);
         #endregion
 
         #region 数据库管理

@@ -41,7 +41,7 @@ namespace BtzjManagement.Api
                 //修改属性名称的序列化方式，首字母小写
                 //options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
                 //修改时间的序列化方式
-                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter() { DateTimeFormat = "yyyy-MM-dd HH:mm:ss" });
+                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter());
                 //忽略循环引用
                 //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 //解决命名不一致问题,不使用驼峰样式的key
@@ -90,3 +90,6 @@ namespace BtzjManagement.Api
         }
     }
 }
+
+
+

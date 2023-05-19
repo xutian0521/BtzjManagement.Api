@@ -65,9 +65,8 @@ namespace BtzjManagement.Api.Utils
         /// </summary> 
         /// <param name="serviceAction">代码段</param> 
         /// <param name="level">事务级别</param>
-        public bool InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted)
+        public void InvokeTransactionScope(Action serviceAction, IsolationLevel level = IsolationLevel.ReadCommitted)
         {
-            var result = false;
             lock (_tranLock)
             {
                 try
@@ -78,7 +77,6 @@ namespace BtzjManagement.Api.Utils
                     }
                     serviceAction();
                     DbContext.Ado.CommitTran();
-                    result = true;
                 }
                 catch (Exception ex)
                 {
@@ -91,7 +89,6 @@ namespace BtzjManagement.Api.Utils
                     DbContext.Dispose();
                 }
             }
-            return result;
         }
         #endregion
 

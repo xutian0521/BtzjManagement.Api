@@ -90,7 +90,7 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// <summary>
         /// 单位缴存比例
         /// </summary>
-        public decimal DWJCBL { get; set; }
+        public decimal DWJCBL { get; set; } = 0;
         /// <summary>
         /// 补贴资金来源
         /// </summary>

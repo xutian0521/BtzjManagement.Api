@@ -20,12 +20,6 @@ namespace BtzjManagement.Api.Services
 {
     public class DataTransferService
     {
-        IConfiguration _configuration;
-        public DataTransferService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-        
         /// <summary>
         /// 单位基本信息表结构初始化
         /// </summary>
@@ -67,10 +61,10 @@ namespace BtzjManagement.Api.Services
         /// 单位基本信息表数据初始化
         /// </summary>
         /// <returns></returns>
-        public void CorporationBasicInfoInitData()
+        public void CorporationBasicInfoInitData(string city_cent)
         {
             #region 表数据初始化
-            var city_cent = _configuration.GetValue<string>("CityCent");
+            //var city_cent = _configuration.GetValue<string>("CityCent");
             using (var syBaseConn = SybaseConnector.Conn())
             {
                 //获取原基本信息表
@@ -150,10 +144,10 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 单位账户信息表数据初始化
         /// </summary>
-        public void CorporationAcctInfoInitData()
+        public void CorporationAcctInfoInitData(string city_cent)
         {
             #region 表数据初始化
-            var city_cent = _configuration.GetValue<string>("CityCent");
+            //var city_cent = _configuration.GetValue<string>("CityCent");
             using (var syBaseConn = SybaseConnector.Conn())
             {
                 //获取原基本信息表
@@ -214,13 +208,13 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 枚举表数据初始化
         /// </summary>
-        public void SysEnumInitData()
+        public void SysEnumInitData( string city_cent)
         {
             #region 表数据初始化
             var sugarHelper = SugarHelper.Instance();
             sugarHelper.ExecuteCommand("delete from SYS_ENUM");
 
-            var city_cent = _configuration.GetValue<string>("CityCent");
+            //var city_cent = _configuration.GetValue<string>("CityCent");
             using (var syBaseConn = SybaseConnector.Conn())
             {
                 //获取原基本信息表
@@ -249,7 +243,7 @@ namespace BtzjManagement.Api.Services
                     }
 
                     D_SYS_ENUM tModel = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT = ++sort, PARENTID = 0, ORIGIN_FLAG = key, VAL = vlaue };
-                    action+=() => sugarHelper.AddReturnIdentity(tModel);
+                    action += () => sugarHelper.AddReturnIdentity(tModel);
                 }
 
                 var tModelJsff = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT = ++sort, PARENTID = 0, ORIGIN_FLAG = "jsff", VAL = "jsff" };
@@ -258,17 +252,17 @@ namespace BtzjManagement.Api.Services
                 action += () => sugarHelper.AddReturnIdentity(tModelJsff);
                 action += () => sugarHelper.AddReturnIdentity(tModelZjlx);
                 sugarHelper.InvokeTransactionScope(action);
-                
+
                 //计算方法相关
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "0", s_value_gbk = Common.GBKToCp850("舍入到分"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "1", s_value_gbk = Common.GBKToCp850("见分进角"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "2", s_value_gbk = Common.GBKToCp850("舍入到角"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "3", s_value_gbk = Common.GBKToCp850("见角进元"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "4", s_value_gbk = Common.GBKToCp850("舍入到元"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "5", s_value_gbk = Common.GBKToCp850("见厘进分"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "6", s_value_gbk = Common.GBKToCp850("四舍五入到分"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "7", s_value_gbk = Common.GBKToCp850("四舍五入到角"), s_name_gbk = "", i_flag_gbk="jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "8", s_value_gbk = Common.GBKToCp850("四舍五入到元"), s_name_gbk = "", i_flag_gbk="jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "0", s_value_gbk = Common.GBKToCp850("舍入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "1", s_value_gbk = Common.GBKToCp850("见分进角"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "2", s_value_gbk = Common.GBKToCp850("舍入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "3", s_value_gbk = Common.GBKToCp850("见角进元"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "4", s_value_gbk = Common.GBKToCp850("舍入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "5", s_value_gbk = Common.GBKToCp850("见厘进分"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "6", s_value_gbk = Common.GBKToCp850("四舍五入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "7", s_value_gbk = Common.GBKToCp850("四舍五入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "8", s_value_gbk = Common.GBKToCp850("四舍五入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
 
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "01", s_value_gbk = Common.GBKToCp850("身份证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("军官证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
@@ -279,7 +273,7 @@ namespace BtzjManagement.Api.Services
 
                 action = null;
                 var listFather = sugarHelper.QueryList<D_SYS_ENUM>();
-                
+
                 foreach (var item in listFather)
                 {
                     sort = 0;
@@ -300,7 +294,50 @@ namespace BtzjManagement.Api.Services
             #endregion
         }
 
+        public void GrkhInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "varchar2(255)", columnDesc = "业务流水号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "varchar2(20)", columnDesc = "单位账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWMC", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "单位名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "KHTYPE", columnTypeAndLimit = "NUMBER(10)", columnDesc = "开户类型(按月1，一次性2)" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_TIME", columnTypeAndLimit = "date", columnDesc = "保存时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "保存人" });
+            v_TableInits.Add(new v_TableInit { columnName = "SUBMIT_TIME", columnTypeAndLimit = "date", columnDesc = "提交时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "SUBMIT_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "提交人" });
+            v_TableInits.Add(new v_TableInit { columnName = "VERIFY_TIME", columnTypeAndLimit = "date", columnDesc = "审核时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "VERIFY_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "审核人" });
+            v_TableInits.Add(new v_TableInit { columnName = "STATUS", columnTypeAndLimit = "varchar2(30)", columnDesc = "业务状态" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
 
+            this.TableInit("GRKH", v_TableInits, true, "个人开户业务主表");
+        }
+
+        public void Grkh_ItemInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "varchar2(255)", columnDesc = "业务流水号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "varchar2(20)", columnDesc = "单位账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "YWYD", columnTypeAndLimit = "varchar2(10)", columnDesc = "业务月度" });
+            v_TableInits.Add(new v_TableInit { columnName = "XINGMING", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "姓名" });
+            v_TableInits.Add(new v_TableInit { columnName = "ZJLX", columnTypeAndLimit = "varchar2(4byte)", columnDesc = "证件类型" });
+            v_TableInits.Add(new v_TableInit { columnName = "ZJHM", columnTypeAndLimit = "varchar2(18byte)", columnDesc = "证件号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "XINGBIE", columnTypeAndLimit = "varchar2(2)", columnDesc = "性别" });
+            v_TableInits.Add(new v_TableInit { columnName = "CSNY", columnTypeAndLimit = "date", columnDesc = "出生日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "SJHM", columnTypeAndLimit = "varchar2(20byte)", columnDesc = "手机号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "单位缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCJS", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人缴存基数" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRYJCE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人月缴存额" });
+            v_TableInits.Add(new v_TableInit { columnName = "QJRQ", columnTypeAndLimit = "date", columnDesc = "起缴日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZHZT", columnTypeAndLimit = "VARCHAR2(2)", columnDesc = "个人账户状态" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRCKZHHM", columnTypeAndLimit = "varchar2(30)", columnDesc = "个人存款账户号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRCKZHKHMC", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人存款账户开户名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRCKZHKHYHDM", columnTypeAndLimit = "varchar2(30)", columnDesc = "个人存款账户开户银行代码" });
+
+            this.TableInit("GRKH_ITEM", v_TableInits, true, "个人开户业务明细表");
+        }
 
         /// <summary>
         /// 表结构初始化语句
