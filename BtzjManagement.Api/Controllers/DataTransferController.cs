@@ -34,8 +34,9 @@ namespace BtzjManagement.Api.Controllers
                 //_transferService.SysEnumInitStructure();
                 //_transferService.CorporationBasicInfoInitStructure();
                 //_transferService.CorporationAcctInfoInitStructure();
-                _transferService.GrkhInitStructure();
-                _transferService.Grkh_ItemInitStructure();
+                //_transferService.GrkhInitStructure();
+                //_transferService.Grkh_ItemInitStructure();
+                //_transferService.SysMenuInitStructure();
             }
             catch (Exception ex)
             {
@@ -54,9 +55,10 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-                _transferService.SysEnumInitData(CityCent());
-                _transferService.CorporationBasicInfoInitData(CityCent());
-                _transferService.CorporationAcctInfoInitData(CityCent());
+                //_transferService.SysEnumInitData(CityCent());
+                //_transferService.CorporationBasicInfoInitData(CityCent());
+                //_transferService.CorporationAcctInfoInitData(CityCent());
+                //_transferService.SysMenuInitData(CityCent());
             }
             catch (Exception ex)
             {
