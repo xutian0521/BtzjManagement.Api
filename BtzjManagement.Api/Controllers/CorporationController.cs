@@ -73,5 +73,20 @@ namespace BtzjManagement.Api.Controllers
 
             return result;
         }
+
+        public v_ApiResult CorporationCreatedModel(string tyxydm)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                return _corporationService.CorporationCreatedModel(tyxydm, CityCent());
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }

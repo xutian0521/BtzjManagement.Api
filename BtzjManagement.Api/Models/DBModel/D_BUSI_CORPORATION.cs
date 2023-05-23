@@ -7,32 +7,28 @@ using System.Threading.Tasks;
 namespace BtzjManagement.Api.Models.DBModel
 {
     /// <summary>
-    /// 个人开户业务主表
+    /// 单位业务信息主表
     /// </summary>
-    [SugarTable("GRKH")]
-    public class D_GRKH
+    [SugarTable("BUSI_CORPORATION")]
+    public class D_BUSI_CORPORATION
     {
         /// <summary>
         /// Id
         /// </summary>
-        [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "GRKH_SEQ")]
-        public string ID { get; set; }
+        [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "BUSI_CORPORATION_SEQ")]
+        public int ID { get; set; }
         /// <summary>
         /// 业务流水号
         /// </summary>
         public string YWLSH { get; set; }
         /// <summary>
-        /// 单位账号
+        /// 统一社会信用代码
         /// </summary>
-        public string DWZH { get; set; }
+        public string USCCID { get; set; }
         /// <summary>
-        /// 单位名称
+        /// 业务类型
         /// </summary>
-        public string DWMC { get; set; }
-        /// <summary>
-        /// 开户类型(按月1，一次性2)
-        /// </summary>
-        public int KHTYPE { get; set; } = 1;
+        public int BUSITYPE { get; set; }
         /// <summary>
         /// 保存时间
         /// </summary>

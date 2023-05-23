@@ -31,12 +31,22 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-                //_transferService.SysEnumInitStructure();
-                //_transferService.CorporationBasicInfoInitStructure();
-                //_transferService.CorporationAcctInfoInitStructure();
-                //_transferService.GrkhInitStructure();
-                //_transferService.Grkh_ItemInitStructure();
-                //_transferService.SysMenuInitStructure();
+                //系统相关
+                _transferService.SysEnumInitStructure();
+                _transferService.SysMenuInitStructure();
+                _transferService.ImageMenuInitStructure();
+                _transferService.ImageDataInitStructure();
+                _transferService.FlowProcInitStructure();
+
+                //单位管理
+                _transferService.BusiCorporationInitStructure();
+                _transferService.CorporationBasicInfoInitStructure();
+                _transferService.CorporationAcctInfoInitStructure();
+
+                //客户管理
+                _transferService.GrkhInitStructure();
+                _transferService.Grkh_ItemInitStructure();
+                
             }
             catch (Exception ex)
             {
@@ -55,10 +65,16 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-                //_transferService.SysEnumInitData(CityCent());
-                //_transferService.CorporationBasicInfoInitData(CityCent());
-                //_transferService.CorporationAcctInfoInitData(CityCent());
-                //_transferService.SysMenuInitData(CityCent());
+                //系统相关
+                _transferService.SysEnumInitData(CityCent());
+                _transferService.SysMenuInitData(CityCent());
+
+                //单位管理
+                _transferService.CorporationBasicInfoInitData(CityCent());
+                _transferService.CorporationAcctInfoInitData(CityCent());
+
+                //客户管理
+                
             }
             catch (Exception ex)
             {

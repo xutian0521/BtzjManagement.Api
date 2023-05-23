@@ -104,6 +104,140 @@ namespace BtzjManagement.Api.Enum
         public const string 未知 = null;
     }
 
+    /// <summary>
+    /// 公积金操作类型
+    /// </summary>
+    public class GjjOptType
+    {
+        [Description("单位汇缴")]
+        public const int 单位汇缴 = 1;
+        [Description("个人补缴")]
+        public const int 个人补缴 = 3;
+        [Description("个人结息")]
+        public const int 个人结息 = 6;
+        [Description("同行转入")]
+        public const int 同行转入 = 9;
+        [Description("单位转移转入")]
+        public const int 单位转移转入 = 12;
+        [Description("单位转移转出")]
+        public const int 单位转移转出 = 13;
+        [Description("同行转出")]
+        public const int 同行转出 = 14;
+        [Description("个人转入")]
+        public const int 个人转入 = 15;
+        [Description("个人转出")]
+        public const int 个人转出 = 16;
+        [Description("公积金个人调帐")]
+        public const int 公积金个人调帐 = 18;
+        [Description("公积金个人转入")]
+        public const int 公积金个人转入 = 19;
+        [Description("公积金个人转出")]
+        public const int 公积金个人转出 = 20;
+        [Description("购买,建造,翻建大修自住住房支取")]
+        public const int 购买_建造_翻建大修自住住房支取 = 51;
+        [Description("房租超出家庭工资收入的规定比例支取")]
+        public const int 房租超出家庭工资收入的规定比例支取 = 52;
+        [Description("偿还购房贷款本息支取")]
+        public const int 偿还购房贷款本息支取 = 53;
+        [Description("其他原因支取")]
+        public const int 其他原因支取 = 54;
+        [Description("离休,退休销户")]
+        public const int 离休_退休销户 = 61;
+        [Description("丧失劳动能力,并与单位终止关系销户")]
+        public const int 丧失劳动能力_并与单位终止关系销户 = 62;
+        [Description("户口迁出本地,或出境定居销户")]
+        public const int 户口迁出本地_或出境定居销户 = 63;
+        [Description("其他原因销户")]
+        public const int 其他原因销户 = 64;
+        [Description("红冲单位汇缴")]
+        public const int 红冲单位汇缴 = 501;
+        [Description("红冲个人补缴")]
+        public const int 红冲个人补缴 = 503;
+        [Description("红冲个人结息")]
+        public const int 红冲个人结息 = 506;
+        [Description("红冲同行转入")]
+        public const int 红冲同行转入 = 509;
+        [Description("红冲单位转移转入")]
+        public const int 红冲单位转移转入 = 512;
+        [Description("红冲单位转移转出")]
+        public const int 红冲单位转移转出 = 513;
+        [Description("")]
+        public const int 红冲同行转出 = 514;
+        [Description("红冲同行转出")]
+        public const int 红冲个人转入 = 515;
+        [Description("红冲个人转出")]
+        public const int 红冲个人转出 = 516;
+        [Description("红冲公积金个人调帐")]
+        public const int 红冲公积金个人调帐 = 518;
+        [Description("红冲公积金个人转入")]
+        public const int 红冲公积金个人转入 = 519;
+        [Description("红冲公积金个人转出")]
+        public const int 红冲公积金个人转出 = 520;
+        [Description("红冲购买,建造,翻建大修自住住房支取")]
+        public const int 红冲购买_建造_翻建大修自住住房支取 = 551;
+        [Description("红冲房租超出家庭工资收入的规定比例支取")]
+        public const int 红冲房租超出家庭工资收入的规定比例支取 = 552;
+        [Description("红冲偿还购房贷款本息支取")]
+        public const int 红冲偿还购房贷款本息支取 = 553;
+        [Description("红冲其他原因支取")]
+        public const int 红冲其他原因支取 = 554;
+        [Description("红冲离休,退休销户")]
+        public const int 红冲离休_退休销户 = 561;
+        [Description("红冲丧失劳动能力,并与单位终止关系销户")]
+        public const int 红冲丧失劳动能力_并与单位终止关系销户 = 562;
+        [Description("红冲户口迁出本地,或出境定居销户")]
+        public const int 红冲户口迁出本地_或出境定居销户 = 563;
+        [Description("红冲其他原因销户")]
+        public const int 红冲其他原因销户 = 564;
+        [Description("单位开户")]
+        public const int 单位开户 = 1000;
+    }
 
 
 }
+
+
+
+
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+	

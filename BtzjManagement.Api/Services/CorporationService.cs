@@ -138,5 +138,71 @@ namespace BtzjManagement.Api.Services
             var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH }, where);
             return list;
         }
+
+        /// <summary>
+        /// 获取保存状态的数据
+        /// </summary>
+        /// <param name="tyxydm"></param>
+        /// <param name="city_cent"></param>
+        /// <returns></returns>
+        public v_ApiResult CorporationCreatedModel(string tyxydm,string city_cent)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            var status = new string[] { OptStatusConst.新建, OptStatusConst.等待初审, OptStatusConst.等待终审, OptStatusConst.初审出错, OptStatusConst.终审出错, OptStatusConst.初审退回, OptStatusConst.终审退回};
+            //业务数据-业务数据
+            var bus_model = SugarHelper.Instance().First<D_BUSI_CORPORATION>(x => x.USCCID.ToUpper() == tyxydm && x.CITY_CENTNO == city_cent && x.BUSITYPE == GjjOptType.单位开户);
+
+            if(bus_model == null)//不存在保存的数据
+            {
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Content = new v_CorporationCreated();
+                return result;
+            }
+
+            //基本信息和账户信息
+            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = null;
+            where = (t1, t2) => t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent && t1.USCCID.ToUpper().Contains(tyxydm.ToUpper());
+            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_BaseCorporatiorn>> selectExpression = (t1, t2) => new v_BaseCorporatiorn
+            {
+                DWMC = t1.DWMC,
+                USCCID = t1.USCCID,
+                BASICACCTBRCH = t1.BASICACCTBRCH,
+                DWDZ = t1.DWDZ,
+                DWFRDBXM = t1.DWFRDBXM,
+                BASICACCTMC = t1.BASICACCTMC,
+                BASICACCTNO = t1.BASICACCTNO,
+                DWFRDBZJHM = t1.DWFRDBZJHM,
+                DWFRDBZJLX = t1.DWFRDBZJLX,
+                DWFXR = t1.DWFXR,
+                JBRGDDHHM = t1.JBRGDDHHM,
+                JBRSJHM = t1.JBRSJHM,
+                JBRXM = t1.JBRXM,
+                JBRZJHM = t1.JBRZJHM,
+                JBRZJLX = t1.JBRZJLX,
+                DWXZ = t1.DWXZ,
+                DWYB = t1.DWYB,
+                DWSLRQ = t1.DWSLRQ,
+                CALC_METHOD = t2.CALC_METHOD,
+                DWJCBL = t2.DWJCBL,
+                DWQJRQ = t1.DWQJRQ,
+                NEXTPAYMTH = t2.NEXTPAYMTH,
+                STYHDM = t2.STYHDM,
+                FROMFLAG = t2.FROMFLAG,
+                STYHMC = t2.STYHMC,
+                STYHZH = t2.STYHZH,
+                DWZH = t2.DWZH
+            };
+            var baseModel = SugarHelper.Instance().QueryMuch((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, selectExpression, where).FirstOrDefault();
+
+            if (bus_model.STATUS != OptStatusConst.新建)//说明已经有在途的业务
+            {
+                result.Message = $"该统一信用代码代码（{tyxydm}）有在途未办结的单位开户业务";
+            }
+
+            result.Content = baseModel;
+            return result;
+            //影像信息
+        }
+
     }
 }
