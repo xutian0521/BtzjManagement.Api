@@ -1,4 +1,5 @@
 ﻿using BtzjManagement.Api.Model.QueryModel;
+using Microsoft.Data.SqlClient;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
@@ -848,7 +849,7 @@ namespace BtzjManagement.Api.Utils
         /// </summary> 
         /// <param name="sql">sql</param> 
         /// <returns>实体</returns>
-        DataTable QueryDataTable(string sql);
+        List<T> QueryDataTable<T>(string sql, List<SqlParameter> parameters) where T : class, new();
 
         /// <summary>
         /// 查询单个值
@@ -914,14 +915,14 @@ namespace BtzjManagement.Api.Utils
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="parameters">参数</param>
         /// <returns>DataSet</returns>
-        DataSet QueryProcedureDataSet(string procedureName, List<SugarParameter> parameters);
+        DataSet QueryProcedureDataSet(string procedureName, List<SqlParameter> parameters);
         /// <summary>
         /// 查询存储过程
         /// </summary> 
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="parameters">参数</param>
         /// <returns>DataTable</returns>
-        DataTable QueryProcedure(string procedureName, List<SugarParameter> parameters);
+        DataTable QueryProcedure(string procedureName, List<SqlParameter> parameters);
 
         /// <summary>
         /// 查询存储过程
@@ -929,7 +930,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="parameters">参数</param>
         /// <returns>单个值</returns>
-        object QueryProcedureScalar(string procedureName, List<SugarParameter> parameters);
+        object QueryProcedureScalar(string procedureName, List<SqlParameter> parameters);
 
         #endregion
 

@@ -314,6 +314,9 @@ namespace BtzjManagement.Api.Services
             this.TableInit("GRKH", v_TableInits, true, "个人开户业务主表");
         }
 
+        /// <summary>
+        /// 个人开户明细表结构初始化
+        /// </summary>
         public void Grkh_ItemInitStructure()
         {
             List<v_TableInit> v_TableInits = new List<v_TableInit> { };
@@ -338,6 +341,126 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("GRKH_ITEM", v_TableInits, true, "个人开户业务明细表");
         }
+
+        /// <summary>
+        /// 菜单表结构初始化
+        /// </summary>
+        public void SysMenuInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "NAME", columnTypeAndLimit = "VARCHAR2(50 BYTE) NOT NULL", columnDesc = "菜单名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "ALIAS", columnTypeAndLimit = "varchar2(20)", columnDesc = "菜单名称别名" });
+            v_TableInits.Add(new v_TableInit { columnName = "PID", columnTypeAndLimit = "NUMBER(11, 0) NOT NULL", columnDesc = "分类节点id" });
+            v_TableInits.Add(new v_TableInit { columnName = "PATH", columnTypeAndLimit = "VARCHAR2(100 BYTE)", columnDesc = "路由" });
+            v_TableInits.Add(new v_TableInit { columnName = "ICON", columnTypeAndLimit = "VARCHAR2(50 BYTE)", columnDesc = "菜单图标" });
+            v_TableInits.Add(new v_TableInit { columnName = "SORTID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
+            v_TableInits.Add(new v_TableInit { columnName = "ISENABLE", columnTypeAndLimit = "NUMBER(5,0)", columnDesc = "是否可用 0:不可用，1:可用" });
+            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "VARCHAR2(200 BYTE)", columnDesc = "备注" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
+
+            this.TableInit("SYS_MENU", v_TableInits, true, "菜单信息表");
+        }
+
+        /// <summary>
+        /// 菜单信息表数据初始化
+        /// </summary>
+        public void SysMenuInitData(string city_cent)
+        {
+            var sqlHelper = SugarHelper.Instance();
+            var faModel = new D_SysMenu { Name = "首页", IsEnable = 1, PId = 0, Remark = "首页", Path = "homepage.html", Alias = "Home", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            var faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+
+            faModel = new D_SysMenu { Name = "单位管理", IsEnable = 1, PId = 0, Remark = "单位管理", Path = "", Alias = "CorporationManager", SortId = 20, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            List<D_SysMenu> sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "单位开户", IsEnable = 1, PId = faId, Remark = "单位开户", Path = "unitOpen.html", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "信息变更", IsEnable = 1, PId = faId, Remark = "信息变更", Path = "", Alias = "", SortId = 20, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "比例调整", IsEnable = 1, PId = faId, Remark = "比例调整", Path = "", Alias = "", SortId = 30, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "状态调整", IsEnable = 1, PId = faId, Remark = "状态调整", Path = "", Alias = "", SortId = 40, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "客户管理", IsEnable = 1, PId = 0, Remark = "客户管理", Path = "", Alias = "PersonInfoManager", SortId = 30, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "个人开户", IsEnable = 1, PId = faId, Remark = "个人开户", Path = "peopleOpen.html", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "个人一次性开户", IsEnable = 1, PId = faId, Remark = "个人一次性开户", Path = "", Alias = "", SortId = 20, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "个人信息变更", IsEnable = 1, PId = faId, Remark = "个人信息变更", Path = "", Alias = "", SortId = 30, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "缴存变更", IsEnable = 1, PId = 0, Remark = "缴存变更", Path = "", Alias = "JcbgManager", SortId = 40, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "缴存变更", IsEnable = 1, PId = faId, Remark = "缴存变更", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "转移", IsEnable = 1, PId = 0, Remark = "转移", Path = "", Alias = "TransferManager", SortId = 50, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "内部转移", IsEnable = 1, PId = faId, Remark = "内部转移", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location" , CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "个人转出", IsEnable = 1, PId = faId, Remark = "个人转出", Path = "", Alias = "", SortId = 20, Icon = "el-icon-location" , CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "异地转入", IsEnable = 1, PId = faId, Remark = "异地转入", Path = "", Alias = "", SortId = 30, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "缴存核定", IsEnable = 1, PId = 0, Remark = "缴存核定", Path = "", Alias = "PaymentManager", SortId = 60, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "按月汇缴核定", IsEnable = 1, PId = faId, Remark = "按月汇缴核定", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "一次性汇缴", IsEnable = 1, PId = faId, Remark = "一次性汇缴", Path = "", Alias = "", SortId = 20, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "补缴", IsEnable = 1, PId = faId, Remark = "补缴", Path = "", Alias = "", SortId = 30, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "资金匹配", IsEnable = 1, PId = 0, Remark = "资金匹配", Path = "", Alias = "MatchManager", SortId = 70, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "资金进账录入", IsEnable = 1, PId = faId, Remark = "资金进账录入", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "资金进账匹配", IsEnable = 1, PId = faId, Remark = "资金进账匹配", Path = "", Alias = "", SortId = 20, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "记账", IsEnable = 1, PId = 0, Remark = "记账", Path = "", Alias = "BookManager", SortId = 80, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "单笔入账", IsEnable = 1, PId = faId, Remark = "单笔入账", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SysMenu { Name = "批量入账", IsEnable = 1, PId = faId, Remark = "批量入账", Path = "", Alias = "", SortId = 20, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "数据统计", IsEnable = 1, PId = 0, Remark = "数据统计", Path = "", Alias = "CountManager", SortId = 90, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "数据对比", IsEnable = 1, PId = faId, Remark = "数据对比", Path = "datastatistics.html", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "菜单管理", IsEnable = 1, PId = 0, Remark = "菜单管理", Path = "", Alias = "Menu", SortId = 100, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "菜单管理", IsEnable = 1, PId = faId, Remark = "菜单管理", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "用户管理", IsEnable = 1, PId = 0, Remark = "用户管理", Path = "", Alias = "User", SortId = 110, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "用户管理", IsEnable = 1, PId = faId, Remark = "用户管理", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "角色管理", IsEnable = 1, PId = 0, Remark = "角色管理", Path = "", Alias = "Role", SortId = 120, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "角色管理", IsEnable = 1, PId = faId, Remark = "角色管理", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "权限管理", IsEnable = 1, PId = 0, Remark = "权限管理", Path = "", Alias = "Permission", SortId = 130, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "权限管理", IsEnable = 1, PId = faId, Remark = "权限管理", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SysMenu { Name = "系统设置", IsEnable = 1, PId = 0, Remark = "系统设置", Path = "", Alias = "System", SortId = 140, Icon = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SysMenu>(faModel);
+            sonList = new List<D_SysMenu> { };
+            sonList.Add(new D_SysMenu { Name = "系统设置", IsEnable = 1, PId = faId, Remark = "系统设置", Path = "", Alias = "", SortId = 10, Icon = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+        }
+
 
         /// <summary>
         /// 表结构初始化语句

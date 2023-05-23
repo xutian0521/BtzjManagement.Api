@@ -10,6 +10,8 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper.Contrib.Extensions;
+using SqlSugar;
+using Microsoft.Data.SqlClient;
 
 namespace BtzjManagement.Api.Services
 {
@@ -29,17 +31,19 @@ namespace BtzjManagement.Api.Services
         /// <returns></returns>
         public List<v_SysMenu> MenuTreeList(int pId, bool isFilterDisabledMenu)
         {
+            var listParamer = new List<SqlParameter>();
             string sql = "SELECT * from sys_menu ";
             string sql_orderBy = " ORDER BY sortid ";
-            string sql_where = "WHERE pid=:pid ";
+            string sql_where = "WHERE pid= :pid ";
+            listParamer.Add(new SqlParameter("pid", pId));
             if (isFilterDisabledMenu)
             {
                 sql_where += " AND IsEnable= 1 ";
             }
-            DynamicParameters parameters = new DynamicParameters();
-
             string sqlAll = sql + sql_where + sql_orderBy;
-            var list = OracleConnector.Conn().Query<D_SysMenu>(sqlAll, new { pid = pId }).ToList();
+
+            var list = SugarHelper.Instance().QueryDataTable<D_SysMenu>(sqlAll, listParamer);
+
             var menuList = new List<v_SysMenu>();
 
             if (list.Count() <= 0)

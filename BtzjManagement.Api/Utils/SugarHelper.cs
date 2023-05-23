@@ -1,12 +1,14 @@
 ﻿using BtzjManagement.Api.Enum;
 using BtzjManagement.Api.Model.QueryModel;
 using BtzjManagement.Api.Models.QueryModel;
+using Microsoft.Data.SqlClient;
 using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Utils
@@ -1797,9 +1799,11 @@ namespace BtzjManagement.Api.Utils
         /// </summary> 
         /// <param name="sql">sql</param> 
         /// <returns>实体</returns>
-        public DataTable QueryDataTable(string sql)
+        public List<T> QueryDataTable<T>(string sql, List<SqlParameter> parameters) where T : class, new()
         {
-            return DbContext.Ado.GetDataTable(sql);
+            var listParams = ConvetParameter(parameters);
+            var table = DbContext.Ado.GetDataTable(sql, listParams);
+            return ToDataList<T>(table);
         }
 
         /// <summary>
@@ -1948,7 +1952,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="parameters">参数</param>
         /// <returns>DataSet</returns>
-        public DataSet QueryProcedureDataSet(string procedureName, List<SugarParameter> parameters)
+        public DataSet QueryProcedureDataSet(string procedureName, List<SqlParameter> parameters)
         {
             var listParams = ConvetParameter(parameters);
             var datas = DbContext.Ado.UseStoredProcedure().GetDataSetAll(procedureName, listParams);
@@ -1960,7 +1964,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="parameters">参数</param>
         /// <returns>DataTable</returns>
-        public DataTable QueryProcedure(string procedureName, List<SugarParameter> parameters)
+        public DataTable QueryProcedure(string procedureName, List<SqlParameter> parameters)
         {
             var listParams = ConvetParameter(parameters);
             var datas = DbContext.Ado.UseStoredProcedure().GetDataTable(procedureName, listParams);
@@ -1973,7 +1977,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="procedureName">存储过程名称</param>
         /// <param name="parameters">参数</param>
         /// <returns>单个值</returns>
-        public object QueryProcedureScalar(string procedureName, List<SugarParameter> parameters)
+        public object QueryProcedureScalar(string procedureName, List<SqlParameter> parameters)
         {
             var listParams = ConvetParameter(parameters);
             var datas = DbContext.Ado.UseStoredProcedure().GetScalar(procedureName, listParams);
@@ -2166,7 +2170,7 @@ namespace BtzjManagement.Api.Utils
         /// </summary>
         /// <param name="parameters">参数</param>
         /// <returns></returns>
-        private List<SugarParameter> ConvetParameter(List<SugarParameter> parameters)
+        private List<SugarParameter> ConvetParameter(List<SqlParameter> parameters)
         {
             var listParams = new List<SugarParameter>();
             foreach (var p in parameters)
@@ -2372,6 +2376,65 @@ namespace BtzjManagement.Api.Utils
 
             return conds.TrimEnd(',');
         }
+
+       
+        /// <summary>
+        /// DataTable转成List
+        /// </summary>
+        private static List<T> ToDataList<T>(DataTable dt)
+        {
+            var list = new List<T>();
+            //创建一个属性的列表，并赋值
+            var plist = new List<PropertyInfo>(typeof(T).GetProperties());
+            if (dt == null || dt.Rows.Count == 0)
+            {
+                return list;
+            }
+            foreach (DataRow item in dt.Rows)
+            {
+                //实例化泛型对象
+                T s = Activator.CreateInstance<T>();
+                //遍历dataTable中的列集合
+                for (int i = 0; i < dt.Columns.Count; i++)
+                {
+                    //获取属性和DataTable的列名称相同的属性(PropertyInfo)
+                    PropertyInfo info = plist.Find(p => p.Name.ToUpper() == dt.Columns[i].ColumnName);
+                    //判断是否存在
+                    if (info != null)
+                    {
+                        try
+                        {
+                            //判断是否为空
+                            if (!Convert.IsDBNull(item[i]))
+                            {
+                                object v = null;
+                                //判断属性是否包含可空
+                                if (info.PropertyType.ToString().Contains("System.Nullable"))
+                                {
+                                    //类型转换
+                                    v = Convert.ChangeType(item[i], Nullable.GetUnderlyingType(info.PropertyType));
+                                }
+                                else
+                                {
+                                    //类型转换
+                                    v = Convert.ChangeType(item[i], info.PropertyType);
+                                }
+                                //赋值
+                                info.SetValue(s, v, null);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            throw new Exception("字段[" + info.Name + "]转换出错," + ex.Message);
+                        }
+                    }
+                }
+                list.Add(s);
+            }
+            return list;
+        }
+
+
         #endregion
 
         /// <inheritdoc />
