@@ -338,7 +338,19 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("GRKH_ITEM", v_TableInits, true, "个人开户业务明细表");
         }
+        internal void UserInfoInitData(string v)
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "用户名" });
+            v_TableInits.Add(new v_TableInit { columnName = "REAL_NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "真实姓名" });
+            v_TableInits.Add(new v_TableInit { columnName = "PASSWORD", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "密码" });
+            v_TableInits.Add(new v_TableInit { columnName = "RULE_ID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "权限ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_TIME", columnTypeAndLimit = "date", columnDesc = "创建时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "nvarchar2(2000)", columnDesc = "备注" });
 
+            this.TableInit("USER_INFO", v_TableInits, true, "用户信息表");
+        }
         /// <summary>
         /// 表结构初始化语句
         /// </summary>
@@ -435,6 +447,8 @@ namespace BtzjManagement.Api.Services
                 }
             }
         }
+
+
     }
 }
 

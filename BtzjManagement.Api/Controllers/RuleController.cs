@@ -4,12 +4,13 @@ using BtzjManagement.Api.Services;
 using System.Collections.Generic;
 using BtzjManagement.Api.Filter;
 using System;
+using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Encryption]
+    //[Encryption]
     public class RuleController : ControllerBase
     {
         RuleService _ruleService;
@@ -54,6 +55,30 @@ namespace BtzjManagement.Api.Controllers
             return result;
         }
 
+        /// <summary>
+        /// 用户列表
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("UserList")]
+        public async Task<v_ApiResult> UserList(string userName, string roleId, int pageIndex = 1, int pageSize = 10)
+        {
+            var list = await _ruleService.UserList(userName, roleId, pageIndex, pageSize);
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
+        }
+        [HttpPost("AddOrModify")]
+        public async Task<v_ApiResult> AddOrModify([FromForm] int id, [FromForm]string userName, [FromForm] string passWord,
+            [FromForm] string roleId, [FromForm] string realName, [FromForm] string remark)
+        {
+            var r = await _ruleService.AddOrModify(id, userName, passWord, roleId, realName, remark);
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, r.message);
+        }
+
+        [HttpGet("DelateUser")]
+        public async Task<v_ApiResult> DeleteUser(int id)
+        {
+            var r = await _ruleService.DeleteUser(id);
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, r.message);
+        }
 
     }
 }

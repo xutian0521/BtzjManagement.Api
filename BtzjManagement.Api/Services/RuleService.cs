@@ -10,6 +10,10 @@ using Oracle.ManagedDataAccess.Client;
 using System.Data;
 using System.Threading.Tasks;
 using Dapper.Contrib.Extensions;
+using System.Linq.Expressions;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Collections;
+using System.Xml.Linq;
 
 namespace BtzjManagement.Api.Services
 {
@@ -98,5 +102,113 @@ namespace BtzjManagement.Api.Services
                 return _id > -1 ? (true, "添加成功！") : (false, "添加失败!");
             }
         }
+
+
+
+        //---------------------------------------------------用户信息-----------------------------------------------------
+        /// <summary>
+        /// 查询分页用户信息列表
+        /// </summary>
+        /// <param name="userName">用户名</param>
+        /// <param name="roleId">权限id</param>
+        /// <param name="pageIndex">页码</param>
+        /// <param name="pageSize">页容量</param>
+        /// <returns></returns>
+        public async Task<Pager<D_USER_INFO>> UserList(string userName, string roleId, int pageIndex = 1, int pageSize = 10)
+        {
+            var query = SugarSimple.Instance().Queryable<D_USER_INFO>();
+            query = query.Where(u => string.IsNullOrEmpty(userName) || u.NAME == userName);
+            query = query.Where(u => string.IsNullOrEmpty(roleId) || u.RULE_ID == roleId);
+            var totalCount = query.Count();
+
+            var list = await query
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            var pager = new Pager<D_USER_INFO>
+            {
+                list = list,
+                total = totalCount
+            };
+            return pager;
+        }
+
+        public async Task<(int code, string message)> AddOrModify(int id, string userName,string passWord, string roleId, string realName, string remark)
+        {
+            if (id == 0)
+            {
+                // 新增操作
+                var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.NAME == userName).FirstAsync();
+                if (existingUser != null)
+                {
+                    return (0, "用户已存在");
+                }
+
+                var newUser = new D_USER_INFO
+                {
+                    NAME = userName,
+                    RULE_ID = roleId,
+                    REAL_NAME = realName,
+                    REMARK = remark,
+                    CREATE_TIME = DateTime.Now
+                };
+
+                var insertResult = await SugarSimple.Instance().Insertable(newUser).ExecuteCommandAsync();
+                if (insertResult > 0)
+                {
+                    return (1, "新增成功");
+                }
+                else
+                {
+                    return (0, "新增失败");
+                }
+            }
+            else
+            {
+                // 修改操作
+                var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
+                if (existingUser == null)
+                {
+                    return (0, "用户不存在");
+                }
+
+                existingUser.NAME = userName;
+                existingUser.RULE_ID = roleId;
+                existingUser.REAL_NAME = realName;
+                existingUser.REMARK = remark;
+
+                var updateResult = await SugarSimple.Instance().Updateable(existingUser).ExecuteCommandAsync();
+                if (updateResult > 0)
+                {
+                    return (1, "修改成功");
+                }
+                else
+                {
+                    return (0, "修改失败");
+                }
+            }
+        }
+
+        public async Task<(int code, string message)> DeleteUser(int id)
+        {
+            var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
+            if (existingUser == null)
+            {
+                return (0, "用户不存在");
+            }
+
+            var deleteResult = await SugarSimple.Instance().Deleteable<D_USER_INFO>().In(id).ExecuteCommandAsync();
+            if (deleteResult > 0)
+            {
+                return (1, "删除成功");
+            }
+            else
+            {
+                return (0, "删除失败");
+            }
+        }
+
+
     }
 }

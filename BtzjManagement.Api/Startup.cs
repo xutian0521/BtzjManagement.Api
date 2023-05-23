@@ -15,6 +15,8 @@ using BtzjManagement.Api.Services;
 using Newtonsoft.Json.Serialization;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using System.Text.Json;
+using System.ComponentModel;
 
 namespace BtzjManagement.Api
 {
@@ -36,19 +38,12 @@ namespace BtzjManagement.Api
                 option.Filters.Add<UserAuthorizeFilter>();
                 option.Filters.Add<EncryptionActionFilter>();
             });
-            services.AddControllers().AddNewtonsoftJson(options =>
+            services.AddControllers()       .AddJsonOptions(options =>
             {
-                //修改属性名称的序列化方式，首字母小写
-                //options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-                //修改时间的序列化方式
-                options.SerializerSettings.Converters.Add(new IsoDateTimeConverter());
-                //忽略循环引用
-                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-                //解决命名不一致问题,不使用驼峰样式的key
-                options.SerializerSettings.ContractResolver = new DefaultContractResolver();
-                //我们将 NullValueHandling 设置为 Ignore，表示在序列化时忽略 null 值。如果您希望将 null 值序列化为 JSON 字符串 "null"，则可以将其设置为 Include。
-                options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
-            }); ;
+                // 将所有字段名转换为小写
+                options.JsonSerializerOptions.PropertyNamingPolicy = new LowercaseNamingPolicy();
+                options.JsonSerializerOptions.Converters.Add(new MyDateTimeConverter());
+            });
 
             services.AddCors(options => options.AddPolicy("AppCors", policy =>
             {
