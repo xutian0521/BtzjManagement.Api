@@ -70,14 +70,14 @@ namespace BtzjManagement.Api.Controllers
             [FromForm] string roleId, [FromForm] string realName, [FromForm] string remark)
         {
             var r = await _ruleService.AddOrModify(id, userName, passWord, roleId, realName, remark);
-            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, r.message);
+            return new v_ApiResult(r.code, r.message, null);
         }
 
         [HttpGet("DelateUser")]
         public async Task<v_ApiResult> DeleteUser(int id)
         {
             var r = await _ruleService.DeleteUser(id);
-            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, r.message);
+            return new v_ApiResult(r.code, r.message, null);
         }
 
     }

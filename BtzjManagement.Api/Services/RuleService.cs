@@ -146,7 +146,7 @@ namespace BtzjManagement.Api.Services
                 var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.NAME == userName).FirstAsync();
                 if (existingUser != null)
                 {
-                    return (0, "用户已存在");
+                    return (ApiResultCodeConst.ERROR, "用户已存在");
                 }
 
                 var newUser = new D_USER_INFO
@@ -161,11 +161,11 @@ namespace BtzjManagement.Api.Services
                 var insertResult = await SugarSimple.Instance().Insertable(newUser).ExecuteCommandAsync();
                 if (insertResult > 0)
                 {
-                    return (1, "新增成功");
+                    return (ApiResultCodeConst.SUCCESS, "新增成功");
                 }
                 else
                 {
-                    return (0, "新增失败");
+                    return (ApiResultCodeConst.ERROR, "新增失败");
                 }
             }
             else
@@ -174,7 +174,7 @@ namespace BtzjManagement.Api.Services
                 var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
                 if (existingUser == null)
                 {
-                    return (0, "用户不存在");
+                    return (ApiResultCodeConst.ERROR, "用户不存在");
                 }
 
                 existingUser.NAME = userName;
@@ -185,11 +185,11 @@ namespace BtzjManagement.Api.Services
                 var updateResult = await SugarSimple.Instance().Updateable(existingUser).ExecuteCommandAsync();
                 if (updateResult > 0)
                 {
-                    return (1, "修改成功");
+                    return (ApiResultCodeConst.SUCCESS, "修改成功");
                 }
                 else
                 {
-                    return (0, "修改失败");
+                    return (ApiResultCodeConst.ERROR, "修改失败");
                 }
             }
         }
@@ -199,17 +199,17 @@ namespace BtzjManagement.Api.Services
             var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
             if (existingUser == null)
             {
-                return (0, "用户不存在");
+                return (ApiResultCodeConst.ERROR, "用户不存在");
             }
 
             var deleteResult = await SugarSimple.Instance().Deleteable<D_USER_INFO>().In(id).ExecuteCommandAsync();
             if (deleteResult > 0)
             {
-                return (1, "删除成功");
+                return (ApiResultCodeConst.SUCCESS, "删除成功");
             }
             else
             {
-                return (0, "删除失败");
+                return (ApiResultCodeConst.ERROR, "删除失败");
             }
         }
 
