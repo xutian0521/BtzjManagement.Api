@@ -32,6 +32,7 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //系统相关
+                _transferService.UserInfoInitData(CityCent());
                 _transferService.SysEnumInitStructure();
                 _transferService.SysMenuInitStructure();
                 _transferService.ImageMenuInitStructure();
@@ -83,24 +84,5 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, true);
         }
 
-
-        /// <summary>
-        /// 用户信息表数据初始化
-        /// </summary>
-        /// <returns></returns>
-        [AcceptVerbs("GET", "POST")]
-        [Route("UserInfoInitData")]
-        public v_ApiResult UserInfoInitData()
-        {
-            try
-            {
-                _transferService.UserInfoInitData(CityCent());
-            }
-            catch (Exception ex)
-            {
-                return new v_ApiResult(ApiResultCodeConst.ERROR, ex.Message, false);
-            }
-            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, true);
-        }
     }
 }

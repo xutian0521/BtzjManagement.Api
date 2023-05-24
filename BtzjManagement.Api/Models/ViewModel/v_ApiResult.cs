@@ -54,6 +54,16 @@ namespace BtzjManagement.Api.Models.ViewModel
             this.Code = code;
         }
         /// <summary>
+        /// ctor4
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="message"></param>
+        public v_ApiResult(int code, string message)
+        {
+            this.Message = message;
+            this.Code = code;
+        }
+        /// <summary>
         /// 代码
         /// </summary>
         public int Code { get; set; }
