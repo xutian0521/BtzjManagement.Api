@@ -16,6 +16,7 @@ using System.Collections;
 using System.Xml.Linq;
 using SqlSugar;
 using Microsoft.Data.SqlClient;
+using System.Data.SqlTypes;
 
 namespace BtzjManagement.Api.Services
 {
@@ -35,18 +36,12 @@ namespace BtzjManagement.Api.Services
         /// <returns></returns>
         public List<v_SysMenu> MenuTreeList(int pId, bool isFilterDisabledMenu)
         {
-            var listParamer = new List<SqlParameter>();
-            string sql = "SELECT * from sys_menu ";
-            string sql_orderBy = " ORDER BY sortid ";
-            string sql_where = "WHERE pid= :pid ";
-            listParamer.Add(new SqlParameter("pid", pId));
-            if (isFilterDisabledMenu)
-            {
-                sql_where += " AND IsEnable= 1 ";
-            }
-            string sqlAll = sql + sql_where + sql_orderBy;
+            var query = SugarSimple.Instance().Queryable<D_SYS_MENU>();
+            query = query.WhereIF(pId > 0, u => u.PID == pId);
+            query = isFilterDisabledMenu ? query.Where(u => u.IS_ENABLE == 1) : query;
 
-            var list = SugarHelper.Instance().QueryDataTable<D_SysMenu>(sqlAll, listParamer);
+            
+            var list = query.ToList();
 
             var menuList = new List<v_SysMenu>();
 
@@ -60,16 +55,16 @@ namespace BtzjManagement.Api.Services
                 {
                     var menu = new v_SysMenu()
                     {
-                        Id = item.Id,
-                        Name = item.Name,
-                        Icon = item.Icon,
-                        IsEnable = item.IsEnable,
-                        PId = item.PId,
-                        Path = item.Path,
-                        SortId = item.SortId,
-                        Alias = item.Alias,
-                        Remark = item.Remark,
-                        Subs = MenuTreeList(item.Id, isFilterDisabledMenu)
+                        ID = item.ID,
+                        NAME = item.NAME,
+                        ICON = item.ICON,
+                        IS_ENABLE = item.IS_ENABLE,
+                        PID = item.PID,
+                        PATH = item.PATH,
+                        SORT_ID = item.SORT_ID,
+                        ALIAS = item.ALIAS,
+                        REMARK = item.REMARK,
+                        Subs = MenuTreeList(item.ID, isFilterDisabledMenu)
                     };
                     menuList.Add(menu);
                 });
@@ -80,21 +75,21 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 添加或修改菜单
         /// </summary>
-        public async Task<(bool, string)> AddOrModifyMenuAsync(int id, int pId, string title,
-            string path, string icon, int sortId, bool isEnable, string remark, Guid userId)
+        public async Task<(bool, string)> AddOrModifyMenuAsync(int id, int pId,
+            string title, string path, string icon, int sortId, bool isEnable, string remark, Guid userId)
         {
-            var model = new D_SysMenu();
-            model.PId = pId;
-            model.Name = title;
-            model.Path = path;
-            model.Icon = icon;
-            model.SortId = sortId;
-            model.IsEnable = isEnable ? 1 : 0;
-            model.Remark = remark;
+            var model = new D_SYS_MENU();
+            model.PID = pId;
+            model.NAME = title;
+            model.PATH = path;
+            model.ICON = icon;
+            model.SORT_ID = sortId;
+            model.IS_ENABLE = isEnable ? 1 : 0;
+            model.REMARK = remark;
 
             if (id > 0) //修改
             {
-                model.Id = id;
+                model.ID = id;
                 var b = await OracleConnector.Conn().UpdateAsync(model);
                 //await _sysLogService.RecordActionSysLogObj(SysLogActionConst.修改菜单, userId, null, model);
                 return b ? (true, "修改成功！") : (false, "修改失败!");
@@ -121,8 +116,8 @@ namespace BtzjManagement.Api.Services
         public async Task<Pager<D_USER_INFO>> UserList(string userName, string roleId, int pageIndex = 1, int pageSize = 10)
         {
             var query = SugarSimple.Instance().Queryable<D_USER_INFO>();
-            query = query.Where(u => string.IsNullOrEmpty(userName) || u.NAME == userName);
-            query = query.Where(u => string.IsNullOrEmpty(roleId) || u.RULE_ID == roleId);
+            query = query.WhereIF(!string.IsNullOrEmpty(userName),u => u.NAME == userName);
+            query = query.WhereIF(!string.IsNullOrEmpty(roleId) , u => u.RULE_ID == roleId);
             var totalCount = query.Count();
 
             var list = await query
@@ -146,7 +141,7 @@ namespace BtzjManagement.Api.Services
                 var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.NAME == userName).FirstAsync();
                 if (existingUser != null)
                 {
-                    return (0, "用户已存在");
+                    return (ApiResultCodeConst.ERROR, "用户已存在");
                 }
 
                 var newUser = new D_USER_INFO
@@ -161,11 +156,11 @@ namespace BtzjManagement.Api.Services
                 var insertResult = await SugarSimple.Instance().Insertable(newUser).ExecuteCommandAsync();
                 if (insertResult > 0)
                 {
-                    return (1, "新增成功");
+                    return (ApiResultCodeConst.SUCCESS, "新增成功");
                 }
                 else
                 {
-                    return (0, "新增失败");
+                    return (ApiResultCodeConst.ERROR, "新增失败");
                 }
             }
             else
@@ -174,7 +169,7 @@ namespace BtzjManagement.Api.Services
                 var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
                 if (existingUser == null)
                 {
-                    return (0, "用户不存在");
+                    return (ApiResultCodeConst.ERROR, "用户不存在");
                 }
 
                 existingUser.NAME = userName;
@@ -185,11 +180,11 @@ namespace BtzjManagement.Api.Services
                 var updateResult = await SugarSimple.Instance().Updateable(existingUser).ExecuteCommandAsync();
                 if (updateResult > 0)
                 {
-                    return (1, "修改成功");
+                    return (ApiResultCodeConst.SUCCESS, "修改成功");
                 }
                 else
                 {
-                    return (0, "修改失败");
+                    return (ApiResultCodeConst.ERROR, "修改失败");
                 }
             }
         }
@@ -199,17 +194,17 @@ namespace BtzjManagement.Api.Services
             var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
             if (existingUser == null)
             {
-                return (0, "用户不存在");
+                return (ApiResultCodeConst.ERROR, "用户不存在");
             }
 
             var deleteResult = await SugarSimple.Instance().Deleteable<D_USER_INFO>().In(id).ExecuteCommandAsync();
             if (deleteResult > 0)
             {
-                return (1, "删除成功");
+                return (ApiResultCodeConst.SUCCESS, "删除成功");
             }
             else
             {
-                return (0, "删除失败");
+                return (ApiResultCodeConst.ERROR, "删除失败");
             }
         }
 
