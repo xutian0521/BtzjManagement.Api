@@ -22,9 +22,9 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public string YWLSH { get; set; }
         /// <summary>
-        /// 统一社会信用代码
+        /// 标识符号-单位账号/统一信用代码
         /// </summary>
-        public string USCCID { get; set; }
+        public string UNIQUE_KEY { get; set; }
         /// <summary>
         /// 业务类型
         /// </summary>

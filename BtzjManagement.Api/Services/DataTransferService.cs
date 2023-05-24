@@ -365,7 +365,7 @@ namespace BtzjManagement.Api.Services
             List<v_TableInit> v_TableInits = new List<v_TableInit> { };
             v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
             v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "varchar2(255)", columnDesc = "业务流水号" });
-            v_TableInits.Add(new v_TableInit { columnName = "USCCID", columnTypeAndLimit = "varchar2(255)", columnDesc = "统一社会信用代码" });
+            v_TableInits.Add(new v_TableInit { columnName = "UNIQUE_KEY", columnTypeAndLimit = "varchar2(255)", columnDesc = "标识符号-单位账号/统一信用代码" });
             v_TableInits.Add(new v_TableInit { columnName = "BUSITYPE", columnTypeAndLimit = "NUMBER(10)", columnDesc = "业务类型" });
             v_TableInits.Add(new v_TableInit { columnName = "CREATE_TIME", columnTypeAndLimit = "date", columnDesc = "保存时间" });
             v_TableInits.Add(new v_TableInit { columnName = "CREATE_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "保存人" });

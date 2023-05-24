@@ -20,6 +20,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         public string DWMC { get; set; }
     }
 
+    //public class v_CorporationCreateOut : v_ApiResult
+    //{
+    //    public new v_CorporationCreate Content { get; set; }
+
+    //}
+    //public class v_CorporationCreate
+    //{
+    //    public string YWLSH { get; set; }
+
+    //}
 
     public class v_CorporationCreated
     {

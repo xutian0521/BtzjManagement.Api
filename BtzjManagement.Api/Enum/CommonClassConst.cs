@@ -73,6 +73,7 @@ namespace BtzjManagement.Api.Enum
     /// </summary>
     public class OptStatusConst
     {
+        #region 业务审核流程相关
         [Description("新建:表示该业务数据已经创建，但尚未完成。在这个状态下，可以对业务数据进行编辑、修改等操作。")]
         public const string 新建 = "created";
         [Description("等待初审:表示该业务数据已经提交，正在初审相关人员进行审核。")]
@@ -89,6 +90,12 @@ namespace BtzjManagement.Api.Enum
         public const string 终审退回 = "zhongshenback";
         [Description("已归档:表示该业务数据已经完成并且不再需要使用。在这个状态下，不允许再对业务数据进行任何操作。")]
         public const string 已归档 = "completed";
+        #endregion
+
+        #region 业务操作流程相关
+        [Description("修改:表示该业务数据创建后被修改了。")]
+        public const string 修改 = "update";
+        #endregion
     }
 
     /// <summary>

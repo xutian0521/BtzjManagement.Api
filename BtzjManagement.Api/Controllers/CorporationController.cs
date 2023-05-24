@@ -40,7 +40,7 @@ namespace BtzjManagement.Api.Controllers
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                return _corporationService.CreateCorporation(pmodel, CityCent());
+                return _corporationService.CreateUpdateCorporation(pmodel, CityCent(), GetUser().userName);
             }
             catch (Exception ex)
             {
