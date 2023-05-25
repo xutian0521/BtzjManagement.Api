@@ -21,7 +21,7 @@ namespace BtzjManagement.Api.Services
         /// <param name="status"></param>
         /// <param name="memo"></param>
         /// <returns></returns>
-        public bool AddBusiCorporation(string city_cent, string ywlsh, string uniqueKey, int busitype, string optMan, string status = OptStatusConst.新建, string memo = "",ISugarHelper sugarHelper=null)
+        public int AddBusiCorporation(string city_cent, string ywlsh, string uniqueKey, int busitype, string optMan, string status = OptStatusConst.新建, string memo = "",ISugarHelper sugarHelper=null)
         {
             D_BUSI_CORPORATION model = new D_BUSI_CORPORATION
             {
@@ -39,9 +39,9 @@ namespace BtzjManagement.Api.Services
             }
             if(sugarHelper == null)
             {
-                return SugarHelper.Instance().AddReturnBool(model);
+                return SugarHelper.Instance().AddReturnIdentity(model);
             }
-            return sugarHelper.AddReturnBool(model);
+            return sugarHelper.AddReturnIdentity(model);
         }
     }
 }

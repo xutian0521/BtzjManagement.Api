@@ -39,7 +39,6 @@ namespace BtzjManagement.Api.Services
         {
             v_ApiResult result = new v_ApiResult() { Code= ApiResultCodeConst.ERROR };
             var sugarHelper = SugarHelper.Instance();
-           
 
             if (string.IsNullOrEmpty(pmodel.DWMC))
             {
@@ -69,9 +68,6 @@ namespace BtzjManagement.Api.Services
                     result.Message = "当前单位名称已存在";
                     return result;
                 }
-
-                //先向业务表写数据
-                action += () => _busiCorporationService.AddBusiCorporation(city_cent, ywlsh, pmodel.USCCID, GjjOptType.单位开户, optMan, sugarHelper: sugarHelper);
 
                 //单位基本信息
                 D_CORPORATION_BASICINFO basicModel = new D_CORPORATION_BASICINFO
@@ -123,7 +119,14 @@ namespace BtzjManagement.Api.Services
                     DWZHZT = DwzhztConst.正常,
                 };
 
-                action += () => { var id = sugarHelper.Add(basicModel); sugarHelper.Add(acctModel); _flowProcService.AddFlowProc(ywlsh, id, dwzh, nameof(GjjOptType.单位开户), optMan, OptStatusConst.新建, sugarHelper: sugarHelper); };
+                action += () => 
+                {
+                    //写业务数据
+                    var id = _busiCorporationService.AddBusiCorporation(city_cent, ywlsh, pmodel.USCCID, GjjOptType.单位开户, optMan, sugarHelper: sugarHelper);
+                    sugarHelper.Add(basicModel); //写单位基本信息
+                    sugarHelper.Add(acctModel);//写单位账户信息
+                    _flowProcService.AddFlowProc(ywlsh, id, dwzh, nameof(GjjOptType.单位开户), optMan, OptStatusConst.新建, sugarHelper: sugarHelper); 
+                };
                 sugarHelper.InvokeTransactionScope(action);
                 result.Content = ywlsh;
             }
@@ -173,7 +176,7 @@ namespace BtzjManagement.Api.Services
                 acctDwModel.DWZHYE = 0;
                 acctDwModel.DWZHZT = DwzhztConst.正常;
                 action += () => sugarHelper.Update(acctDwModel);
-                action+=() => _flowProcService.AddFlowProc(busiModel.YWLSH, basicDwModel.ID, acctDwModel.DWZH, nameof(GjjOptType.单位开户), optMan, OptStatusConst.修改, sugarHelper: sugarHelper);
+                action+=() => _flowProcService.AddFlowProc(busiModel.YWLSH, busiModel.ID, acctDwModel.DWZH, nameof(GjjOptType.单位开户), optMan, OptStatusConst.修改, sugarHelper: sugarHelper);
                 sugarHelper.InvokeTransactionScope(action);
                 result.Content = busiModel.YWLSH;
             }
@@ -192,15 +195,20 @@ namespace BtzjManagement.Api.Services
         /// <param name="dwzh"></param>
         /// <param name="dwmc"></param>
         /// <returns></returns>
-        public List<v_CorporationSelect> CorporationSelectList(string serchKey, string city_cent)
+        public List<v_CorporationSelect> CorporationSelectList(string city_cent,string searchKey)
         {
             var dwzhzts = new string[] { DwzhztConst.正常, DwzhztConst.封存 };
-            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = (t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent; ;
-            if (!string.IsNullOrEmpty(serchKey))
-            {
-                where = (t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(serchKey) || t2.DWZH.Contains(serchKey) || t1.USCCID.Contains(serchKey));
-            }
-            var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH }, where);
+            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = (t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent;
+
+            List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)> wherif = new List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)>(); ;
+            wherif.Add(new(!string.IsNullOrEmpty(searchKey),(t1,t2)=> t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.USCCID.Contains(searchKey))));
+            var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH }, where,wherif);
+
+            //var llll = SugarSimple.Instance().Queryable<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID })
+            //    .Where((t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent)
+            //    .WhereIF(!string.IsNullOrEmpty(searchKey), (t1, t2) => t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.USCCID.Contains(searchKey)))
+            //    .Select((t1, t2) => new v_CorporationSelect() { DWMC = t1.DWMC, DWZH = t2.DWZH }).ToList();
+
             return list;
         }
 
@@ -227,6 +235,12 @@ namespace BtzjManagement.Api.Services
             if(bus_model == null)//不存在保存的数据
             {
                 result.Code = ApiResultCodeConst.SUCCESS;
+                return result;
+            }
+
+            if (bus_model.STATUS != OptStatusConst.新建)//说明已经有在途的业务
+            {
+                result.Message = $"当前统一信用代码（{tyxydm}）已开过户";
                 return result;
             }
 
@@ -265,18 +279,71 @@ namespace BtzjManagement.Api.Services
                 DWZH = t2.DWZH
             };
             var baseModel = SugarHelper.Instance().QueryMuch((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, selectExpression, where).FirstOrDefault();
-
-            if (bus_model.STATUS != OptStatusConst.新建)//说明已经有在途的业务
-            {
-                result.Message = $"当前统一信用代码（{tyxydm}）已开过户";
-            }
             contentModel.BaseModel = baseModel;
             contentModel.YWLSH = bus_model.YWLSH;
-
+            result.Code = ApiResultCodeConst.SUCCESS;
             //影像信息
             result.Content = contentModel;
             return result;
         }
 
+        /// <summary>
+        /// 提交单位开户业务
+        /// </summary>
+        /// <param name="ywlsh"></param>
+        /// <param name="optMan"></param>
+        /// <param name="city_cent"></param>
+        /// <returns></returns>
+        public (bool,string) SubmitCorporationCreated(P_In_Corporation_Submit pmodel, string optMan,string city_cent)
+        {
+            if (pmodel == null || string.IsNullOrEmpty(pmodel.ywlsh))
+            {
+                return (false, "请先录入相关业务再提交");
+            }
+            //先查要提交的数据状态
+            var sugarHelper = SugarHelper.Instance();
+            var busiModel = sugarHelper.First<D_BUSI_CORPORATION>(x => x.CITY_CENTNO == city_cent && x.YWLSH == pmodel.ywlsh);
+            if (busiModel == null)
+            {
+                return (false, "未查询到相关业务");
+            }
+
+            if(busiModel.STATUS == OptStatusConst.已归档)
+            {
+                return (false, "当前业务已提交成功，请勿重复提交");
+            }
+
+            Action action = null;
+
+            //提交流程
+            busiModel.STATUS = OptStatusConst.已归档;
+            busiModel.SUBMIT_MAN = optMan;
+            busiModel.SUBMIT_TIME = DateTime.Now;
+            busiModel.VERIFY_MAN = optMan;
+            busiModel.VERIFY_TIME = DateTime.Now;
+            action += () => sugarHelper.Update(busiModel);
+
+            //更新单位基本信息表
+            var basicDwModel = sugarHelper.First<D_CORPORATION_BASICINFO>(x => x.USCCID.ToUpper() == busiModel.UNIQUE_KEY.ToUpper() && x.CITY_CENTNO == city_cent);
+            if (basicDwModel == null)
+            {
+                return (false, "当前业务对应的单位基本信息有误，提交失败");
+            }
+            basicDwModel.DWKHRQ = DateTime.Now;
+            basicDwModel.OPERID = optMan;
+            action += () => sugarHelper.Update(basicDwModel);
+
+            //更新单位账户信息表
+            var acctDwModel = sugarHelper.First<D_CORPORATION_ACCTINFO>(x => x.CUSTID == basicDwModel.CUSTID && x.CITY_CENTNO == city_cent);
+            if (acctDwModel == null)
+            {
+                return (false, "当前业务对应的单位账户信息有误，提交失败");
+            }
+
+            //写入业务流程数据
+            action += () => _flowProcService.AddFlowProc(pmodel.ywlsh, busiModel.ID, acctDwModel.DWZH, nameof(GjjOptType.单位开户), optMan, OptStatusConst.已归档, sugarHelper: sugarHelper);
+            sugarHelper.InvokeTransactionScope(action);
+            return (true, "提交成功");
+        }
     }
 }

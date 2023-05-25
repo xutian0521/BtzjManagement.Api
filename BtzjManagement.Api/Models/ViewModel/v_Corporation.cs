@@ -33,7 +33,7 @@ namespace BtzjManagement.Api.Models.ViewModel
 
     public class v_CorporationCreated
     {
-        public v_BaseCorporatiorn BaseModel = new v_BaseCorporatiorn();
+        public v_BaseCorporatiorn BaseModel { get; set; }
         public string YWLSH { get; set; }
     }
 

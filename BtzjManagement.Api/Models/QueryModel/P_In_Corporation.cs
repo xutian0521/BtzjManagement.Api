@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Models.QueryModel
 {
+    /// <summary>
+    /// 单位开户录入数据
+    /// </summary>
     public class P_In_Corporation_Add
     {
         #region 单位基本信息
@@ -113,6 +116,17 @@ namespace BtzjManagement.Api.Models.QueryModel
         public string CALC_METHOD { get; set; }
 
         #endregion
+    }
+
+    /// <summary>
+    /// 单位开户提交数据
+    /// </summary>
+    public class P_In_Corporation_Submit
+    {
+        /// <summary>
+        /// 业务流水号
+        /// </summary>
+        public string ywlsh { get; set; }
     }
 }
 
