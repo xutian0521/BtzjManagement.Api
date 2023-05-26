@@ -16,7 +16,7 @@ namespace BtzjManagement.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    //[Encryption]
+    [Encryption]
     public class RuleController : ControllerBase
     {
         RuleService _ruleService;

@@ -38,11 +38,20 @@ namespace BtzjManagement.Api
                 option.Filters.Add<UserAuthorizeFilter>();
                 option.Filters.Add<EncryptionActionFilter>();
             });
-            services.AddControllers()       .AddJsonOptions(options =>
+            services.AddControllers().AddNewtonsoftJson(options =>
             {
-                // 将所有字段名转换为小写
-                options.JsonSerializerOptions.PropertyNamingPolicy = new LowercaseNamingPolicy();
-                options.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
+                //修改属性名称的序列化方式，字段全小写
+                options.SerializerSettings.ContractResolver = new DefaultContractResolver
+                {
+                    NamingStrategy = new LowerCaseNamingStrategy()
+                };
+
+                //修改时间的序列化方式
+                options.SerializerSettings.Converters.Add(new FixedDateTimeConverter());
+                //忽略循环引用
+                //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                //我们将 NullValueHandling 设置为 Ignore，表示在序列化时忽略 null 值。如果您希望将 null 值序列化为 JSON 字符串 "null"，则可以将其设置为 Include。
+                options.SerializerSettings.NullValueHandling = NullValueHandling.Include;
             });
             services.AddSwaggerDocument();
             services.AddCors(options => options.AddPolicy("AppCors", policy =>
