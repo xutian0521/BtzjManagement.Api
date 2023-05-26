@@ -47,7 +47,7 @@ namespace BtzjManagement.Api.Controllers
                 //客户管理
                 _transferService.GrkhInitStructure();
                 _transferService.Grkh_ItemInitStructure();
-                
+
             }
             catch (Exception ex)
             {
