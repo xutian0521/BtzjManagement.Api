@@ -152,7 +152,17 @@ namespace BtzjManagement.Api.Services
             return pager;
         }
 
-        public async Task<(int code, string message)> AddOrModify(int id, string userName,string passWord, string roleId, string realName, string remark)
+        /// <summary>
+        /// 添加或修改用户
+        /// </summary>
+        /// <param name="id">id</param>
+        /// <param name="userName">用户名</param>
+        /// <param name="passWord">密码</param>
+        /// <param name="roleId">角色id</param>
+        /// <param name="realName">真实姓名</param>
+        /// <param name="remark">备注</param>
+        /// <returns></returns>
+        public async Task<(int code, string message)> AddOrModifyUser(int id, string userName,string passWord, string roleId, string realName, string remark)
         {
             if (id == 0)
             {
@@ -208,6 +218,11 @@ namespace BtzjManagement.Api.Services
             }
         }
 
+        /// <summary>
+        /// 删除用户
+        /// </summary>
+        /// <param name="id">用户的id</param>
+        /// <returns></returns>
         public async Task<(int code, string message)> DeleteUser(int id)
         {
             var existingUser = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == id).FirstAsync();
@@ -227,6 +242,165 @@ namespace BtzjManagement.Api.Services
             }
         }
 
+        /// <summary>
+        /// 载入修改用户信息
+        /// </summary>
+        /// <param name="id">用户ID</param>
+        /// <returns>用户信息或不存在信息</returns>
+        public async Task<(int code, string message, D_USER_INFO user)> LoadModifyUserInfoAsync(string id)
+        {
+            // 根据ID查询用户信息
+            var user = await SugarSimple.Instance().Queryable<D_USER_INFO>().Where(u => u.ID == int.Parse(id)).FirstAsync();
 
+            if (user != null)
+            {
+                // 返回存在用户信息
+                return (code: 1, message: "用户信息存在", user: user);
+            }
+            else
+            {
+                // 返回不存在用户信息
+                return (code: 0, message: "用户信息不存在", user: null);
+            }
+        }
+
+        //---------------------------------------------------角色-----------------------------------------------------
+
+        public async Task<(int code, string message, D_SYS_ROLE role)> LoadModifyRoleInfo(int id)
+        {
+            try
+            {
+                // 根据角色ID查询角色信息
+                var role = await SugarSimple.Instance().Queryable<D_SYS_ROLE>().Where(r => r.ID == id).FirstAsync();
+
+                if (role != null)
+                {
+                    // 角色存在，返回角色信息
+                    return (code: 1, message: "success", role: role);
+                }
+                else
+                {
+                    // 角色不存在，返回不存在角色信息
+                    return (code: 0, message: "角色不存在", role: null);
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常
+                return (code: -1, message: ex.Message, role: null);
+            }
+        }
+
+        /// <summary>
+        /// 新增或修改角色
+        /// </summary>
+        /// <returns></returns>
+        public async Task<(int code, string message)> AddOrModifyRoleAsync(int id, string roleName, string remark)
+        {
+            try
+            {
+                // 根据角色ID查询角色信息
+                var role = await SugarSimple.Instance().Queryable<D_SYS_ROLE>().Where(r => r.ID == id).FirstAsync();
+
+                if (role != null)
+                {
+                    // 角色存在，进行修改操作
+                    role.ROLE_NAME = roleName;
+                    role.REMARK = remark;
+
+                    // 更新角色信息
+                    await SugarSimple.Instance().Updateable(role).ExecuteCommandAsync();
+
+                    return (code: 1, message: "角色修改成功");
+                }
+                else
+                {
+                    // 角色不存在，进行新增操作
+                    role = new D_SYS_ROLE
+                    {
+                        ID = id,
+                        ROLE_NAME = roleName,
+                        REMARK = remark
+                    };
+
+                    // 插入角色信息
+                    await SugarSimple.Instance().Insertable(role).ExecuteCommandAsync();
+
+                    return (code: 1, message: "角色新增成功");
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常
+                return (code: -1, message: ex.Message);
+            }
+        }
+        /// <summary>
+        /// 删除角色
+        /// </summary>
+        /// <returns></returns>
+        public async Task<(int code, string message)> DeleteRoleAsync(int id)
+        {
+            try
+            {
+                // 根据角色ID查询角色信息
+                var role = await SugarSimple.Instance().Queryable<D_SYS_ROLE>().Where(r => r.ID == id).FirstAsync();
+
+                if (role != null)
+                {
+                    // 角色存在，进行删除操作
+                    await SugarSimple.Instance().Deleteable<D_SYS_ROLE>().Where(r => r.ID == id).ExecuteCommandAsync();
+
+                    return (code: 1, message: "角色删除成功");
+                }
+                else
+                {
+                    // 角色不存在
+                    return (code: 0, message: "角色不存在");
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常
+                return (code: -1, message: ex.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// 角色列表
+        /// </summary>
+        public async Task<(int code, string message, Pager<D_SYS_ROLE> list)> RoleListAsync(string roleName, int pageIndex = 1, int pageSize = 10)
+        {
+            try
+            {
+                var query = SugarSimple.Instance().Queryable<D_SYS_ROLE>();
+
+                if (!string.IsNullOrEmpty(roleName))
+                {
+                    // 根据角色名称筛选
+                    query = query.Where(r => r.ROLE_NAME.Contains(roleName));
+                }
+
+                // 查询总记录数
+                var totalCount = await query.CountAsync();
+
+                // 分页查询角色列表
+                var list = await query.Skip((pageIndex - 1) * pageSize).Take(pageSize).ToListAsync();
+
+                var pager = new Pager<D_SYS_ROLE>
+                {
+                    list = list,
+                    total = totalCount
+                };
+
+                return (code: 1, message: "success", list: pager);
+            }
+            catch (Exception ex)
+            {
+                // 处理异常
+                return (code: -1, message: ex.Message, list: null);
+            }
+        }
     }
 }

@@ -182,6 +182,37 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("USER_INFO", v_TableInits, true, "用户信息表");
         }
+        /// <summary>
+        /// 角色表数据初始化
+        /// </summary>
+        /// <param name="v"></param>
+        internal void SysRoleInitData(string v)
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "ROLE_NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "角色名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "SORT_ID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "排序号" });
+            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "nvarchar2(2000)", columnDesc = "备注" });
+
+            this.TableInit("SYS_ROLE", v_TableInits, true, "角色表");
+        }
+        /// <summary>
+        /// 角色菜单表数据初始化
+        /// </summary>
+        /// <param name="v"></param>
+        internal void SysRoleMenuInitData(string v)
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "ROLE_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "角色id" });
+            v_TableInits.Add(new v_TableInit { columnName = "MENU_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "菜单id" });
+            v_TableInits.Add(new v_TableInit { columnName = "CAN_ADD", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否有添加权限" });
+            v_TableInits.Add(new v_TableInit { columnName = "CAN_EDIT", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否有编辑权限" });
+            v_TableInits.Add(new v_TableInit { columnName = "CAN_DELETE", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否有删除权限" });
+            v_TableInits.Add(new v_TableInit { columnName = "CAN_AUDIT", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否有查看权限" });
+
+            this.TableInit("SYS_ROLE_MENU", v_TableInits, true, "角色菜单表");
+        }
         #region 菜单表相关
         /// <summary>
         /// 菜单表结构初始化
