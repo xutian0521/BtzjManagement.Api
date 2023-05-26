@@ -21,12 +21,12 @@ namespace BtzjManagement.Api.Controllers
         /// 获取网点编号
         /// </summary>
         /// <returns></returns>
-        public string CityCent()
+        internal string CityCent()
         {
             return _configuration.GetValue<string>("CityCent");
         }
 
-        public JwtPayload GetUser()
+        internal JwtPayload GetUser()
         {
             var user = /*new JwtPayload { userName = "llll" };*/ this.HttpContext.Items["User"] as JwtPayload;
             return user;

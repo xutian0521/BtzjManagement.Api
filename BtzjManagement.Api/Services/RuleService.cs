@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using SqlSugar;
 using Microsoft.Data.SqlClient;
 using System.Data.SqlTypes;
+using System.Security.Cryptography;
 
 namespace BtzjManagement.Api.Services
 {
@@ -37,7 +38,7 @@ namespace BtzjManagement.Api.Services
         public List<v_SysMenu> MenuTreeList(int pId, bool isFilterDisabledMenu)
         {
             var query = SugarSimple.Instance().Queryable<D_SYS_MENU>();
-            query = query.WhereIF(pId > 0, u => u.PID == pId);
+            query = query.Where(u => u.PID == pId);
             query = isFilterDisabledMenu ? query.Where(u => u.IS_ENABLE == 1) : query;
 
             
@@ -90,20 +91,38 @@ namespace BtzjManagement.Api.Services
             if (id > 0) //修改
             {
                 model.ID = id;
-                var b = await OracleConnector.Conn().UpdateAsync(model);
-                //await _sysLogService.RecordActionSysLogObj(SysLogActionConst.修改菜单, userId, null, model);
-                return b ? (true, "修改成功！") : (false, "修改失败!");
+                var updateResult = await SugarSimple.Instance().Updateable(model).ExecuteCommandAsync();
+                return updateResult > 0 ? (true, "修改成功！") : (false, "修改失败!");
             }
             else
             {
-                var _id = await OracleConnector.Conn().InsertAsync(model);
-                //await _sysLogService.RecordActionSysLogObj(SysLogActionConst.添加菜单, userId, null, model);
-                return _id > -1 ? (true, "添加成功！") : (false, "添加失败!");
+                var insertResult = await SugarSimple.Instance().Insertable(model).ExecuteCommandAsync();
+                return insertResult > 0 ? (true, "添加成功！") : (false, "添加失败!");
             }
         }
 
+        /// <summary>
+        /// 获取父级菜单枚举
+        /// </summary>
+        public async Task<List<D_SYS_MENU>> ParentMenuEnums()
+        {
+            var query = SugarSimple.Instance().Queryable<D_SYS_MENU>();
+            query = query.Where( u => u.PID == 0);
+            var list = await query.ToListAsync();
+            return list.ToList();
+        }
 
-
+        /// <summary>
+        /// 载入修改菜单信息
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public async Task<D_SYS_MENU> LoadModifyMenu(int id)
+        {
+            var query = SugarSimple.Instance().Queryable<D_SYS_MENU>();
+            var one = await query.Where(u => u.ID == id).FirstAsync();
+            return one;
+        }
         //---------------------------------------------------用户信息-----------------------------------------------------
         /// <summary>
         /// 查询分页用户信息列表
