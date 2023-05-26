@@ -11,7 +11,7 @@ namespace BtzjManagement.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Encryption]
+    //[Encryption]
     public class RuleController : ControllerBase
     {
         RuleService _ruleService;
@@ -79,6 +79,26 @@ namespace BtzjManagement.Api.Controllers
             Guid userId = Guid.Parse(user.userId);
             var result = await _ruleService.AddOrModifyMenuAsync(id, pId, title, path, icon, sortId, isEnable, remark, userId);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, result);
+        }
+        /// <summary>
+        /// 获取父级菜单枚举
+        /// </summary>
+        [HttpGet("ParentMenuEnums")]
+        public async Task<v_ApiResult> ParentMenuEnums()
+        {
+            var list = await _ruleService.ParentMenuEnums();
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
+        }
+        /// <summary>
+        /// 载入修改菜单信息
+        /// </summary>
+        /// <param name="id">菜单id</param>
+        /// <returns></returns>
+        [HttpGet("LoadModifyMenu")]
+        public async Task<v_ApiResult> LoadModifyMenu(int id)
+        {
+            var one = await _ruleService.LoadModifyMenu(id);
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, one);
         }
         /// <summary>
         /// 用户列表

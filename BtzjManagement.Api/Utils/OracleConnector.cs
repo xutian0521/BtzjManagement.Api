@@ -3,14 +3,14 @@ using Dapper;
 
 namespace BtzjManagement.Api.Utils
 {
-    public class OracleConnector
-    {
-        public static string _connectionString;
+    //public class OracleConnector
+    //{
+    //    public static string _connectionString;
 
-        public static OracleConnection Conn()
-        {
-            string connStr = _connectionString;
-            return new OracleConnection(connStr);
-        }
-    }
+    //    public static OracleConnection Conn()
+    //    {
+    //        string connStr = _connectionString;
+    //        return new OracleConnection(connStr);
+    //    }
+    //}
 }

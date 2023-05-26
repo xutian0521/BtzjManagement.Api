@@ -42,9 +42,9 @@ namespace BtzjManagement.Api
             {
                 // 将所有字段名转换为小写
                 options.JsonSerializerOptions.PropertyNamingPolicy = new LowercaseNamingPolicy();
-                options.JsonSerializerOptions.Converters.Add(new MyDateTimeConverter());
+                options.JsonSerializerOptions.Converters.Add(new DatetimeJsonConverter());
             });
-
+            services.AddSwaggerDocument();
             services.AddCors(options => options.AddPolicy("AppCors", policy =>
             {
                 var hosts = Configuration.GetValue<string>("AppHosts");
@@ -53,7 +53,7 @@ namespace BtzjManagement.Api
                         .AllowAnyMethod()
                         .AllowCredentials();
             }));
-            OracleConnector._connectionString = Configuration.GetConnectionString("conn");
+            //OracleConnector._connectionString = Configuration.GetConnectionString("conn");
             BaseDbContext.ConnectionString = Configuration.GetConnectionString("conn");
             try
             {
@@ -73,9 +73,12 @@ namespace BtzjManagement.Api
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseCors("AppCors");
-            app.UseAESEncryption();
-            app.UseRouting();
 
+            app.UseRouting();
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
+
+                        app.UseAESEncryption();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
