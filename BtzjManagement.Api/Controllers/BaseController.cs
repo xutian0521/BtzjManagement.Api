@@ -28,7 +28,7 @@ namespace BtzjManagement.Api.Controllers
 
         public JwtPayload GetUser()
         {
-            var user = this.HttpContext.Items["User"] as JwtPayload;
+            var user = /*new JwtPayload { userName = "llll" };*/ this.HttpContext.Items["User"] as JwtPayload;
             return user;
         }
 
