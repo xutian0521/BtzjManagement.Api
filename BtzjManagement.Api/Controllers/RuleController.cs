@@ -6,9 +6,13 @@ using BtzjManagement.Api.Filter;
 using System;
 using System.Threading.Tasks;
 using SqlSugar;
+using Microsoft.AspNetCore.Http;
 
 namespace BtzjManagement.Api.Controllers
 {
+    /// <summary>
+    /// 用户/菜单/角色/权限相关控制器
+    /// </summary>
     [Route("api/[controller]")]
     [ApiController]
     [Encryption]
@@ -26,6 +30,7 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="isFilterDisabledMenu">是否过滤掉禁用菜单</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<v_SysMenu>), StatusCodes.Status200OK)]
         [HttpGet("MenuTreeList")]
         public v_ApiResult MenuTreeList(bool isFilterDisabledMenu = false)
         {
