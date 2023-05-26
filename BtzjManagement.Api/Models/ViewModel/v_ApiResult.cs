@@ -76,4 +76,21 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public dynamic Content { get; set; }
     }
+
+    public class s_ApiResult<T>
+    {
+        /// <summary>
+        /// 代码
+        /// </summary>
+        public int Code { get; set; }
+        /// <summary>
+        /// 消息
+        /// </summary>
+        public string Message { get; set; }
+        /// <summary>
+        /// 内容
+        /// </summary>
+        public T Content { get; set; }
+    }
+
 }
