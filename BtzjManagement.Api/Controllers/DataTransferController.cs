@@ -67,8 +67,8 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //系统相关
-                _transferService.SysEnumInitData(CityCent());
-                _transferService.SysMenuInitData(CityCent());
+                //_transferService.SysEnumInitData(CityCent());
+                //_transferService.SysMenuInitData(CityCent());
 
                 //单位管理
                 _transferService.CorporationBasicInfoInitData(CityCent());

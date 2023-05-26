@@ -1,4 +1,5 @@
 ﻿using BtzjManagement.Api.Model.QueryModel;
+using BtzjManagement.Api.Models.QueryModel;
 using Microsoft.Data.SqlClient;
 using SqlSugar;
 using System;
@@ -469,6 +470,23 @@ namespace BtzjManagement.Api.Utils
         /// </summary>
         /// <typeparam name="T">实体1</typeparam>
         /// <typeparam name="T2">实体2</typeparam>
+        /// <typeparam name="TResult">返回对象</typeparam>
+        /// <param name="joinExpression">关联表达式 (t1,t2) => new object[] {JoinType.Left,t1.UserNo==t2.UserNo}</param>
+        /// <param name="selectExpression">返回表达式 (t1, t2) => new { Id =t1.UserNo, Id1 = t2.UserNo}</param>
+        /// <param name="whereLambda">查询表达式 (t1, t2) =>t1.UserNo == "")</param>   
+        /// <param name="whereif">WhereIF条件拼接 string.isempty(t1.UserNo),(t1,t2) =>t1.UserNo == "" </param>
+        /// <returns></returns>
+        List<TResult> QueryMuch<T, T2, TResult>(
+           Expression<Func<T, T2, object[]>> joinExpression,
+           Expression<Func<T, T2, TResult>> selectExpression,
+           Expression<Func<T, T2, bool>> whereLambda = null,
+           List<(bool, Expression<Func<T, T2, bool>>)> whereif = null) where T : class, new();
+
+        /// <summary>
+        ///查询-多表查询 
+        /// </summary>
+        /// <typeparam name="T">实体1</typeparam>
+        /// <typeparam name="T2">实体2</typeparam>
         /// <typeparam name="T3">实体3</typeparam>
         /// <typeparam name="TResult">返回对象</typeparam>
         /// <param name="joinExpression">关联表达式</param>
@@ -609,10 +627,35 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, TResult>(
             Expression<Func<T, T2, object[]>> joinExpression,
             Expression<Func<T, T2, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
+
+        /// <summary>
+        /// 查询-多表查询-可分页
+        /// </summary>
+        /// <typeparam name="T">实体1</typeparam>
+        /// <typeparam name="T2">实体2</typeparam>
+        /// <typeparam name="TResult">返回对象</typeparam>
+        /// <param name="PageIndex">页码</param>
+        /// <param name="PageSize">行数</param>
+        /// <param name="totalCount">总计</param>
+        /// <param name="joinExpression">关联表达式 (t1,t2) => new object[] {JoinType.Left,t1.UserNo==t2.UserNo}</param>
+        /// <param name="selectExpression">返回表达式 (t1, t2) => new { Id =t1.UserNo, Id1 = t2.UserNo}</param>
+        /// <param name="whereLambda">where条件</param>
+        /// <param name="whereIf">whereif条件</param>
+        /// <param name="OrderBys">排序</param>
+        /// <returns></returns>
+        public List<TResult> QueryMuchDescriptorPageList<T, T2, TResult>(
+            int PageIndex,
+            int PageSize,
+            out int totalCount,
+            Expression<Func<T, T2, object[]>> joinExpression,
+            Expression<Func<T, T2, TResult>> selectExpression,
+            Expression<Func<T, T2, bool>> whereLambda = null,
+            List<(bool, Expression<Func<T, T2, bool>>)> whereIf = null,
+            List<OrderByClause> OrderBys = null) where T : class, new();
 
 
         /// <summary>
@@ -627,7 +670,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, TResult>(
             Expression<Func<T, T2, T3, object[]>> joinExpression,
             Expression<Func<T, T2, T3, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -646,7 +689,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, T4, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, T4, TResult>(
             Expression<Func<T, T2, T3, T4, object[]>> joinExpression,
             Expression<Func<T, T2, T3, T4, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -665,7 +708,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, T4, T5, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, T4, T5, TResult>(
             Expression<Func<T, T2, T3, T4, T5, object[]>> joinExpression,
             Expression<Func<T, T2, T3, T4, T5, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -685,7 +728,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, T4, T5, T6, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, T4, T5, T6, TResult>(
             Expression<Func<T, T2, T3, T4, T5, T6, object[]>> joinExpression,
             Expression<Func<T, T2, T3, T4, T5, T6, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -706,7 +749,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, T4, T5, T6, T7, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, T4, T5, T6, T7, TResult>(
             Expression<Func<T, T2, T3, T4, T5, T6, T7, object[]>> joinExpression,
             Expression<Func<T, T2, T3, T4, T5, T6, T7, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -728,7 +771,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, T4, T5, T6, T7, T8, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, T4, T5, T6, T7, T8, TResult>(
             Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, object[]>> joinExpression,
             Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -751,7 +794,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="query">查询条件</param>  
         /// <param name="totalCount">总行数</param>  
         /// <returns>值</returns>
-        List<TResult> QueryMuchDescriptor<T, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
+        List<TResult> QueryMuchDescriptorPageList<T, T2, T3, T4, T5, T6, T7, T8, T9, TResult>(
             Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, object[]>> joinExpression,
             Expression<Func<T, T2, T3, T4, T5, T6, T7, T8, T9, TResult>> selectExpression,
             QueryDescriptor query, out int totalCount) where T : class, new();
@@ -776,8 +819,36 @@ namespace BtzjManagement.Api.Utils
         /// <typeparam name="TResult">返回值类型</typeparam>
         /// <param name="expression">返回值表达式</param> 
         /// <param name="whereLambda">查询表达式</param> 
+        /// <param name="whereIf">WhereIF条件</param>
+        /// <returns></returns>
+        public TResult QuerySelect<T, TResult>(
+            Expression<Func<T, TResult>> expression,
+            Expression<Func<T, bool>> whereLambda = null,
+            List<(bool, Expression<Func<T, bool>>)> whereIf = null) where T : class, new();
+
+        /// <summary>
+        /// 查询-返回自定义数据
+        /// </summary>
+        /// <typeparam name="T">泛型参数(集合成员的类型)</typeparam>
+        /// <typeparam name="TResult">返回值类型</typeparam>
+        /// <param name="expression">返回值表达式</param> 
+        /// <param name="whereLambda">查询表达式</param> 
         /// <returns>值</returns>
         List<TResult> QuerySelectList<T, TResult>(Expression<Func<T, TResult>> expression, Expression<Func<T, bool>> whereLambda = null) where T : class, new();
+
+        /// <summary>
+        /// 查询-返回自定义数据
+        /// </summary>
+        /// <typeparam name="T">泛型参数(集合成员的类型)</typeparam>
+        /// <typeparam name="TResult">返回值类型</typeparam>
+        /// <param name="expression">返回值表达式</param> 
+        /// <param name="whereLambda">查询表达式</param> 
+        /// <param name="whereIf">whereIf条件</param>
+        /// <returns></returns>
+        public List<TResult> QuerySelectList<T, TResult>(
+            Expression<Func<T, TResult>> expression,
+            Expression<Func<T, bool>> whereLambda = null,
+            List<(bool, Expression<Func<T, bool>>)> whereIf = null) where T : class, new();
 
         /// <summary>
         /// 查询
@@ -788,12 +859,35 @@ namespace BtzjManagement.Api.Utils
         T Query<T>(Expression<Func<T, bool>> whereLambda = null) where T : class, new();
 
         /// <summary>
+        /// 查询
+        /// </summary>
+        /// <typeparam name="T">泛型参数(集合成员的类型)</typeparam>
+        /// <param name="whereLambda">查询表达式</param> 
+        /// <param name="whereIf">whereIf条件</param>
+        /// <returns></returns>
+        public T Query<T>(
+            Expression<Func<T, bool>> whereLambda = null,
+            List<(bool, Expression<Func<T, bool>>)> whereIf = null) where T : class, new();
+
+        /// <summary>
         /// 查询集合
         /// </summary>
         /// <typeparam name="T">泛型参数(集合成员的类型)</typeparam>
         /// <param name="whereLambda">过滤条件</param> 
         /// <returns>实体</returns>
         List<T> QueryWhereList<T>(Expression<Func<T, bool>> whereLambda = null) where T : class, new();
+
+        /// <summary>
+        /// 查询集合
+        /// </summary>
+        /// <typeparam name="T">泛型参数(集合成员的类型)</typeparam>
+        /// <param name="whereLambda">过滤条件</param> 
+        /// <param name="whereIf">whereif 条件</param>
+        /// <returns></returns>
+        public List<T> QueryWhereList<T>(
+            Expression<Func<T, bool>> whereLambda = null,
+            List<(bool, Expression<Func<T, bool>>)> whereIf = null) where T : class, new();
+
         /// <summary>
         /// 查询集合
         /// </summary>
@@ -818,6 +912,26 @@ namespace BtzjManagement.Api.Utils
         /// <param name="totalCount">总行数</param>
         /// <returns>实体</returns>
         List<T> QueryPageList<T>(QueryDescriptor query, out int totalCount) where T : class, new();
+
+        /// <summary>
+        /// 分页查询
+        /// </summary>
+        /// <typeparam name="T">数据表</typeparam>
+        /// <param name="PageIndex">页码</param>
+        /// <param name="PageSize">行数</param>
+        /// <param name="totalCount">总计</param>
+        /// <param name="whereLambda">过滤条件</param>
+        /// <param name="whereIf">whereif 条件</param>
+        /// <param name="OrderBys">排序字段</param>
+        /// <returns></returns>
+        public List<T> QueryPageList<T>(
+            int PageIndex,
+            int PageSize,
+            out int totalCount,
+            Expression<Func<T, bool>> whereLambda = null,
+            List<(bool, Expression<Func<T, bool>>)> whereIf = null,
+            List<OrderByClause> OrderBys = null
+            ) where T : class, new();
 
         /// <summary>
         /// 通过多值查询数据集

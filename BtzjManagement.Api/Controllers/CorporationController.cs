@@ -40,7 +40,7 @@ namespace BtzjManagement.Api.Controllers
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                return _corporationService.CreateCorporation(pmodel, CityCent());
+                return _corporationService.CreateUpdateCorporation(pmodel, CityCent(), GetUser().userName);
             }
             catch (Exception ex)
             {
@@ -57,12 +57,12 @@ namespace BtzjManagement.Api.Controllers
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("CorporationSelectList")]
-        public v_ApiResult CorporationSelectList(string dwzh, string dwmc)
+        public v_ApiResult CorporationSelectList(string searchKey)
         {
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var list = _corporationService.CorporationSelectList(dwzh, dwmc);
+                var list = _corporationService.CorporationSelectList(CityCent(), searchKey);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Content = list;
             }
@@ -74,19 +74,50 @@ namespace BtzjManagement.Api.Controllers
             return result;
         }
 
-        //public v_ApiResult CorporationCreatedModel(string tyxydm)
-        //{
-        //    v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
-        //    try
-        //    {
-        //        return _corporationService.CorporationCreatedModel(tyxydm, CityCent());
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        result.Message = ex.Message;
-        //    }
+        /// <summary>
+        /// 获取保存状态的单位开户数据
+        /// </summary>
+        /// <param name="tyxydm"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("CorporationCreatedModel")]
+        public v_ApiResult CorporationCreatedModel(string tyxydm)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                return _corporationService.CorporationCreatedModel(tyxydm, CityCent());
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
 
-        //    return result;
-        //}
+            return result;
+        }
+
+        /// <summary>
+        /// 提交单位开户业务
+        /// </summary>
+        /// <param name="ywlsh"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("SubmitCorporationCreated")]
+        public v_ApiResult SubmitCorporationCreated(P_In_Corporation_Submit pmodel)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var rT = _corporationService.SubmitCorporationCreated(pmodel, GetUser().userName, CityCent());
+                result.Code = rT.Item1 ? ApiResultCodeConst.SUCCESS : ApiResultCodeConst.ERROR;
+                result.Message = rT.Item2;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }
