@@ -106,7 +106,7 @@ namespace BtzjManagement.Api.Enum
         [Description("男")]
         public const string 男 = "1";
         [Description("女")]
-        public const string 女 = "1";
+        public const string 女 = "0";
         [Description("未知")]
         public const string 未知 = null;
     }
@@ -198,6 +198,8 @@ namespace BtzjManagement.Api.Enum
         public const int 红冲其他原因销户 = 564;
         [Description("单位开户")]
         public const int 单位开户 = 1000;
+        [Description("个人开户")]
+        public const int 个人开户 = 1001;
     }
 
 

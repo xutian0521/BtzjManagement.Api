@@ -33,8 +33,10 @@ namespace BtzjManagement.Api.Controllers
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-
-                result = _personInfoService.CreatePersonInfo(pmodel, CityCent(), GetUser().userName);
+                var r = _personInfoService.CreatePersonInfo(pmodel, CityCent(), GetUser().userName);
+                result.Code = r.Item1;
+                result.Message = r.Item2;
+                result.Content = r.Item3;
             }
             catch (Exception ex)
             {

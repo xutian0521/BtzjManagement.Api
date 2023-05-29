@@ -18,6 +18,17 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 单位名称
         /// </summary>
         public string DWMC { get; set; }
+
+        /// <summary>
+        /// 单位缴存比例
+        /// </summary>
+        public decimal DWJCBL { get; set; }
+        /// <summary>
+        /// 下次应缴日期
+        /// </summary>
+        public string NEXTPAYMTH { get; set; }
+
+
     }
 
     //public class v_CorporationCreateOut : v_ApiResult

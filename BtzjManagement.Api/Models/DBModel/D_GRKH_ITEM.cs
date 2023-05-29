@@ -16,7 +16,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// Id
         /// </summary>
         [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "GRKH_ITEM_SEQ")]
-        public string ID { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// 业务流水号
         /// </summary>

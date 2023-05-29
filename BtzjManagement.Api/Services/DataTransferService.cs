@@ -79,6 +79,9 @@ namespace BtzjManagement.Api.Services
                         case "银行":
                             vlaue = "bank";
                             break;
+                        case "性别":
+                            vlaue = "xingbie";
+                            break;
                     }
 
                     D_SYS_ENUM tModel = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = key, VAL = vlaue };

@@ -195,14 +195,14 @@ namespace BtzjManagement.Api.Services
         /// <param name="dwzh"></param>
         /// <param name="dwmc"></param>
         /// <returns></returns>
-        public List<v_CorporationSelect> CorporationSelectList(string city_cent,string searchKey)
+        public List<v_CorporationSelect> CorporationSelectList(string city_cent, string searchKey)
         {
             var dwzhzts = new string[] { DwzhztConst.正常, DwzhztConst.封存 };
             Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = (t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent;
 
             List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)> wherif = new List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)>(); ;
-            wherif.Add(new(!string.IsNullOrEmpty(searchKey),(t1,t2)=> t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.USCCID.Contains(searchKey))));
-            var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH }, where,wherif);
+            wherif.Add(new(!string.IsNullOrEmpty(searchKey), (t1, t2) => t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.USCCID.Contains(searchKey))));
+            var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH, DWJCBL = t2.DWJCBL, NEXTPAYMTH = t2.NEXTPAYMTH.Value.ToString("yyyy-MM-dd") }, where, wherif);
 
             //var llll = SugarSimple.Instance().Queryable<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID })
             //    .Where((t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent)
@@ -247,38 +247,8 @@ namespace BtzjManagement.Api.Services
             //基本信息和账户信息
             Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = null;
             where = (t1, t2) => t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent && t1.USCCID.ToUpper() == tyxydm.ToUpper();
+            var baseModel = GetCorporatiorn(where);
 
-            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_BaseCorporatiorn>> selectExpression = (t1, t2) => new v_BaseCorporatiorn
-            {
-                DWMC = t1.DWMC,
-                USCCID = t1.USCCID,
-                BASICACCTBRCH = t1.BASICACCTBRCH,
-                DWDZ = t1.DWDZ,
-                DWFRDBXM = t1.DWFRDBXM,
-                BASICACCTMC = t1.BASICACCTMC,
-                BASICACCTNO = t1.BASICACCTNO,
-                DWFRDBZJHM = t1.DWFRDBZJHM,
-                DWFRDBZJLX = t1.DWFRDBZJLX,
-                DWFXR = t1.DWFXR,
-                JBRGDDHHM = t1.JBRGDDHHM,
-                JBRSJHM = t1.JBRSJHM,
-                JBRXM = t1.JBRXM,
-                JBRZJHM = t1.JBRZJHM,
-                JBRZJLX = t1.JBRZJLX,
-                DWXZ = t1.DWXZ,
-                DWYB = t1.DWYB,
-                DWSLRQ = t1.DWSLRQ,
-                CALC_METHOD = t2.CALC_METHOD,
-                DWJCBL = t2.DWJCBL,
-                DWQJRQ = t1.DWQJRQ,
-                NEXTPAYMTH = t2.NEXTPAYMTH,
-                STYHDM = t2.STYHDM,
-                FROMFLAG = t2.FROMFLAG,
-                STYHMC = t2.STYHMC,
-                STYHZH = t2.STYHZH,
-                DWZH = t2.DWZH
-            };
-            var baseModel = SugarHelper.Instance().QueryMuch((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, selectExpression, where).FirstOrDefault();
             contentModel.BaseModel = baseModel;
             contentModel.YWLSH = bus_model.YWLSH;
             result.Code = ApiResultCodeConst.SUCCESS;
@@ -344,6 +314,49 @@ namespace BtzjManagement.Api.Services
             action += () => _flowProcService.AddFlowProc(pmodel.ywlsh, busiModel.ID, acctDwModel.DWZH, nameof(GjjOptType.单位开户), optMan, OptStatusConst.已归档, sugarHelper: sugarHelper);
             sugarHelper.InvokeTransactionScope(action);
             return (true, "提交成功");
+        }
+
+
+
+        /// <summary>
+        /// 获取单位相关信息
+        /// </summary>
+        /// <param name="where"></param>
+        /// <returns></returns>
+        internal v_BaseCorporatiorn GetCorporatiorn(Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where)
+        {
+            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_BaseCorporatiorn>> selectExpression = (t1, t2) => new v_BaseCorporatiorn
+            {
+                DWMC = t1.DWMC,
+                USCCID = t1.USCCID,
+                BASICACCTBRCH = t1.BASICACCTBRCH,
+                DWDZ = t1.DWDZ,
+                DWFRDBXM = t1.DWFRDBXM,
+                BASICACCTMC = t1.BASICACCTMC,
+                BASICACCTNO = t1.BASICACCTNO,
+                DWFRDBZJHM = t1.DWFRDBZJHM,
+                DWFRDBZJLX = t1.DWFRDBZJLX,
+                DWFXR = t1.DWFXR,
+                JBRGDDHHM = t1.JBRGDDHHM,
+                JBRSJHM = t1.JBRSJHM,
+                JBRXM = t1.JBRXM,
+                JBRZJHM = t1.JBRZJHM,
+                JBRZJLX = t1.JBRZJLX,
+                DWXZ = t1.DWXZ,
+                DWYB = t1.DWYB,
+                DWSLRQ = t1.DWSLRQ,
+                CALC_METHOD = t2.CALC_METHOD,
+                DWJCBL = t2.DWJCBL,
+                DWQJRQ = t1.DWQJRQ,
+                NEXTPAYMTH = t2.NEXTPAYMTH,
+                STYHDM = t2.STYHDM,
+                FROMFLAG = t2.FROMFLAG,
+                STYHMC = t2.STYHMC,
+                STYHZH = t2.STYHZH,
+                DWZH = t2.DWZH
+            };
+
+            return SugarHelper.Instance().QueryMuch((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, selectExpression, where).FirstOrDefault();
         }
     }
 }

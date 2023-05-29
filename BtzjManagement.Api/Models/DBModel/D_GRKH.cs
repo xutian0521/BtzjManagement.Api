@@ -16,7 +16,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// Id
         /// </summary>
         [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "GRKH_SEQ")]
-        public string ID { get; set; }
+        public int ID { get; set; }
         /// <summary>
         /// 业务流水号
         /// </summary>
@@ -57,6 +57,10 @@ namespace BtzjManagement.Api.Models.DBModel
         /// 审核人
         /// </summary>
         public string VERIFY_MAN { get; set; }
+        /// <summary>
+        /// 系统账务日期
+        /// </summary>
+        public DateTime SYSTEM_TIME { get; set; }
         /// <summary>
         /// 业务状态
         /// </summary>

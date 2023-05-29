@@ -3,18 +3,27 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BtzjManagement.Api.Models.QueryModel
+namespace BtzjManagement.Api.Models.ViewModel
 {
-    public class P_In_PersonInfo
+    public class v_Busi_PersonInfo
     {
+        /// <summary>
+        /// 业务流水号
+        /// </summary>
+        public string YWLSH { get; set; }
+        /// <summary>
+        /// 开户类型(按月1，一次性2)
+        /// </summary>
+        public int KHTYPE { get; set; }
+        /// <summary>
+        /// 业务状态
+        /// </summary>
+        public string STATUS { get; set; }
+
         /// <summary>
         /// 单位账号
         /// </summary>
         public string DWZH { get; set; }
-        /// <summary>
-        /// 单位名称
-        /// </summary>
-        public string DWMC { get; set; }
         /// <summary>
         /// 业务月度
         /// </summary>
@@ -60,6 +69,10 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// </summary>
         public DateTime? QJRQ { get; set; }
         /// <summary>
+        /// 个人账户状态
+        /// </summary>
+        public string GRZHZT { get; set; }
+        /// <summary>
         /// 个人存款账户号码
         /// </summary>
         public string GRCKZHHM { get; set; }
@@ -71,5 +84,6 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// 个人存款账户开户银行代码
         /// </summary>
         public string GRCKZHKHYHDM { get; set; }
+
     }
-} 
+}

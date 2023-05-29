@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace BtzjManagement.Api.Controllers
 {
     [ApiController]
-    [Encryption]
+    //[Encryption]
     [Route("api/DataTransfer")]
     public class DataTransferController : BaseController
     {

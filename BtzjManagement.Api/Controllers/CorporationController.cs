@@ -17,7 +17,7 @@ namespace BtzjManagement.Api.Controllers
 {
     [Route("api/Corporation")]
     [ApiController]
-    [Encryption]
+    //[Encryption]
     public class CorporationController : BaseController
     {
         CorporationService _corporationService;

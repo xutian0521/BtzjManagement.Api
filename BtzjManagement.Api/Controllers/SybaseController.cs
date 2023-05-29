@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace BtzjManagement.Api.Controllers
 {
     [ApiController]
-    [Encryption]
+    //[Encryption]
     [Route("api/OldSource")]
     public class SybaseController : ControllerBase
     {

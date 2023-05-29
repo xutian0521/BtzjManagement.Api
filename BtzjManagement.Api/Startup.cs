@@ -47,7 +47,7 @@ namespace BtzjManagement.Api
                 };
 
                 //修改时间的序列化方式
-                options.SerializerSettings.Converters.Add(new FixedDateTimeConverter());
+                //options.SerializerSettings.Converters.Add(new FixedDateTimeConverter());
                 //忽略循环引用
                 //options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 //我们将 NullValueHandling 设置为 Ignore，表示在序列化时忽略 null 值。如果您希望将 null 值序列化为 JSON 字符串 "null"，则可以将其设置为 Include。
@@ -77,6 +77,7 @@ namespace BtzjManagement.Api
             services.AddSingleton<SysEnumService>();
             services.AddSingleton<BusiCorporationService>();
             services.AddSingleton<FlowProcService>();
+            services.AddSingleton<PersonInfoService>();
 
         }
 

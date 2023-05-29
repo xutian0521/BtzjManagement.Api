@@ -28,7 +28,7 @@ namespace BtzjManagement.Api.Filter
     {
         private const string Format = "yyyy-MM-dd HH:mm:ss"; // 定义要转换的时间格式
 
-        //public override bool CanRead => false;
+        public override bool CanRead => false;
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
             throw new NotImplementedException();
@@ -36,11 +36,11 @@ namespace BtzjManagement.Api.Filter
 
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
-            if (value is DateTime dateTime)
-            {
-                writer.WriteValue(dateTime.ToString(Format));
-            }
-            //throw new NotImplementedException();
+            //if (value is DateTime dateTime)
+            //{
+            //    writer.WriteValue(dateTime.ToUniversalTime().ToString(Format));
+            //}
+            throw new NotImplementedException();
         }
     }
 }
