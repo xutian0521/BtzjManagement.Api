@@ -83,6 +83,26 @@ namespace BtzjManagement.Api.Controllers
             }
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, true);
         }
+        /// <summary>
+        /// 单位基本信息表/单位账户信息表结构初始化
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET", "POST")]
+        [Route("Init1")]
+        public v_ApiResult Init1()
+        {
+            try
+            {
+
+                //_transferService.SysRoleMenuInitData(CityCent());
+
+            }
+            catch (Exception ex)
+            {
+                return new v_ApiResult(ApiResultCodeConst.ERROR, ex.Message, false);
+            }
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, true);
+        }
 
     }
 }

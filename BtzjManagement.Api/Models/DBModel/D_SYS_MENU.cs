@@ -6,6 +6,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BtzjManagement.Api.Models.DBModel
 {
+    /// <summary>
+    /// 用户信息表
+    /// </summary>
     [SugarTable("SYS_MENU")]
     public class D_SYS_MENU
     {
