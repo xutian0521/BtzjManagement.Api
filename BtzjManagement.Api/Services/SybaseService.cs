@@ -12,6 +12,9 @@ using System.Transactions;
 
 namespace BtzjManagement.Api.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class SybaseService
     {
         /// <summary>

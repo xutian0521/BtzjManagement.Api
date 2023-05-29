@@ -16,6 +16,11 @@ namespace BtzjManagement.Api.Controllers
     public class DataTransferController : BaseController
     {
         DataTransferService _transferService;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="transferService"></param>
         public DataTransferController(IConfiguration configuration, DataTransferService transferService) : base(configuration)
         {
             _transferService = transferService;
@@ -32,21 +37,22 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //系统相关
-                _transferService.UserInfoInitData(CityCent());
-                _transferService.SysEnumInitStructure();
-                _transferService.SysMenuInitStructure();
-                _transferService.ImageMenuInitStructure();
-                _transferService.ImageDataInitStructure();
-                _transferService.FlowProcInitStructure();
+                //_transferService.UserInfoInitData(CityCent());
+                //_transferService.SysEnumInitStructure();
+                //_transferService.SysMenuInitStructure();
+                //_transferService.ImageMenuInitStructure();
+                //_transferService.ImageDataInitStructure();
+                //_transferService.FlowProcInitStructure();
+                _transferService.SysConfigInitStructure();
 
                 //单位管理
-                _transferService.BusiCorporationInitStructure();
-                _transferService.CorporationBasicInfoInitStructure();
-                _transferService.CorporationAcctInfoInitStructure();
+                //_transferService.BusiCorporationInitStructure();
+                //_transferService.CorporationBasicInfoInitStructure();
+                //_transferService.CorporationAcctInfoInitStructure();
 
                 //客户管理
-                _transferService.GrkhInitStructure();
-                _transferService.Grkh_ItemInitStructure();
+                //_transferService.GrkhInitStructure();
+                //_transferService.Grkh_ItemInitStructure();
 
             }
             catch (Exception ex)
@@ -67,12 +73,13 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //系统相关
-                //_transferService.SysEnumInitData(CityCent());
+                _transferService.SysEnumInitData(CityCent());
                 //_transferService.SysMenuInitData(CityCent());
+                //_transferService.SysConfigInitData(CityCent());
 
                 //单位管理
-                _transferService.CorporationBasicInfoInitData(CityCent());
-                _transferService.CorporationAcctInfoInitData(CityCent());
+                //_transferService.CorporationBasicInfoInitData(CityCent());
+                //_transferService.CorporationAcctInfoInitData(CityCent());
 
                 //客户管理
                 

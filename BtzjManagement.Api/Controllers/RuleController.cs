@@ -51,12 +51,12 @@ namespace BtzjManagement.Api.Controllers
         /// <param name="type"></param>
         /// <returns></returns>
         [HttpGet("GetEnum")]
-        public v_ApiResult GetEnum(string type)
+        public v_ApiResult GetEnum(string type, string val = "")
         {
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var list = _sysEnumService.GetListByType(type);
+                var list = _sysEnumService.GetListByType(type,val);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Content = list;
             }
@@ -64,7 +64,7 @@ namespace BtzjManagement.Api.Controllers
             {
                 result.Message = ex.Message;
             }
-            
+
             return result;
         }
         /// <summary>

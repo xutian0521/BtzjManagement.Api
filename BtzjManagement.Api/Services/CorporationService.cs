@@ -13,17 +13,29 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class CorporationService
     {
         BusiCorporationService _busiCorporationService;
         FlowProcService _flowProcService;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="busiCorporationService"></param>
+        /// <param name="flowProcService"></param>
         public CorporationService(BusiCorporationService busiCorporationService, FlowProcService flowProcService)
         {
             _busiCorporationService = busiCorporationService;
             _flowProcService = flowProcService;
         }
 
-        //获取最大单位账号数字
+        /// <summary>
+        /// 获取最大单位账号数字
+        /// </summary>
+        /// <returns></returns>
         public int NextDwzhInt()
         {
             var maxDwzh = SugarHelper.Instance().Max<D_CORPORATION_ACCTINFO, int>("DWZH");
@@ -34,6 +46,8 @@ namespace BtzjManagement.Api.Services
         /// 按月汇缴单位开户
         /// </summary>
         /// <param name="pmodel"></param>
+        /// <param name="city_cent"></param>
+        /// <param name="optMan"></param>
         /// <returns></returns>
         public v_ApiResult CreateUpdateCorporation(P_In_Corporation_Add pmodel,string city_cent,string optMan)
         {
@@ -192,8 +206,8 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 单位信息筛选下拉列表
         /// </summary>
-        /// <param name="dwzh"></param>
-        /// <param name="dwmc"></param>
+        /// <param name="city_cent"></param>
+        /// <param name="searchKey"></param>
         /// <returns></returns>
         public List<v_CorporationSelect> CorporationSelectList(string city_cent, string searchKey)
         {
@@ -260,7 +274,7 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 提交单位开户业务
         /// </summary>
-        /// <param name="ywlsh"></param>
+        /// <param name="pmodel"></param>
         /// <param name="optMan"></param>
         /// <param name="city_cent"></param>
         /// <returns></returns>

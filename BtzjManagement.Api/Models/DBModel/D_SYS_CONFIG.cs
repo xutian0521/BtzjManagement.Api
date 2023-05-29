@@ -23,7 +23,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public string CALC_METHOD { get; set; }
         /// <summary>
-        /// 最小
+        /// 最小缴交
         /// </summary>
         public decimal MIN_JJ { get; set; }
         /// <summary>

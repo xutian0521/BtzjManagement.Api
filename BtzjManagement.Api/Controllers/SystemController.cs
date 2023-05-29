@@ -1,6 +1,10 @@
-﻿using BtzjManagement.Api.Utils;
+﻿using BtzjManagement.Api.Models.ViewModel;
+using BtzjManagement.Api.Services;
+using BtzjManagement.Api.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using System;
 using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -9,8 +13,17 @@ namespace BtzjManagement.Api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class SystemController : ControllerBase
+    public class SystemController : BaseController
     {
+        RuleService _ruleService;
+        /// <summary>
+        /// ctor
+        /// </summary>
+        public SystemController(IConfiguration configuration, RuleService ruleService) : base(configuration)
+        {
+            _ruleService = ruleService;
+        }
+
         [HttpPost("events")]
         public async Task GetEvents()
         {
@@ -35,6 +48,29 @@ namespace BtzjManagement.Api.Controllers
                 }
                 //await Response.WriteAsync(eventStreamData);
             }
+        }
+
+        /// <summary>
+        /// 获取账务基本信息配置
+        /// </summary>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("GetSysConfig")]
+        public v_ApiResult GetSysConfig()
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var rr = _ruleService.GetSysconfig(CityCent());
+                result.Code = rr.code;
+                result.Message = rr.message;
+                result.Content = rr.model;
+            }
+            catch(Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
         }
     }
 }

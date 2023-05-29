@@ -163,7 +163,23 @@ namespace BtzjManagement.Api.Services
 
                 sugarHelper.Add(listOpt);
                 #endregion
-                //tModel = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT = 1, PARENTID = 0, ORIGIN_FLAG = key, VAL = vlaue };
+
+                //相关限制配置参数
+                sortSon = 0;
+                var tModelLimit = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "gjjlimitconfig" };
+                faId = sugarHelper.AddReturnIdentity(tModelLimit);
+                List<D_SYS_ENUM> listLimit = new List<D_SYS_ENUM>();
+                listLimit.Add(new D_SYS_ENUM
+                {
+                    CITY_CENTNO = city_cent,
+                    DESCRIPTION = "单位开户统一信用代码长度限制",
+                    LABEL = "18",
+                    PARENTID = faId,
+                    SORT = ++sortSon,
+                    TYPEKEY = tModelLimit.VAL,
+                    VAL = "1",
+                });
+                sugarHelper.Add(listLimit);
             }
             #endregion
         }
@@ -392,7 +408,59 @@ namespace BtzjManagement.Api.Services
         }
         #endregion 业务流程表
 
-        #endregion 菜单表相关
+
+
+        #region 系统配置表相关
+        /// <summary>
+        /// 系统配置表结构初始化
+        /// </summary>
+        public void SysConfigInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "CALC_METHOD", columnTypeAndLimit = "varchar2(255)", columnDesc = "计算方法" });
+            v_TableInits.Add(new v_TableInit { columnName = "MIN_JJ", columnTypeAndLimit = "NUMBER(18, 8)", columnDesc = "最小缴交" });
+            v_TableInits.Add(new v_TableInit { columnName = "SNJZ_LIXI", columnTypeAndLimit = "NUMBER(18, 8)", columnDesc = "上年结转利息" });
+            v_TableInits.Add(new v_TableInit { columnName = "JNHJ_LIXI", columnTypeAndLimit = "NUMBER(18, 8)", columnDesc = "今年汇缴利息" });
+            v_TableInits.Add(new v_TableInit { columnName = "DT_CREATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "系统开始时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "DT_SYSTEM", columnTypeAndLimit = "TIMESTAMP", columnDesc = "系统账户日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "SYS_FLAG", columnTypeAndLimit = "varchar2(255)", columnDesc = "系统标志" });
+            v_TableInits.Add(new v_TableInit { columnName = "DKYLL", columnTypeAndLimit = "NUMBER(18, 8)", columnDesc = "贷款月利率" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(255)", columnDesc = "城市网点" });
+
+            this.TableInit("SYS_CONFIG", v_TableInits, true, "系统配置表");
+        }
+
+        /// <summary>
+        /// 系统配置表数据初始化
+        /// </summary>
+        /// <param name="city_cent"></param>
+        public void SysConfigInitData(string city_cent)
+        {
+            using (var syBaseConn = SybaseConnector.Conn())
+            {
+                //获取原基本信息表
+                var org_dwXinxiSql = @" select * from system_config ";
+                List<SD_system_config> sD_Dwxinxis = syBaseConn.Query<SD_system_config>(org_dwXinxiSql).ToList();
+                var models = sD_Dwxinxis.Select(x =>
+                                       new D_SYS_CONFIG
+                                       {
+                                           CALC_METHOD = x.jsff,
+                                           CITY_CENTNO = city_cent,
+                                           DKYLL = x.dc_dk_yll,
+                                           DT_CREATE = x.dt_create,
+                                           DT_SYSTEM = x.dt_system,
+                                           JNHJ_LIXI = x.jnhjlixi,
+                                           MIN_JJ = x.minjj,
+                                           SNJZ_LIXI = x.snjzlixi,
+                                           SYS_FLAG = x.i_flag
+                                       }).ToList();
+                SugarHelper.Instance().Add(models);
+            }
+        }
+        #endregion
+
+        #endregion 系统配置相关
 
         #region  单位管理相关
         /// <summary>

@@ -31,23 +31,24 @@ namespace BtzjManagement.Api.Models.ViewModel
 
     }
 
-    //public class v_CorporationCreateOut : v_ApiResult
-    //{
-    //    public new v_CorporationCreate Content { get; set; }
-
-    //}
-    //public class v_CorporationCreate
-    //{
-    //    public string YWLSH { get; set; }
-
-    //}
-
+    /// <summary>
+    /// 单位保存状态数据model
+    /// </summary>
     public class v_CorporationCreated
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public v_BaseCorporatiorn BaseModel { get; set; }
+        /// <summary>
+        /// 
+        /// </summary>
         public string YWLSH { get; set; }
     }
 
+    /// <summary>
+    /// 
+    /// </summary>
     public class v_BaseCorporatiorn
     {
         /// <summary>

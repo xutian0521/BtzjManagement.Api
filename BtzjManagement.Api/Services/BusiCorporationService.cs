@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class BusiCorporationService
     {
         /// <summary>
@@ -20,6 +23,7 @@ namespace BtzjManagement.Api.Services
         /// <param name="optMan"></param>
         /// <param name="status"></param>
         /// <param name="memo"></param>
+        /// <param name="sugarHelper"></param>
         /// <returns></returns>
         public int AddBusiCorporation(string city_cent, string ywlsh, string uniqueKey, int busitype, string optMan, string status = OptStatusConst.新建, string memo = "",ISugarHelper sugarHelper=null)
         {

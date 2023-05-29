@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class FlowProcService
     {
         /// <summary>
@@ -19,6 +22,7 @@ namespace BtzjManagement.Api.Services
         /// <param name="execMan">操作人</param>
         /// <param name="status">状态-来自OptStatusConst</param>
         /// <param name="memo">备注</param>
+        /// <param name="sugarHelper">备注</param>
         /// <returns></returns>
         public bool AddFlowProc(string ywlsh, int ywid, string dwzh, string procName, string execMan, string status, string memo = "", ISugarHelper sugarHelper=null)
         {

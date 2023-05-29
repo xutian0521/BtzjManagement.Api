@@ -15,6 +15,11 @@ namespace BtzjManagement.Api.Controllers
     public class SybaseController : ControllerBase
     {
         SybaseService _sybaseService;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="sybaseService"></param>
         public SybaseController(SybaseService sybaseService)
         {
             _sybaseService = sybaseService;

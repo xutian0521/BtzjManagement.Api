@@ -12,10 +12,19 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PersonInfoService
     {
         FlowProcService _flowProcService;
         CorporationService _corporationService;
+
+        /// <summary>
+        /// ctor
+        /// </summary>
+        /// <param name="flowProcService"></param>
+        /// <param name="corporationService"></param>
         public PersonInfoService(FlowProcService flowProcService,CorporationService corporationService)
         {
             _flowProcService = flowProcService;

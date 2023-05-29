@@ -402,5 +402,21 @@ namespace BtzjManagement.Api.Services
                 return (code: -1, message: ex.Message, list: null);
             }
         }
+
+        //---------------------------------------------------账务配置-----------------------------------------------------
+        /// <summary>
+        /// 查询账务基本配置
+        /// </summary>
+        /// <param name="city_cent"></param>
+        /// <returns></returns>
+        public (int code, string message, D_SYS_CONFIG model) GetSysconfig(string city_cent)
+        {
+            var model = SugarSimple.Instance().Queryable<D_SYS_CONFIG>().First(x => x.CITY_CENTNO == city_cent);
+            if(model == null)
+            {
+                return (ApiResultCodeConst.ERROR, "未查询到相关账务配置", model);
+            }
+            return (ApiResultCodeConst.SUCCESS, "", model);
+        }
     }
 }

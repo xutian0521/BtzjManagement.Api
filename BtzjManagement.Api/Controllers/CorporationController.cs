@@ -52,8 +52,7 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 单位信息筛选下拉列表
         /// </summary>
-        /// <param name="dwzh">单位账号</param>
-        /// <param name="dwmc">单位名称</param>
+        /// <param name="searchKey"></param>
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("CorporationSelectList")]

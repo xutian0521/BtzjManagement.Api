@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Models.ViewModel
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class v_Busi_PersonInfo
     {
         /// <summary>
