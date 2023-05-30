@@ -22,7 +22,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public int PID { get; set; }
         /// <summary>
-        /// 影像类型-一级类型来自sys_enum表typekey为gjjopttype
+        /// 影像类型-一级类型来自SYS_DATA_DICTIONARY表type_key为gjjopttype
         /// </summary>
         public int MENU_TYPE { get; set; }
         /// <summary>

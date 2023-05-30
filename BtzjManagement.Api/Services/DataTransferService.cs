@@ -22,168 +22,11 @@ namespace BtzjManagement.Api.Services
     {
         #region 系统配置相关
 
-        #region 枚举表相关
-        /// <summary>
-        /// 枚举表结构初始化
-        /// </summary>
-        public void SysEnumInitStructure()
-        {
-            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
-            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-            v_TableInits.Add(new v_TableInit { columnName = "TYPEKEY", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "客户编号" });
-            v_TableInits.Add(new v_TableInit { columnName = "VAL", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "键" });
-            v_TableInits.Add(new v_TableInit { columnName = "LABEL", columnTypeAndLimit = "nvarchar2(360)", columnDesc = "值" });
-            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "nvarchar2(360)", columnDesc = "备注" });
-            v_TableInits.Add(new v_TableInit { columnName = "PARENTID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "父类ID" });
-            v_TableInits.Add(new v_TableInit { columnName = "SORT", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
-            v_TableInits.Add(new v_TableInit { columnName = "DESCRIPTION", columnTypeAndLimit = "nvarchar2(360)", columnDesc = "描述" });
-            v_TableInits.Add(new v_TableInit { columnName = "ORIGIN_FLAG", columnTypeAndLimit = "nvarchar2(20)", columnDesc = "原sybase i_flag 字段留存" });
-            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
-
-            this.TableInit("SYS_ENUM", v_TableInits, true, "枚举类型表");
-        }
-
-        /// <summary>
-        /// 枚举表数据初始化
-        /// </summary>
-        public void SysEnumInitData(string city_cent)
-        {
-            #region 表数据初始化
-            var sugarHelper = SugarHelper.Instance();
-            sugarHelper.ExecuteCommand("delete from SYS_ENUM");
-
-            //var city_cent = _configuration.GetValue<string>("CityCent");
-            using (var syBaseConn = SybaseConnector.Conn())
-            {
-                //获取枚举信息表
-                var org_journey_ConfigsSql = @" select * from journey_config order by i_flag asc ";
-                List<SD_journey_config> journey_Configs = syBaseConn.Query<SD_journey_config>(org_journey_ConfigsSql).ToList();
-                var listFirst = journey_Configs.GroupBy(x => x.i_flag_gbk, x => x.s_name_gbk).ToList();
-                var modelsFather = new List<D_SYS_ENUM>();
-                Action action = null;
-                int sortFa = 0;
-                int sortSon = 0;
-                foreach (var item in listFirst)
-                {
-                    var key = item.Key;
-                    var name = item.FirstOrDefault();
-                    var vlaue = name;
-                    switch (name)
-                    {
-                        case "单位性质":
-                            vlaue = "danweixingzhi";
-                            break;
-                        case "补贴资金来源":
-                            vlaue = "butiezijinlaiyuan";
-                            break;
-                        case "银行":
-                            vlaue = "bank";
-                            break;
-                        case "性别":
-                            vlaue = "xingbie";
-                            break;
-                    }
-
-                    D_SYS_ENUM tModel = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = key, VAL = vlaue };
-                    action += () => sugarHelper.AddReturnIdentity(tModel);
-                }
-
-                var tModelJsff = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "jsff", VAL = "jsff" };
-                var tModelZjlx = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "zjhmlx" };
-
-                action += () => sugarHelper.AddReturnIdentity(tModelJsff);
-                action += () => sugarHelper.AddReturnIdentity(tModelZjlx);
-                sugarHelper.InvokeTransactionScope(action);
-
-                //计算方法相关
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "0", s_value_gbk = Common.GBKToCp850("舍入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "1", s_value_gbk = Common.GBKToCp850("见分进角"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "2", s_value_gbk = Common.GBKToCp850("舍入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "3", s_value_gbk = Common.GBKToCp850("见角进元"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "4", s_value_gbk = Common.GBKToCp850("舍入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "5", s_value_gbk = Common.GBKToCp850("见厘进分"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "6", s_value_gbk = Common.GBKToCp850("四舍五入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "7", s_value_gbk = Common.GBKToCp850("四舍五入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "8", s_value_gbk = Common.GBKToCp850("四舍五入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
-
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "01", s_value_gbk = Common.GBKToCp850("身份证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("军官证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("护照"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("外国人永居居留证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
 
 
-                action = null;
-                var listFather = sugarHelper.QueryList<D_SYS_ENUM>();
+        #region 系统用户，角色，权限，字典相关
 
-                foreach (var item in listFather)
-                {
-                    sortSon = 0;
-                    var list = journey_Configs.Where(x => x.i_flag_gbk == item.ORIGIN_FLAG).Select(x => new D_SYS_ENUM
-                    {
-                        PARENTID = item.ID,
-                        LABEL = x.s_value_gbk,
-                        ORIGIN_FLAG = x.i_flag_gbk,
-                        VAL = x.i_value_gbk,
-                        CITY_CENTNO = city_cent,
-                        TYPEKEY = item.VAL,
-                        SORT = ++sortSon
-                    }).ToList();
-                    action += () => sugarHelper.Add(list);
-                }
-                sugarHelper.InvokeTransactionScope(action);
 
-                #region 公积金业务操作名称
-                var org_gjjop_configSql = @" select * from gjjop_config order by i_value asc ";
-                List<SD_gjjop_config> gjjop_config = syBaseConn.Query<SD_gjjop_config>(org_gjjop_configSql).ToList();
-                var tModelOpt = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "gjjopttype", VAL = "gjjopttype" };
-                var faId = sugarHelper.AddReturnIdentity(tModelOpt);
-                sortSon = 0;
-                var listOpt = gjjop_config.Select(x => new D_SYS_ENUM
-                {
-                    CITY_CENTNO = city_cent,
-                    DESCRIPTION = x.s_value_gbk,
-                    LABEL = x.s_value_gbk,
-                    ORIGIN_FLAG = x.i_flag_gbk,
-                    PARENTID = faId,
-                    SORT = ++sortSon,
-                    TYPEKEY = tModelOpt.VAL,
-                    VAL = x.i_value_gbk
-                }).ToList();
-                listOpt.Add(new D_SYS_ENUM
-                {
-                    CITY_CENTNO = city_cent,
-                    DESCRIPTION = "单位开户",
-                    LABEL = "单位开户",
-                    PARENTID = faId,
-                    SORT = ++sortSon,
-                    TYPEKEY = tModelOpt.VAL,
-                    VAL = "1000"
-                });
-
-                sugarHelper.Add(listOpt);
-                #endregion
-
-                //相关限制配置参数
-                sortSon = 0;
-                var tModelLimit = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "gjjlimitconfig" };
-                faId = sugarHelper.AddReturnIdentity(tModelLimit);
-                List<D_SYS_ENUM> listLimit = new List<D_SYS_ENUM>();
-                listLimit.Add(new D_SYS_ENUM
-                {
-                    CITY_CENTNO = city_cent,
-                    DESCRIPTION = "单位开户统一信用代码长度限制",
-                    LABEL = "18",
-                    PARENTID = faId,
-                    SORT = ++sortSon,
-                    TYPEKEY = tModelLimit.VAL,
-                    VAL = "1",
-                });
-                sugarHelper.Add(listLimit);
-            }
-            #endregion
-        }
-        #endregion 枚举表相关
         /// <summary>
         /// 用户信息表数据初始化
         /// </summary>
@@ -195,7 +38,10 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "用户名" });
             v_TableInits.Add(new v_TableInit { columnName = "REAL_NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "真实姓名" });
             v_TableInits.Add(new v_TableInit { columnName = "PASSWORD", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "密码" });
-            v_TableInits.Add(new v_TableInit { columnName = "RULE_ID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "权限ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "SALT", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "盐" });
+            v_TableInits.Add(new v_TableInit { columnName = "ROLE_ID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "权限ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "LAST_LOGIN_IP", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "最后登录IP" });
+            v_TableInits.Add(new v_TableInit { columnName = "LAST_LOGIN_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "最后登录时间" });
             v_TableInits.Add(new v_TableInit { columnName = "CREATE_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "创建时间" });
             v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "nvarchar2(2000)", columnDesc = "备注" });
 
@@ -232,6 +78,171 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("SYS_ROLE_MENU", v_TableInits, true, "角色菜单表");
         }
+
+
+        /// <summary>
+        /// 数据字典表结构初始化
+        /// </summary>
+        internal void SysDataDictionaryInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "TYPE_KEY", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "客户编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "VAL", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "键" });
+            v_TableInits.Add(new v_TableInit { columnName = "LABEL", columnTypeAndLimit = "nvarchar2(360)", columnDesc = "值" });
+            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "nvarchar2(360)", columnDesc = "备注" });
+            v_TableInits.Add(new v_TableInit { columnName = "PARENT_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "父类ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "SORT_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
+            v_TableInits.Add(new v_TableInit { columnName = "DESCRIPTION", columnTypeAndLimit = "nvarchar2(360)", columnDesc = "描述" });
+            v_TableInits.Add(new v_TableInit { columnName = "ORIGIN_FLAG", columnTypeAndLimit = "nvarchar2(20)", columnDesc = "原sybase i_flag 字段留存" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
+
+            this.TableInit("SYS_DATA_DICTIONARY", v_TableInits, true, "数据字典表");
+        }
+
+        /// <summary>
+        /// 数据字典表数据初始化
+        /// </summary>
+        internal void SysDataDictionaryInitData(string city_cent)
+        {
+            #region 表数据初始化
+            var sugarHelper = SugarHelper.Instance();
+            sugarHelper.ExecuteCommand("delete from SYS_DATA_DICTIONARY");
+
+            //var city_cent = _configuration.GetValue<string>("CityCent");
+            using (var syBaseConn = SybaseConnector.Conn())
+            {
+                //获取枚举信息表
+                var org_journey_ConfigsSql = @" select * from journey_config order by i_flag asc ";
+                List<SD_journey_config> journey_Configs = syBaseConn.Query<SD_journey_config>(org_journey_ConfigsSql).ToList();
+                var listFirst = journey_Configs.GroupBy(x => x.i_flag_gbk, x => x.s_name_gbk).ToList();
+                var modelsFather = new List<D_SYS_DATA_DICTIONARY>();
+                Action action = null;
+                int sortFa = 0;
+                int sortSon = 0;
+                foreach (var item in listFirst)
+                {
+                    var key = item.Key;
+                    var name = item.FirstOrDefault();
+                    var vlaue = name;
+                    switch (name)
+                    {
+                        case "单位性质":
+                            vlaue = "danweixingzhi";
+                            break;
+                        case "补贴资金来源":
+                            vlaue = "butiezijinlaiyuan";
+                            break;
+                        case "银行":
+                            vlaue = "bank";
+                            break;
+                        case "性别":
+                            vlaue = "xingbie";
+                            break;
+                    }
+
+                    D_SYS_DATA_DICTIONARY tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = vlaue };
+                    action += () => sugarHelper.AddReturnIdentity(tModel);
+                }
+
+                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "jsff" };
+                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "zjhmlx" };
+
+                action += () => sugarHelper.AddReturnIdentity(tModelJsff);
+                action += () => sugarHelper.AddReturnIdentity(tModelZjlx);
+                sugarHelper.InvokeTransactionScope(action);
+
+                //计算方法相关
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "0", s_value_gbk = Common.GBKToCp850("舍入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "1", s_value_gbk = Common.GBKToCp850("见分进角"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "2", s_value_gbk = Common.GBKToCp850("舍入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "3", s_value_gbk = Common.GBKToCp850("见角进元"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "4", s_value_gbk = Common.GBKToCp850("舍入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "5", s_value_gbk = Common.GBKToCp850("见厘进分"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "6", s_value_gbk = Common.GBKToCp850("四舍五入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "7", s_value_gbk = Common.GBKToCp850("四舍五入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "8", s_value_gbk = Common.GBKToCp850("四舍五入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
+
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "01", s_value_gbk = Common.GBKToCp850("身份证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("军官证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("护照"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("外国人永居居留证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+
+
+                action = null;
+                var listFather = sugarHelper.QueryList<D_SYS_DATA_DICTIONARY>();
+
+                foreach (var item in listFather)
+                {
+                    sortSon = 0;
+                    var list = journey_Configs.Where(x => x.i_flag_gbk == item.ORIGIN_FLAG).Select(x => new D_SYS_DATA_DICTIONARY
+                    {
+                        PARENT_ID = item.ID,
+                        LABEL = x.s_value_gbk,
+                        ORIGIN_FLAG = x.i_flag_gbk,
+                        VAL = x.i_value_gbk,
+                        CITY_CENTNO = city_cent,
+                        TYPE_KEY = item.VAL,
+                        SORT_ID = ++sortSon
+                    }).ToList();
+                    action += () => sugarHelper.Add(list);
+                }
+                sugarHelper.InvokeTransactionScope(action);
+
+                #region 公积金业务操作名称
+                var org_gjjop_configSql = @" select * from gjjop_config order by i_value asc ";
+                List<SD_gjjop_config> gjjop_config = syBaseConn.Query<SD_gjjop_config>(org_gjjop_configSql).ToList();
+                var tModelOpt = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjopttype", VAL = "gjjopttype" };
+                var faId = sugarHelper.AddReturnIdentity(tModelOpt);
+                sortSon = 0;
+                var listOpt = gjjop_config.Select(x => new D_SYS_DATA_DICTIONARY
+                {
+                    CITY_CENTNO = city_cent,
+                    DESCRIPTION = x.s_value_gbk,
+                    LABEL = x.s_value_gbk,
+                    ORIGIN_FLAG = x.i_flag_gbk,
+                    PARENT_ID = faId,
+                    SORT_ID = ++sortSon,
+                    TYPE_KEY = tModelOpt.VAL,
+                    VAL = x.i_value_gbk
+                }).ToList();
+                listOpt.Add(new D_SYS_DATA_DICTIONARY
+                {
+                    CITY_CENTNO = city_cent,
+                    DESCRIPTION = "单位开户",
+                    LABEL = "单位开户",
+                    PARENT_ID = faId,
+                    SORT_ID = ++sortSon,
+                    TYPE_KEY = tModelOpt.VAL,
+                    VAL = "1000"
+                });
+
+                sugarHelper.Add(listOpt);
+                #endregion
+
+                //相关限制配置参数
+                sortSon = 0;
+                var tModelLimit = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "gjjlimitconfig" };
+                faId = sugarHelper.AddReturnIdentity(tModelLimit);
+                List<D_SYS_ENUM> listLimit = new List<D_SYS_ENUM>();
+                listLimit.Add(new D_SYS_ENUM
+                {
+                    CITY_CENTNO = city_cent,
+                    DESCRIPTION = "单位开户统一信用代码长度限制",
+                    LABEL = "18",
+                    PARENTID = faId,
+                    SORT = ++sortSon,
+                    TYPEKEY = tModelLimit.VAL,
+                    VAL = "1",
+                });
+                sugarHelper.Add(listLimit);
+                //tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = 1, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = vlaue };
+            }
+            #endregion
+        }
+        #endregion
+
         #region 菜单表相关
         /// <summary>
         /// 菜单表结构初始化
@@ -398,7 +409,7 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "varchar2(255)", columnDesc = "业务流水号" });
             v_TableInits.Add(new v_TableInit { columnName = "YWID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "业务id" });
             v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "varchar2(255)", columnDesc = "单位账号" });
-            v_TableInits.Add(new v_TableInit { columnName = "PROC_NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "流程名称-来自sys_enum表typekey为gjjopttype" });
+            v_TableInits.Add(new v_TableInit { columnName = "PROC_NAME", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "流程名称-来自SYS_DATA_DICTIONARY表type_key为gjjopttype" });
             v_TableInits.Add(new v_TableInit { columnName = "EXCEC_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "执行时间" });
             v_TableInits.Add(new v_TableInit { columnName = "EXCEC_MAN", columnTypeAndLimit = "varchar2(255)", columnDesc = "执行人" });
             v_TableInits.Add(new v_TableInit { columnName = "STATUS", columnTypeAndLimit = "varchar2(255)", columnDesc = "状态-来自OptStatusConst" });

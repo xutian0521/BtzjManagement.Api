@@ -3,6 +3,9 @@ using System;
 
 namespace BtzjManagement.Api.Models.DBModel
 {
+    /// <summary>
+    /// 用户信息表
+    /// </summary>
     [SugarTable("USER_INFO")]
     public class D_USER_INFO
     {
@@ -26,19 +29,33 @@ namespace BtzjManagement.Api.Models.DBModel
         /// 密码
         /// </summary>
         public string PASSWORD { get; set; }
+        /// <summary>
+        /// 盐
+        /// </summary>
+        public string SALT { get; set; }
 
         /// <summary>
         /// 权限ID
         /// </summary>
-        public string RULE_ID { get; set; }
+        public string ROLE_ID { get; set; }
+        /// <summary>
+        /// 最后登录ip
+        /// </summary>
+        public string LAST_LOGIN_IP { get; set; }
+        /// <summary>
+        /// 最后登录时间
+        /// </summary>
+        public DateTime? LAST_LOGIN_TIME { get; set; }
+
         /// <summary>
         /// 创建时间
         /// </summary>
-        public DateTime CREATE_TIME { get; set; }
+        public DateTime? CREATE_TIME { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
         public string REMARK { get; set; }
+
     }
 }

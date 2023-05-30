@@ -30,7 +30,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public string DWZH { get; set; }
         /// <summary>
-        /// 流程名称-来自sys_enum表typekey为gjjopttype
+        /// 流程名称-来自SYS_DATA_DICTIONARY表type_key为gjjopttype
         /// </summary>
         public string PROC_NAME { get; set; }
         /// <summary>

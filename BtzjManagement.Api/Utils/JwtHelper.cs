@@ -18,7 +18,7 @@ namespace BtzjManagement.Api.Utils
         /// <param name="roleId">角色id</param>
         /// <param name="exp">过期时间</param>
         /// <returns></returns>
-        public static string Encrypt(string userId, string userName, int roleId, double exp)
+        public static string Encrypt(string userId, string userName, string roleId, double exp)
         {
             #region 1) 加密
             var payload = new Dictionary<string, object>
@@ -69,27 +69,5 @@ namespace BtzjManagement.Api.Utils
 
         }
 
-    }
-    /// <summary>
-    /// jwtPayload
-    /// </summary>
-    public class JwtPayload
-    {
-        /// <summary>
-        /// 会员编号
-        /// </summary>
-        public string userId { get; set; }
-        /// <summary>
-        /// 用户姓名
-        /// </summary>
-        public string userName { get; set; }
-        /// <summary>
-        /// roleId
-        /// </summary>
-        public int roleId { get; set; }
-        /// <summary>
-        /// 用户凭证过期时间
-        /// </summary>
-        public double exp { get; set; }
     }
 }
