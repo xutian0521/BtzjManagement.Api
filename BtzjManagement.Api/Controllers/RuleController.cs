@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using SqlSugar;
 using Microsoft.AspNetCore.Http;
 using YamlDotNet.Core;
+using Microsoft.Extensions.Configuration;
 
 namespace BtzjManagement.Api.Controllers
 {
@@ -17,7 +18,7 @@ namespace BtzjManagement.Api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     //[Encryption]
-    public class RuleController : ControllerBase
+    public class RuleController : BaseController
     {
         RuleService _ruleService;
 
@@ -25,8 +26,9 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// ctor
         /// </summary>
+        /// <param name="configuration"></param>
         /// <param name="ruleService"></param>
-        public RuleController(RuleService ruleService)
+        public RuleController(IConfiguration configuration, RuleService ruleService): base(configuration)
         {
             _ruleService = ruleService;
         }
@@ -41,7 +43,7 @@ namespace BtzjManagement.Api.Controllers
         [HttpGet("MenuTreeList")]
         public v_ApiResult MenuTreeList(bool isFilterDisabledMenu = false)
         {
-            var user = this.HttpContext.Items["User"] as JwtPayload;
+            var user = base.GetUser();
             var list = _ruleService.MenuTreeList(user.roleId, 0, isFilterDisabledMenu);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
@@ -67,7 +69,7 @@ namespace BtzjManagement.Api.Controllers
             {
                 return new v_ApiResult(ApiResultCodeConst.ERROR, "菜单名称不能为空");
             }
-            var user = this.HttpContext.Items["User"] as JwtPayload;
+            var user = base.GetUser();
             Guid userId = Guid.Parse(user.userId);
             var result = await _ruleService.AddOrModifyMenuAsync(id, pId, title, path, icon, sortId, isEnable, remark, userId);
             return new v_ApiResult(result.code, result.message);
