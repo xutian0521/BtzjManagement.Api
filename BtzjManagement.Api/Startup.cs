@@ -74,9 +74,10 @@ namespace BtzjManagement.Api
             services.AddSingleton<SybaseService>();
             services.AddSingleton<DataTransferService>();
             services.AddSingleton<CorporationService>();
-            services.AddSingleton<SysEnumService>();
+
             services.AddSingleton<BusiCorporationService>();
             services.AddSingleton<FlowProcService>();
+            services.AddSingleton<AccountService>();
 
         }
 

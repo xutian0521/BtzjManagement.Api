@@ -7,6 +7,7 @@ using JWT.Serializers;
 using System.Linq;
 using BtzjManagement.Api.Utils;
 using Microsoft.AspNetCore.Authorization;
+using BtzjManagement.Api.Models.ViewModel;
 
 namespace BtzjManagement.Api.Filter
 {

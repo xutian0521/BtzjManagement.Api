@@ -16,22 +16,22 @@ namespace BtzjManagement.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Encryption]
+    //[Encryption]
     public class RuleController : ControllerBase
     {
         RuleService _ruleService;
-        SysEnumService _sysEnumService;
+
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="ruleService"></param>
-        /// <param name="sysEnumService"></param>
-        public RuleController(RuleService ruleService, SysEnumService sysEnumService)
+        public RuleController(RuleService ruleService)
         {
             _ruleService = ruleService;
-            _sysEnumService = sysEnumService;
         }
+        //---------------------------------------------------菜单-----------------------------------------------------
+
         /// <summary>
         /// 菜单列表
         /// </summary>
@@ -41,32 +41,11 @@ namespace BtzjManagement.Api.Controllers
         [HttpGet("MenuTreeList")]
         public v_ApiResult MenuTreeList(bool isFilterDisabledMenu = false)
         {
-            var list = _ruleService.MenuTreeList(0 , isFilterDisabledMenu);
+            var user = this.HttpContext.Items["User"] as JwtPayload;
+            var list = _ruleService.MenuTreeList(user.roleId, 0, isFilterDisabledMenu);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
 
-        /// <summary>
-        /// 获取枚举列表下拉选项
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        [HttpGet("GetEnum")]
-        public v_ApiResult GetEnum(string type)
-        {
-            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
-            try
-            {
-                var list = _sysEnumService.GetListByType(type);
-                result.Code = ApiResultCodeConst.SUCCESS;
-                result.Content = list;
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-            }
-            
-            return result;
-        }
         /// <summary>
         /// 添加或修改菜单
         /// </summary>
@@ -90,7 +69,7 @@ namespace BtzjManagement.Api.Controllers
             var user = this.HttpContext.Items["User"] as JwtPayload;
             Guid userId = Guid.Parse(user.userId);
             var result = await _ruleService.AddOrModifyMenuAsync(id, pId, title, path, icon, sortId, isEnable, remark, userId);
-            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, result);
+            return new v_ApiResult(result.code, result.message);
         }
         /// <summary>
         /// 获取父级菜单枚举
@@ -113,6 +92,29 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, one);
         }
 
+        /// <summary>
+        /// 删除菜单
+        /// </summary>
+        /// <param name="id">菜单id</param>
+        /// <returns></returns>
+        [HttpPost("DeleteMenu")]
+        public async Task<v_ApiResult> DeleteMenu([FromForm] int id)
+        {
+
+            var result = await _ruleService.DeleteMenuAsync(id);
+            return new v_ApiResult(result.code, result.message);
+        }
+        /// <summary>
+        /// 载入修改角色菜单信息
+        /// </summary>
+        /// <param name="roleId">角色id</param>
+        /// <returns></returns>
+        [HttpGet("LoadModifyRoleMenu")]
+        public List<v_SysMenu> LoadModifyRoleMenu(int roleId)
+        {
+            var list = _ruleService.MenuTreeList(roleId, 0, false);
+            return list;
+        }
         //---------------------------------------------------用户-----------------------------------------------------
 
         /// <summary>
@@ -130,16 +132,16 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="id">id</param>
         /// <param name="userName">用户名</param>
-        /// <param name="passWord">密码</param>
+        /// <param name="password">密码</param>
         /// <param name="roleId">角色id</param>
         /// <param name="realName">真实姓名</param>
         /// <param name="remark">备注</param>
         /// <returns></returns>
         [HttpPost("AddOrModifyUser")]
-        public async Task<v_ApiResult> AddOrModifyUser([FromForm] int id, [FromForm]string userName, [FromForm] string passWord,
+        public async Task<v_ApiResult> AddOrModifyUser([FromForm] int id, [FromForm]string userName, [FromForm] string password,
             [FromForm] string roleId, [FromForm] string realName, [FromForm] string remark)
         {
-            var r = await _ruleService.AddOrModifyUser(id, userName, passWord, roleId, realName, remark);
+            var r = await _ruleService.AddOrModifyUser(id, userName, password, roleId, realName, remark);
             return new v_ApiResult(r.code, r.message, null);
         }
 
@@ -222,5 +224,93 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(r.code, r.message);
         }
 
+        //---------------------------------------------------字典-----------------------------------------------------
+
+
+        /// <summary>
+        /// 获取枚举列表下拉选项
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        [HttpGet("GetDataDictionaryListByType")]
+        public v_ApiResult GetDataDictionaryListByType(string type)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var list = _ruleService.GetDataDictionaryListByType(type);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Content = list;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// 字典列表递归
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetDataDictionaryTreeList")]
+        public v_ApiResult GetDataDictionaryTreeList()
+        {
+            var list = _ruleService.DataDictionaryTreeList(0);
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
+        }
+        /// <summary>
+        /// 数据字典类型
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("GetDataDictionaryListByParent")]
+        public async Task<v_ApiResult> GetDataDictionaryListByParent()
+        {
+            var list = await _ruleService.GetDataDictionaryListByParent();
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
+        }
+        /// <summary>
+        /// 载入修改枚举字典
+        /// </summary>
+        /// <param name="id">字典id</param>
+        /// <returns></returns>
+        [HttpGet("LoadModifyEnumInfoById")]
+        public async Task<v_ApiResult> LoadModifyEnumInfoById(int id)
+        {
+            var r=  await _ruleService.LoadModifyEnumInfoById(id);
+            return new v_ApiResult(r.code, r.message, r.@enum);
+        }
+
+        /// <summary>
+        /// 新增或修改枚举字典
+        /// </summary>
+        /// <param name="id">字典id</param>
+        /// <param name="dataKey">字典key</param>
+        /// <param name="dataKeyAlias">字典别名</param>
+        /// <param name="pId">父级id</param>
+        /// <param name="dataValue">字典值</param>
+        /// <param name="dataDescription">描述</param>
+        /// <param name="sortId">排序</param>
+        /// <returns></returns>
+        [HttpPost("AddOrModifyEnum")]
+        public async Task<v_ApiResult> AddOrModifyEnum(
+            [FromForm] int id, [FromForm] string dataKey, [FromForm] string dataKeyAlias, [FromForm] int? pId,
+            [FromForm] string dataValue, [FromForm] string dataDescription, [FromForm] int? sortId)
+        {
+            var result = await _ruleService.AddOrModifyEnum(id, dataKey, dataKeyAlias,
+                pId == null ? 0 : pId.GetValueOrDefault(), dataValue, dataDescription, sortId == null ? 0 : sortId.GetValueOrDefault());
+            return new v_ApiResult(result.code, result.message);
+        }
+        /// <summary>
+        /// 删除枚举字典
+        /// </summary>
+        /// <param name="id">字典id</param>
+        /// <returns></returns>
+        [HttpGet("DeleteEnum")]
+        public async Task<v_ApiResult> DeleteEnum(int id)
+        {
+            var result = await _ruleService.DeleteEnumAsync(id);
+            return new v_ApiResult(result.code, result.message);
+        }
     }
 }

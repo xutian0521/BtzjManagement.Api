@@ -6,18 +6,21 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Models.DBModel
 {
-    [SugarTable("SYS_ENUM")]
-    public class D_SYS_ENUM
+    /// <summary>
+    /// 数据字典表
+    /// </summary>
+    [SugarTable("SYS_DATA_DICTIONARY")]
+    public class D_SYS_DATA_DICTIONARY
     {
         /// <summary>
         /// ID
         /// </summary>
-        [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "SYS_ENUM_SEQ")]
+        [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "SYS_DATA_DICTIONARY_SEQ")]
         public int ID { get; set; }
         /// <summary>
         /// 枚举类型
         /// </summary>
-        public string TYPEKEY { get; set; }
+        public string TYPE_KEY { get; set; }
         /// <summary>
         /// 键
         /// </summary>
@@ -33,11 +36,11 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 父类ID
         /// </summary>
-        public int PARENTID { get; set; }
+        public int PARENT_ID { get; set; }
         /// <summary>
         /// 排序
         /// </summary>
-        public int SORT { get; set; }
+        public int SORT_ID { get; set; }
         /// <summary>
         /// 描述
         /// </summary>

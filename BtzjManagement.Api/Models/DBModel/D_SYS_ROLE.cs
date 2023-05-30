@@ -2,7 +2,10 @@
 
 namespace BtzjManagement.Api.Models.DBModel
 {
-    [SugarTable("SYS_ENUM")]
+    /// <summary>
+    /// 系统角色表
+    /// </summary>
+    [SugarTable("SYS_ROLE")]
     public class D_SYS_ROLE
     {
         /// <summary>

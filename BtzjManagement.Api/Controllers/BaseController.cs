@@ -1,4 +1,5 @@
-﻿using BtzjManagement.Api.Utils;
+﻿using BtzjManagement.Api.Models.ViewModel;
+using BtzjManagement.Api.Utils;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System;

@@ -32,9 +32,9 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //系统相关
-                _transferService.UserInfoInitData(CityCent());
-                _transferService.SysEnumInitStructure();
-                _transferService.SysMenuInitStructure();
+
+
+
                 _transferService.ImageMenuInitStructure();
                 _transferService.ImageDataInitStructure();
                 _transferService.FlowProcInitStructure();
@@ -84,7 +84,7 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, true);
         }
         /// <summary>
-        /// 单位基本信息表/单位账户信息表结构初始化
+        /// 
         /// </summary>
         /// <returns></returns>
         [AcceptVerbs("GET", "POST")]
@@ -93,8 +93,12 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-
+                //_transferService.SysEnumInitStructure();
+                _transferService.UserInfoInitData(CityCent());
+                //_transferService.SysMenuInitStructure();
                 //_transferService.SysRoleMenuInitData(CityCent());
+                //_transferService.SysRoleMenuInitData(CityCent());
+                
 
             }
             catch (Exception ex)
