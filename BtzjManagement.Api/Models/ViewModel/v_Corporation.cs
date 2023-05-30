@@ -27,7 +27,10 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 下次应缴日期
         /// </summary>
         public string NEXTPAYMTH { get; set; }
-
+        /// <summary>
+        /// 统一社会信用代码
+        /// </summary>
+        public string USCCID { get; set; }
 
     }
 

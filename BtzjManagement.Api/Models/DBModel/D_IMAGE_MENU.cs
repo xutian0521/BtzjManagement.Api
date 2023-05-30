@@ -24,15 +24,15 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 影像类型-一级类型来自sys_enum表typekey为gjjopttype
         /// </summary>
-        public int MENUTYPE { get; set; }
+        public int MENU_TYPE { get; set; }
         /// <summary>
         /// 影像类型名称
         /// </summary>
-        public string MENUNAME { get; set; }
+        public string MENU_NAME { get; set; }
         /// <summary>
         /// 排序
         /// </summary>
-        public int SORTID { get; set; }
+        public int SORT_ID { get; set; }
         /// <summary>
         /// 是否启用(即前端能否获取到该节点) 0:不使用  1：使用
         /// </summary>

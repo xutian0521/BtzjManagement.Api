@@ -20,7 +20,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 影像类型id
         /// </summary>
-        public int MENUID { get; set; }
+        public int MENU_ID { get; set; }
         /// <summary>
         /// 业务流水号
         /// </summary>

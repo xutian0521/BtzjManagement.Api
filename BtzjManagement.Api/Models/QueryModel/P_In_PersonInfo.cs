@@ -5,6 +5,9 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Models.QueryModel
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class P_In_PersonInfo
     {
         /// <summary>
@@ -71,5 +74,13 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// 个人存款账户开户银行代码
         /// </summary>
         public string GRCKZHKHYHDM { get; set; }
+        /// <summary>
+        /// 业务流水号
+        /// </summary>
+        public string YWLSH { get; set; }
+        /// <summary>
+        /// ID
+        /// </summary>
+        public int ID { get; set; }
     }
 } 

@@ -363,9 +363,9 @@ namespace BtzjManagement.Api.Services
             List<v_TableInit> v_TableInits = new List<v_TableInit> { };
             v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
             v_TableInits.Add(new v_TableInit { columnName = "PID", columnTypeAndLimit = "NUMBER(10)  not null", columnDesc = "父级ID" });
-            v_TableInits.Add(new v_TableInit { columnName = "MENUTYPE", columnTypeAndLimit = "NUMBER(10) not null", columnDesc = "影像类型-一级类型来自sys_enum表typekey为gjjopttype" });
-            v_TableInits.Add(new v_TableInit { columnName = "MENUNAME", columnTypeAndLimit = "nvarchar2(400)", columnDesc = "影像类型名称" });
-            v_TableInits.Add(new v_TableInit { columnName = "SORTID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
+            v_TableInits.Add(new v_TableInit { columnName = "MENU_TYPE", columnTypeAndLimit = "NUMBER(10) not null", columnDesc = "影像类型-一级类型来自sys_enum表typekey为gjjopttype" });
+            v_TableInits.Add(new v_TableInit { columnName = "MENU_NAME", columnTypeAndLimit = "nvarchar2(400)", columnDesc = "影像类型名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "SORT_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
             v_TableInits.Add(new v_TableInit { columnName = "ENABLED", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否启用(即前端能否获取到该节点) 0:不使用  1：使用" });
             v_TableInits.Add(new v_TableInit { columnName = "REQUIRED", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否必传(ENABLED为1时该字段才生效) 0:不是必传，1:是必传" });
             v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
@@ -380,7 +380,7 @@ namespace BtzjManagement.Api.Services
         {
             List<v_TableInit> v_TableInits = new List<v_TableInit> { };
             v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-            v_TableInits.Add(new v_TableInit { columnName = "MENUID", columnTypeAndLimit = "NUMBER(10)  not null", columnDesc = "影像类型id" });
+            v_TableInits.Add(new v_TableInit { columnName = "MENU_ID", columnTypeAndLimit = "NUMBER(10)  not null", columnDesc = "影像类型id" });
             v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "varchar2(255) not null", columnDesc = "业务流水号" });
             v_TableInits.Add(new v_TableInit { columnName = "PATH", columnTypeAndLimit = "varchar2(1000)", columnDesc = "影像路径" });
             this.TableInit("IMAGE_DATA", v_TableInits, true, "影像数据表");
@@ -479,6 +479,7 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "SUBMIT_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "提交人" });
             v_TableInits.Add(new v_TableInit { columnName = "VERIFY_TIME", columnTypeAndLimit = "TIMESTAMP ", columnDesc = "审核时间" });
             v_TableInits.Add(new v_TableInit { columnName = "VERIFY_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "审核人" });
+            v_TableInits.Add(new v_TableInit { columnName = "SYSTEM_TIME", columnTypeAndLimit = "TIMESTAMP ", columnDesc = "账务时间" });
             v_TableInits.Add(new v_TableInit { columnName = "STATUS", columnTypeAndLimit = "varchar2(255)", columnDesc = "业务状态" });
             v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
             v_TableInits.Add(new v_TableInit { columnName = "MEMO", columnTypeAndLimit = "nvarchar2(1000)", columnDesc = "备注" });
@@ -673,6 +674,7 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "SUBMIT_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "提交人" });
             v_TableInits.Add(new v_TableInit { columnName = "VERIFY_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "审核时间" });
             v_TableInits.Add(new v_TableInit { columnName = "VERIFY_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "审核人" });
+            v_TableInits.Add(new v_TableInit { columnName = "SYSTEM_TIME", columnTypeAndLimit = "TIMESTAMP ", columnDesc = "账务时间" });
             v_TableInits.Add(new v_TableInit { columnName = "STATUS", columnTypeAndLimit = "varchar2(30)", columnDesc = "业务状态" });
             v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "varchar2(360byte)", columnDesc = "城市网点编号" });
             v_TableInits.Add(new v_TableInit { columnName = "MEMO", columnTypeAndLimit = "nvarchar2(1000)", columnDesc = "备注" });

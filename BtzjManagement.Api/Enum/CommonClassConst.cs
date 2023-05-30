@@ -78,13 +78,13 @@ namespace BtzjManagement.Api.Enum
         public const string 新建 = "created";
         [Description("等待初审:表示该业务数据已经提交，正在初审相关人员进行审核。")]
         public const string 等待初审 = "chushening";
-        [Description("初审未通过:表示该业务数据在后台代码处理中出现错误，等待初审人员再次审核或初审退回。")]
+        [Description("初审出错:表示该业务数据在后台代码处理中出现错误，等待初审人员再次审核或初审退回。")]
         public const string 初审出错 = "chushenerror";
         [Description("初审退回:表示该业务数据被初审人员退回。在这个状态下，可以对业务数据进行编辑、修改等操作。")]
         public const string 初审退回 = "chushengback";
         [Description("等待终审:表示初审通过等待终审或不需要初审直接等待终审")]
         public const string 等待终审 = "zhongshening";
-        [Description("终审未通过:表示该业务数据在后台代码处理中出现错误，等待终审人员再次审核或退回。")]
+        [Description("终审出错:表示该业务数据在后台代码处理中出现错误，等待终审人员再次审核或退回。")]
         public const string 终审出错 = "zhongshenerror";
         [Description("终审退回:表示该业务数据被终审人员退回。在这个状态下，可以对业务数据进行编辑、修改等操作。")]
         public const string 终审退回 = "zhongshenback";

@@ -20,16 +20,18 @@ namespace BtzjManagement.Api.Services
     {
         BusiCorporationService _busiCorporationService;
         FlowProcService _flowProcService;
+        RuleService _ruleService;
 
         /// <summary>
         /// ctor
         /// </summary>
         /// <param name="busiCorporationService"></param>
         /// <param name="flowProcService"></param>
-        public CorporationService(BusiCorporationService busiCorporationService, FlowProcService flowProcService)
+        public CorporationService(BusiCorporationService busiCorporationService, FlowProcService flowProcService,RuleService ruleService)
         {
             _busiCorporationService = busiCorporationService;
             _flowProcService = flowProcService;
+            _ruleService = ruleService;
         }
 
         /// <summary>
@@ -216,7 +218,7 @@ namespace BtzjManagement.Api.Services
 
             List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)> wherif = new List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)>(); ;
             wherif.Add(new(!string.IsNullOrEmpty(searchKey), (t1, t2) => t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.USCCID.Contains(searchKey))));
-            var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH, DWJCBL = t2.DWJCBL, NEXTPAYMTH = t2.NEXTPAYMTH.Value.ToString("yyyy-MM-dd") }, where, wherif);
+            var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, (t1, t2) => new v_CorporationSelect { DWMC = t1.DWMC, DWZH = t2.DWZH, DWJCBL = t2.DWJCBL, NEXTPAYMTH = t2.NEXTPAYMTH.Value.ToString("yyyy-MM-dd"), USCCID = t1.USCCID }, where, wherif);
 
             //var llll = SugarSimple.Instance().Queryable<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO>((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID })
             //    .Where((t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent)
@@ -305,6 +307,8 @@ namespace BtzjManagement.Api.Services
             busiModel.SUBMIT_TIME = DateTime.Now;
             busiModel.VERIFY_MAN = optMan;
             busiModel.VERIFY_TIME = DateTime.Now;
+            var sys_time = _ruleService.GetSysconfig(city_cent).model.DT_SYSTEM;
+            busiModel.SYSTEM_TIME = sys_time;
             action += () => sugarHelper.Update(busiModel);
 
             //更新单位基本信息表

@@ -60,7 +60,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 系统账务日期
         /// </summary>
-        public DateTime SYSTEM_TIME { get; set; }
+        public DateTime? SYSTEM_TIME { get; set; }
         /// <summary>
         /// 业务状态
         /// </summary>

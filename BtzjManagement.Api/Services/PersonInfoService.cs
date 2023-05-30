@@ -8,6 +8,7 @@ using SqlSugar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Services
@@ -19,6 +20,14 @@ namespace BtzjManagement.Api.Services
     {
         FlowProcService _flowProcService;
         CorporationService _corporationService;
+        /// <summary>
+        /// 能录入和修改的状态
+        /// </summary>
+        List<string> statusListCanAddUpdate = new List<string> { OptStatusConst.新建, OptStatusConst.终审退回,OptStatusConst.初审退回 };
+        /// <summary>
+        /// 业务在途的状态-此时不能修改
+        /// </summary>
+        List<string> statusListProcess = new List<string> { OptStatusConst.初审出错, OptStatusConst.等待初审, OptStatusConst.终审出错, OptStatusConst.等待终审 };
 
         /// <summary>
         /// ctor
@@ -89,62 +98,95 @@ namespace BtzjManagement.Api.Services
             }
             else
             {
-                ywid = grkh.ID;
-                grkh.CREATE_MAN = optName;
-                grkh.CREATE_TIME = DateTime.Now;
+                if (statusListCanAddUpdate.Contains(grkh.STATUS))//可修改
+                {
+                    ywid = grkh.ID;
+                    grkh.CREATE_MAN = optName;
+                    grkh.CREATE_TIME = DateTime.Now;
 
-                action += () => { sugarHelper.Update(grkh); };
+                    action += () => { sugarHelper.Update(grkh); };
+                }
+                else if(statusListProcess.Contains(grkh.STATUS))//在途
+                {
+                    return (ApiResultCodeConst.ERROR, $"当前单位（{pmodel.DWZH}）有未办结的按月缴存个人开户业务，请稍后重试", string.Empty);
+                }
+               
             }
 
             //查用户是否已有账户
-            var model = GetCreatedGrhk(pmodel.ZJHM, KhtypeConst.按月汇缴, city_cent);
+            var hasKh = HasKH(pmodel.ZJHM, city_cent);
 
-            if (model == null)//没录入过该用户
+            if (hasKh.hasKh)//有账户
             {
-                //写入明细表数据
-                D_GRKH_ITEM grhk_Item = new D_GRKH_ITEM
-                {
-                    YWLSH = grkh.YWLSH,
-                    CSNY = pmodel.CSNY,
-                    DWJCBL = pmodel.DWJCBL,
-                    DWZH = pmodel.DWZH,
-                    GRCKZHHM = pmodel.GRCKZHHM,
-                    GRCKZHKHYHDM = pmodel.GRCKZHKHYHDM,
-                    GRCKZHKHMC = pmodel.GRCKZHKHMC,
-                    GRJCJS = pmodel.GRJCJS,
-                    GRYJCE = pmodel.GRYJCE,
-                    GRZHZT = GrzhztConst.正常,
-                    QJRQ = pmodel.QJRQ,
-                    SJHM = pmodel.SJHM,
-                    XINGBIE = pmodel.XINGBIE,
-                    XINGMING = pmodel.XINGMING,
-                    YWYD = pmodel.YWYD,
-                    ZJHM = pmodel.ZJHM,
-                    ZJLX = pmodel.ZJLX,
-                };
+                return (ApiResultCodeConst.ERROR, hasKh.msg, string.Empty);
+            }
 
-                action += () =>
-                {
-                    sugarHelper.Add(grhk_Item);
-                    _flowProcService.AddFlowProc(grkh.YWLSH, ywid, pmodel.DWZH, nameof(GjjOptType.个人开户), optName, OptStatusConst.新建, sugarHelper: sugarHelper);
-                };
+            //写入明细表数据
+            D_GRKH_ITEM grhk_Item = new D_GRKH_ITEM
+            {
+                YWLSH = grkh.YWLSH,
+                CSNY = pmodel.CSNY,
+                DWJCBL = pmodel.DWJCBL,
+                DWZH = pmodel.DWZH,
+                GRCKZHHM = pmodel.GRCKZHHM,
+                GRCKZHKHYHDM = pmodel.GRCKZHKHYHDM,
+                GRCKZHKHMC = pmodel.GRCKZHKHMC,
+                GRJCJS = pmodel.GRJCJS,
+                GRYJCE = pmodel.GRYJCE,
+                GRZHZT = GrzhztConst.正常,
+                QJRQ = pmodel.QJRQ,
+                SJHM = pmodel.SJHM,
+                XINGBIE = pmodel.XINGBIE,
+                XINGMING = pmodel.XINGMING,
+                YWYD = pmodel.YWYD,
+                ZJHM = pmodel.ZJHM,
+                ZJLX = pmodel.ZJLX,
+            };
 
-                sugarHelper.InvokeTransactionScope(action);
-            }
-            else if (model.STATUS == OptStatusConst.新建)
+            action += () =>
             {
-                if (model.DWZH == pmodel.DWZH)
-                {
-                    return (ApiResultCodeConst.ERROR, $"当前用户（{pmodel.ZJHM}）在当前单位已有录入保存状态的数据", string.Empty);
-                }
-                return (ApiResultCodeConst.ERROR, $"当前用户（{pmodel.ZJHM}）在其他单位已有录入保存状态的数据", string.Empty);
-            }
-            else
-            {
-                return (ApiResultCodeConst.ERROR, $"当前用户（{pmodel.ZJHM}）已开户，请勿重复操作", string.Empty);
-            }
+                sugarHelper.Add(grhk_Item);
+                _flowProcService.AddFlowProc(grkh.YWLSH, ywid, pmodel.DWZH, nameof(GjjOptType.个人开户), optName, OptStatusConst.新建, sugarHelper: sugarHelper);
+            };
+
+            sugarHelper.InvokeTransactionScope(action);
 
             return (ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, grkh.YWLSH);
+        }
+
+        /// <summary>
+        /// 获取按月汇缴个人开户数据分页
+        /// </summary>
+        /// <param name="city_cent"></param>
+        /// <param name="dwzh"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="KHTYPE"></param>
+        /// <param name="status"></param>
+        /// <returns></returns>
+        public Pager<v_Busi_Grkh> PersonKhMonthList(string city_cent, string dwzh, int pageIndex, int pageSize, int KHTYPE = 1, string status = OptStatusConst.新建)
+        {
+            List<string> ywStatusList = new List<string> { };
+            if (status == OptStatusConst.新建)
+            {
+                ywStatusList.Add(OptStatusConst.新建);
+            }
+
+            List<(bool, Expression<Func<D_GRKH, D_GRKH_ITEM, bool>>)> whereIf = new List<(bool, Expression<Func<D_GRKH, D_GRKH_ITEM, bool>>)>();
+            whereIf.Add(new(ywStatusList.Count > 0, (t1, t2) => ywStatusList.Contains(t1.STATUS)));
+
+            int totalCnt = 0;
+            Pager<v_Busi_Grkh> page = new Pager<v_Busi_Grkh> { total = totalCnt, list = new List<v_Busi_Grkh>() };
+
+            var pageList = SugarHelper.Instance().QueryMuchDescriptorPageList<D_GRKH, D_GRKH_ITEM, v_Busi_Grkh>(pageIndex, pageSize, out totalCnt,
+                (t1, t2) => new object[] { JoinType.Left, t1.YWLSH == t2.YWLSH },
+                (t1, t2) => new v_Busi_Grkh { YWLSH = t1.YWLSH, CSNY = t2.CSNY, DWJCBL = t2.DWJCBL, DWZH = t2.DWZH, GRCKZHHM = t2.GRCKZHHM, GRCKZHKHMC = t2.GRCKZHKHMC, GRCKZHKHYHDM = t2.GRCKZHKHYHDM, GRJCJS = t2.GRJCJS, GRYJCE = t2.GRYJCE, KHTYPE = t1.KHTYPE, QJRQ = t2.QJRQ, SJHM = t2.SJHM, STATUS = t1.STATUS, XINGBIE = t2.XINGBIE, XINGMING = t2.XINGMING, YWYD = t2.YWYD, ZJHM = t2.ZJHM, ZJLX = t2.ZJLX, ID=t2.ID },
+                (t1, t2) => t1.DWZH == dwzh && t1.CITY_CENTNO == city_cent && ywStatusList.Contains(t1.STATUS) && t1.KHTYPE == KHTYPE,
+                whereIf: whereIf,
+                OrderBys: new List<OrderByClause> { new OrderByClause { Order = OrderSequence.Asc, Sort = "ID" } });
+            page.total = totalCnt;
+            page.list = pageList;
+            return page;
         }
 
 
@@ -152,10 +194,9 @@ namespace BtzjManagement.Api.Services
         /// 根据证件号码，开户类型获取个人开户数据
         /// </summary>
         /// <param name="zjhm"></param>
-        /// <param name="KhtypeConst"></param>
         /// <param name="city_cent"></param>
         /// <returns></returns>
-        public v_Busi_PersonInfo GetCreatedGrhk(string zjhm,int KhtypeConst,string city_cent)
+        public v_Busi_PersonInfo GetCreatedMonthGrhk(string zjhm,string city_cent)
         {
             //查是否已有录入状态的账户
             var model = SugarHelper.Instance().QueryMuch<D_GRKH, D_GRKH_ITEM, v_Busi_PersonInfo>(
@@ -182,9 +223,79 @@ namespace BtzjManagement.Api.Services
                     YWYD = t2.YWYD,
                     ZJLX = t2.ZJLX
                 },
-                (t1, t2) => t2.ZJHM == zjhm && t1.CITY_CENTNO == city_cent && t1.KHTYPE == KhtypeConst).FirstOrDefault();
+                (t1, t2) => t2.ZJHM == zjhm && t1.CITY_CENTNO == city_cent && t1.KHTYPE == KhtypeConst.按月汇缴).FirstOrDefault();
             return model;
         }
 
+
+        /// <summary>
+        /// 根据grkh_item 表数据id获取数据
+        /// </summary>
+        /// <param name="ywlsh"></param>
+        /// <param name="id">grkh_item 表数据id</param>
+        /// <returns></returns>
+        public v_Busi_Grkh PersonKHMonthModel(string ywlsh ,int id)
+        {
+            return GetPersonKHMonthVModel((t1, t2) => t2.ID == id && t2.YWLSH == ywlsh);
+        }
+
+        public (int code,string msg) UpdatePersonKHMonthModel(P_In_PersonInfo pmodel)
+        {
+            var oldModel = GetPersonKHMonthVModel((t1, t2) => t2.ID == pmodel.ID && t2.YWLSH == pmodel.YWLSH);
+            if (oldModel==null)
+            {
+                return (ApiResultCodeConst.ERROR, $"修改失败，未查询到相关保存信息");
+            }
+
+            if (!statusListCanAddUpdate.Contains(oldModel.STATUS))//在途或办结
+            {
+                return (ApiResultCodeConst.ERROR, $"业务处于{oldModel.STATUS}状态,不可操作");
+            }
+
+            if(pmodel.ZJHM != oldModel.ZJHM)//修改了证件号码，看新的证件号码有没有开过户
+            {
+
+            }
+            return (ApiResultCodeConst.ERROR, $"业务处于{oldModel.STATUS}状态,不可操作");
+        }
+
+        /// <summary>
+        /// 获取按月汇缴个人开户业务数据
+        /// </summary>
+        /// <param name="whereLambda"></param>
+        /// <param name="whereif"></param>
+        /// <returns></returns>
+        internal v_Busi_Grkh GetPersonKHMonthVModel(Expression<Func<D_GRKH, D_GRKH_ITEM, bool>> whereLambda = null, List<(bool, Expression<Func<D_GRKH, D_GRKH_ITEM, bool>>)> whereif = null)
+        {
+            return SugarHelper.Instance().QueryMuch<D_GRKH, D_GRKH_ITEM, v_Busi_Grkh>(
+                (t1, t2) => new object[] { JoinType.Left, t1.YWLSH == t2.YWLSH },
+                  (t1, t2) => new v_Busi_Grkh { YWLSH = t1.YWLSH, CSNY = t2.CSNY, DWJCBL = t2.DWJCBL, DWZH = t2.DWZH, GRCKZHHM = t2.GRCKZHHM, GRCKZHKHMC = t2.GRCKZHKHMC, GRCKZHKHYHDM = t2.GRCKZHKHYHDM, GRJCJS = t2.GRJCJS, GRYJCE = t2.GRYJCE, KHTYPE = t1.KHTYPE, QJRQ = t2.QJRQ, SJHM = t2.SJHM, STATUS = t1.STATUS, XINGBIE = t2.XINGBIE, XINGMING = t2.XINGMING, YWYD = t2.YWYD, ZJHM = t2.ZJHM, ZJLX = t2.ZJLX, ID = t2.ID },
+                    whereLambda: whereLambda,
+                    whereif: whereif
+                ).FirstOrDefault();
+        }
+
+        internal (bool hasKh, string msg) HasKH(string zjhm, string city_cent)
+        {
+            //先查账户基本信息表
+
+            //查按月开户业务表
+            var modelMonth = GetCreatedMonthGrhk(zjhm, city_cent);
+            if (modelMonth != null)
+            {
+                if (statusListCanAddUpdate.Contains(modelMonth.STATUS))//未提交状态
+                {
+                    return (true, $"用户（{zjhm}）在单位（{modelMonth.DWZH}）已有保存状态的数据，操作失败");
+                }
+                if (statusListProcess.Contains(modelMonth.STATUS))//在途的
+                {
+                    return (true, $"用户（{zjhm}）在单位（{modelMonth.DWZH}）已有在途状态的数据，操作失败");
+                }
+            }
+
+            //查一次性开户业务表
+
+            return (false, string.Empty);
+        }
     }
 }
