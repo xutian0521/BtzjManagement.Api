@@ -231,9 +231,9 @@ namespace BtzjManagement.Api.Services
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public List<v_SYS_DATA_DICTIONARY> GetDataDictionaryListByType(string type)
+        public List<v_SYS_DATA_DICTIONARY> GetDataDictionaryListByType(string type,string val="")
         {
-            return SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY>().Where(x => x.TYPE_KEY == type.Trim()).Select(x => new v_SYS_DATA_DICTIONARY
+            return SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY>().Where(x => x.TYPE_KEY == type.Trim()).WhereIF(!string.IsNullOrEmpty(val), x => x.VAL == val).Select(x => new v_SYS_DATA_DICTIONARY
             {
                 LABEL = x.LABEL,
                 TYPE_KEY = x.TYPE_KEY,

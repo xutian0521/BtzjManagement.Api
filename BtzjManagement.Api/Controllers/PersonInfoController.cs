@@ -97,6 +97,11 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 var r = _personInfoService.PersonKHMonthModel(ywlsh, id);
+                if (r == null)
+                {
+                    result.Message = "未查询到相关数据";
+                    return result;
+                }
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Message = ApiResultMessageConst.SUCCESS;
                 result.Content = r;
@@ -107,5 +112,30 @@ namespace BtzjManagement.Api.Controllers
             }
             return result;
         }
+
+        /// <summary>
+        /// 修改按月汇缴个人开户明细信息
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("UpdatePersonKHMonthModel")]
+        public v_ApiResult UpdatePersonKHMonthModel(P_In_PersonInfo pmodel)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var r = _personInfoService.UpdatePersonKHMonthModel(pmodel, CityCent(), GetUser().userName);
+                result.Code = r.code;
+                result.Message = r.msg;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        
     }
 }

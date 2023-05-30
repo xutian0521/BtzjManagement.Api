@@ -223,17 +223,17 @@ namespace BtzjManagement.Api.Services
 
                 //相关限制配置参数
                 sortSon = 0;
-                var tModelLimit = new D_SYS_ENUM { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT = ++sortFa, PARENTID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "gjjlimitconfig" };
+                var tModelLimit = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "gjjlimitconfig" };
                 faId = sugarHelper.AddReturnIdentity(tModelLimit);
-                List<D_SYS_ENUM> listLimit = new List<D_SYS_ENUM>();
-                listLimit.Add(new D_SYS_ENUM
+                List<D_SYS_DATA_DICTIONARY> listLimit = new List<D_SYS_DATA_DICTIONARY>();
+                listLimit.Add(new D_SYS_DATA_DICTIONARY
                 {
                     CITY_CENTNO = city_cent,
                     DESCRIPTION = "单位开户统一信用代码长度限制",
                     LABEL = "18",
-                    PARENTID = faId,
-                    SORT = ++sortSon,
-                    TYPEKEY = tModelLimit.VAL,
+                    PARENT_ID = faId,
+                    SORT_ID = ++sortSon,
+                    TYPE_KEY = tModelLimit.VAL,
                     VAL = "1",
                 });
                 sugarHelper.Add(listLimit);

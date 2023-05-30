@@ -38,7 +38,7 @@ namespace BtzjManagement.Api.Controllers
             {
                 //系统相关
                 //_transferService.UserInfoInitData(CityCent());
-                //_transferService.SysEnumInitStructure();
+                //_transferService.SysDataDictionaryInitStructure();
                 //_transferService.SysMenuInitStructure();
                 //_transferService.ImageMenuInitStructure();
                 //_transferService.ImageDataInitStructure();
@@ -73,7 +73,7 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //系统相关
-                //_transferService.SysEnumInitData(CityCent());
+                //_transferService.SysDataDictionaryInitData(CityCent());
                 //_transferService.SysMenuInitData(CityCent());
                 //_transferService.SysConfigInitData(CityCent());
 

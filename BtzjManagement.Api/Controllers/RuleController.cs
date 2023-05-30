@@ -46,28 +46,7 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
 
-        /// <summary>
-        /// 获取枚举列表下拉选项
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns></returns>
-        [HttpGet("GetEnum")]
-        public v_ApiResult GetEnum(string type, string val = "")
-        {
-            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
-            try
-            {
-                var list = _sysEnumService.GetListByType(type,val);
-                result.Code = ApiResultCodeConst.SUCCESS;
-                result.Content = list;
-            }
-            catch (Exception ex)
-            {
-                result.Message = ex.Message;
-            }
-
-            return result;
-        }
+       
         /// <summary>
         /// 添加或修改菜单
         /// </summary>
@@ -255,12 +234,12 @@ namespace BtzjManagement.Api.Controllers
         /// <param name="type"></param>
         /// <returns></returns>
         [HttpGet("GetDataDictionaryListByType")]
-        public v_ApiResult GetDataDictionaryListByType(string type)
+        public v_ApiResult GetDataDictionaryListByType(string type,string val="")
         {
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var list = _ruleService.GetDataDictionaryListByType(type);
+                var list = _ruleService.GetDataDictionaryListByType(type,val);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Content = list;
             }

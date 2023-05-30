@@ -239,25 +239,116 @@ namespace BtzjManagement.Api.Services
             return GetPersonKHMonthVModel((t1, t2) => t2.ID == id && t2.YWLSH == ywlsh);
         }
 
-        public (int code,string msg) UpdatePersonKHMonthModel(P_In_PersonInfo pmodel)
+
+        /// <summary>
+        /// 修改按月汇缴个人开户明细信息
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <param name="city_cent"></param>
+        /// <param name="optName"></param>
+        /// <returns></returns>
+        public (int code,string msg) UpdatePersonKHMonthModel(P_In_PersonInfo pmodel,string city_cent,string optName)
         {
-            var oldModel = GetPersonKHMonthVModel((t1, t2) => t2.ID == pmodel.ID && t2.YWLSH == pmodel.YWLSH);
-            if (oldModel==null)
+            if (string.IsNullOrEmpty(pmodel.ZJHM))
+            {
+                return (ApiResultCodeConst.ERROR, $"证件号码不能为空");
+            }
+
+            if (string.IsNullOrEmpty(pmodel.XINGMING))
+            {
+                return (ApiResultCodeConst.ERROR, $"姓名不能为空");
+            }
+
+            var oldVModel = GetPersonKHMonthVModel((t1, t2) => t2.ID == pmodel.ID && t2.YWLSH == pmodel.YWLSH);
+            if (oldVModel == null)
             {
                 return (ApiResultCodeConst.ERROR, $"修改失败，未查询到相关保存信息");
             }
 
-            if (!statusListCanAddUpdate.Contains(oldModel.STATUS))//在途或办结
+            if (!statusListCanAddUpdate.Contains(oldVModel.STATUS))//在途或办结
             {
-                return (ApiResultCodeConst.ERROR, $"业务处于{oldModel.STATUS}状态,不可操作");
+                return (ApiResultCodeConst.ERROR, $"业务处于{oldVModel.STATUS}状态,不可操作");
             }
 
-            if(pmodel.ZJHM != oldModel.ZJHM)//修改了证件号码，看新的证件号码有没有开过户
+            if(pmodel.ZJHM != oldVModel.ZJHM)//修改了证件号码，看新的证件号码有没有开过户
             {
-
+                var r = HasKH(pmodel.ZJHM, city_cent);
+                if (r.hasKh)
+                {
+                    return (ApiResultCodeConst.ERROR, r.msg);
+                }
             }
-            return (ApiResultCodeConst.ERROR, $"业务处于{oldModel.STATUS}状态,不可操作");
+            var sugarHelper = SugarHelper.Instance();
+            Action action = null;
+            var grkhOld = sugarHelper.First<D_GRKH>(x => x.YWLSH == pmodel.YWLSH && x.CITY_CENTNO == city_cent && statusListCanAddUpdate.Contains(x.STATUS));
+            var grkh_itemOld = sugarHelper.First<D_GRKH_ITEM>(x => x.YWLSH == pmodel.YWLSH && x.ID == pmodel.ID);
+
+            //更新主业务表
+            grkhOld.STATUS = OptStatusConst.新建;
+            grkhOld.CREATE_MAN = optName;
+            grkhOld.CREATE_TIME = DateTime.Now;
+            action += () => sugarHelper.Update(grkhOld);
+
+            //更新明细表
+            grkh_itemOld.ZJHM = pmodel.ZJHM;
+            grkh_itemOld.XINGMING = pmodel.XINGMING;
+            grkh_itemOld.YWYD = pmodel.YWYD;
+            grkh_itemOld.CSNY = pmodel.CSNY;
+            grkh_itemOld.GRCKZHHM = pmodel.GRCKZHHM;
+            grkh_itemOld.GRCKZHKHMC = pmodel.GRCKZHKHMC;
+            grkh_itemOld.GRCKZHKHYHDM = pmodel.GRCKZHKHYHDM;
+            grkh_itemOld.GRJCJS = pmodel.GRJCJS;
+            grkh_itemOld.GRYJCE = pmodel.GRYJCE;
+            grkh_itemOld.QJRQ = pmodel.QJRQ;
+            grkh_itemOld.SJHM = pmodel.SJHM;
+            grkh_itemOld.XINGBIE = pmodel.XINGBIE;
+            grkh_itemOld.ZJLX = pmodel.ZJLX;
+            action += () => sugarHelper.Update(grkh_itemOld);
+
+            //流程明细
+            action += () => _flowProcService.AddFlowProc(grkhOld.YWLSH, grkhOld.ID, grkhOld.DWZH, nameof(GjjOptType.个人开户), optName, OptStatusConst.修改, sugarHelper: sugarHelper,memo:$"修改用户({pmodel.ZJHM})录入信息");
+
+            sugarHelper.InvokeTransactionScope(action);
+
+            return (ApiResultCodeConst.SUCCESS, "操作成功");
         }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="ywlsh"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        public (int code, string msg) RemovePersonKHMonthModel(string ywlsh, int id)
+        {
+            var grkhOld = SugarHelper.Instance().First<D_GRKH>(x => x.YWLSH == ywlsh);
+            if (grkhOld == null)
+            {
+                return (ApiResultCodeConst.ERROR, "未查询到相关业务信息，无法删除");
+            }
+
+            if(grkhOld.STATUS == OptStatusConst.已归档)
+            {
+                return (ApiResultCodeConst.ERROR, "该笔业务已办结，无法删除");
+            }
+
+            if (statusListProcess.Contains(grkhOld.STATUS))
+            {
+                return (ApiResultCodeConst.ERROR, "该笔业务在途，无法删除");
+            }
+
+            //明细表如果没有数据了，主表数据业务删除
+            var gr_itemCnt = SugarHelper.Instance();
+            var gr_itemOld = SugarHelper.Instance().First<D_GRKH_ITEM>(x => x.YWLSH == ywlsh && x.ID == id);
+            if(gr_itemOld == null)
+            {
+                return (ApiResultCodeConst.ERROR, "未查询到相关业务明细信息，无法删除");
+            }
+
+            SugarHelper.Instance().Delete(gr_itemOld);
+            return (ApiResultCodeConst.SUCCESS, "操作成功");
+        }
+
 
         /// <summary>
         /// 获取按月汇缴个人开户业务数据
