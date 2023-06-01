@@ -1,4 +1,5 @@
-﻿using BtzjManagement.Api.Models.ViewModel;
+﻿using BtzjManagement.Api.Models.QueryModel;
+using BtzjManagement.Api.Models.ViewModel;
 using BtzjManagement.Api.Services;
 using BtzjManagement.Api.Utils;
 using Microsoft.AspNetCore.Authorization;
@@ -38,11 +39,10 @@ namespace BtzjManagement.Api.Controllers
         /// <param name="codeKey">验证码key</param>
         /// <returns></returns>
         [HttpPost("Login"), AllowAnonymous]
-        public async Task<v_ApiResult> Login([FromForm] string userName,
-            [FromForm] string password, [FromForm] string code, [FromForm] string codeKey)
+        public async Task<v_ApiResult> Login([FromBody]P_AccountLogin model)
         {
             
-            var result = await _accountService.Login(userName, password, code, codeKey, this.HttpContext);
+            var result = await _accountService.Login(model.userName, model.password, model.code, model.codeKey, this.HttpContext);
             return new v_ApiResult(result.code, result.message, result.loginResult);
         }
         /// <summary>
