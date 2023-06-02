@@ -47,14 +47,14 @@ namespace BtzjManagement.Api.Services
         /// <returns></returns>
         public List<v_SysMenu> MenuTreeList(int roleId, int pId, bool isFilterDisabledMenu)
         {
-            var query = SugarSimple.Instance().Queryable<D_SYS_MENU, D_SYS_ROLE_MENU>((m, rm) => new object[] { 
-                JoinType.Left, m.ID == rm.ROLE_ID  }).Select((m, rm) => new D_SYS_MENU()
-                { ID =m.ID, NAME = m.NAME, ICON = m.ICON, PID = m.PID, PATH = m.PATH, ALIAS = m.ALIAS, IS_ENABLE = m.IS_ENABLE, SORT_ID = m.SORT_ID, REMARK = m.REMARK});
-            query = query.Where(m => m.PID == pId && m.ID == roleId);
-            query = isFilterDisabledMenu ? query.Where(m => m.IS_ENABLE == 1) : query;
+            var query = SugarSimple.Instance().Queryable< D_SYS_ROLE_MENU, D_SYS_MENU>((rm, m) => new object[] {
+                JoinType.Left, rm.MENU_ID ==m.ID  });
+            query = query.Where((rm, m) => m.PID == pId && rm.ROLE_ID == roleId);
+            query = isFilterDisabledMenu ? query.Where((rm, m) => m.IS_ENABLE == 1) : query;
 
             
-            var list = query.ToList();
+            var list = query.Select((rm, m) => new D_SYS_MENU()
+            { ID = m.ID, NAME = m.NAME, ICON = m.ICON, PID = m.PID, PATH = m.PATH, ALIAS = m.ALIAS, IS_ENABLE = m.IS_ENABLE, SORT_ID = m.SORT_ID, REMARK = m.REMARK }).ToList();
 
             var menuList = new List<v_SysMenu>();
 

@@ -45,7 +45,7 @@ namespace BtzjManagement.Api.Controllers
         public v_ApiResult MenuTreeList(bool isFilterDisabledMenu = false)
         {
             var user = base.GetUser();
-            var list = _ruleService.MenuTreeList(user.roleId, 0, isFilterDisabledMenu);
+            var list = _ruleService.MenuTreeList(int.Parse( user.roleId), 0, isFilterDisabledMenu);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
 
