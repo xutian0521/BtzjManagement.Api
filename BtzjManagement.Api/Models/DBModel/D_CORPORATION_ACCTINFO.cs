@@ -40,6 +40,10 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public decimal DWJCBL { get; set; }
         /// <summary>
+        /// 个人缴存比例
+        /// </summary>
+        public decimal GRJCBL { get; set; }
+        /// <summary>
         /// 单位职工人数
         /// </summary>
         public decimal DWZGRS { get; set; }

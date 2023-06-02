@@ -61,6 +61,26 @@ namespace BtzjManagement.Api.Utils
             return billNo_;
         }
 
+        /// <summary>
+        /// 个人custid规则 A+18位数+0
+        /// </summary>
+        /// <param name="zjhm"></param>
+        /// <param name="dwzh"></param>
+        /// <param name="grzh"></param>
+        /// <param name="numLast"></param>
+        /// <param name="isOldData"></param>
+        /// <returns></returns>
+        public static string PersonCustIDGenerate(string zjhm, string dwzh = "", string grzh = "", bool isOldData = false, int numLast = 0)
+        {
+            if (isOldData)
+            {
+                var num18 = PaddingDwzh(Convert.ToInt32($"{dwzh}{grzh}"), 18);
+                return $"A{num18}{numLast}";
+            }
+
+            return $"A{zjhm.ToLower()}{numLast}";
+        }
+
        /// <summary>
        /// 获取全局唯一业务流水号
        /// </summary>

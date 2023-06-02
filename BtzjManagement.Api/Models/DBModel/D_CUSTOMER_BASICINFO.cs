@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace BtzjManagement.Api.Models.DBModel
 {
-       /// <summary>
-       /// 单位基本信息
-       /// </summary>
+    /// <summary>
+    /// 个人基本信息
+    /// </summary>
     [SugarTable("CUSTOMER_BASICINFO")]
     public class D_CUSTOMER_BASICINFO
     {
@@ -62,24 +62,33 @@ namespace BtzjManagement.Api.Models.DBModel
         /// 配偶客户编号
         /// </summary>
         public string MATE_CUSTID { get; set; }
+        /// <summary>
+        /// 创建用户
+        /// </summary>
         public string CREATE_MAN { get; set; }
+        /// <summary>
+        /// 创建时间
+        /// </summary>
         public string CREATE_TIME { get; set; }
+        /// <summary>
+        /// 最后修改用户
+        /// </summary>
         public string UPDATE_MAN { get; set; }
+        /// <summary>
+        /// 最后修改时间
+        /// </summary>
         public string UPDATE_TIME { get; set; }
+        /// <summary>
+        /// 操作员
+        /// </summary>
         public string OPER_ID { get; set; }
+        /// <summary>
+        /// 日期戳-有变化就更新
+        /// </summary>
+        public DateTime? LASTDEAL_DATE { get; set; }
+        /// <summary>
+        /// 城市网点
+        /// </summary>
+        public string CITY_CENTNO { get; set; }
     }
 }
-
-
-
-
-
-
-//CREATEUSER 创建用户	VARCHAR2(40)
-//CREATETIME 创建时间_2	TIMESTAMP(6)
-
-//UPDATEUSER 最后修改用户	VARCHAR2(40)
-//UPDATETIME 最后修改时间_2	TIMESTAMP(6)
-//OPERID 操作员	VARCHAR2(80)
-//LASTDEALDATE 日期戳_1	TIMESTAMP(6)
-//CITY_CENTNO 城市网点	        VARCHAR2(10)

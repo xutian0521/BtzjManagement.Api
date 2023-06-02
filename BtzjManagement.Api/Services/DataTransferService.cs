@@ -599,6 +599,7 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "JZNY", columnTypeAndLimit = "VARCHAR2(6)", columnDesc = "缴至年月" });
             v_TableInits.Add(new v_TableInit { columnName = "NEXTPAYMTH", columnTypeAndLimit = "TIMESTAMP", columnDesc = "下次应缴日期" });
             v_TableInits.Add(new v_TableInit { columnName = "DWJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "单位缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "个人缴存比例" });
             v_TableInits.Add(new v_TableInit { columnName = "DWZGRS", columnTypeAndLimit = "NUMBER(10, 0)", columnDesc = "单位职工人数" });
             v_TableInits.Add(new v_TableInit { columnName = "DWJCRS", columnTypeAndLimit = "NUMBER(10, 0)", columnDesc = "单位缴存人数" });
             v_TableInits.Add(new v_TableInit { columnName = "DWFCRS", columnTypeAndLimit = "NUMBER(10, 0)", columnDesc = "单位封存人数" });
@@ -720,6 +721,150 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("GRKH_ITEM", v_TableInits, true, "个人开户业务明细表");
         }
+
+        /// <summary>
+        /// 个人基本信息表结构初始化
+        /// </summary>
+        public void CustomerBasicInfoInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "CUSTID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "客户编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "XINGMING", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "姓名" });
+            v_TableInits.Add(new v_TableInit { columnName = "ZJLX", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "证件类型" });
+            v_TableInits.Add(new v_TableInit { columnName = "ZJHM", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "证件号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "XINGBIE", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "性别" });
+            v_TableInits.Add(new v_TableInit { columnName = "CSNY", columnTypeAndLimit = "TIMESTAMP", columnDesc = "出生年月" });
+            v_TableInits.Add(new v_TableInit { columnName = "WORK_DATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "参加工作时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "GDDHHM", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "固定电话号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "SJHM", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "手机号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "HYZK", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "婚姻状况" });
+            v_TableInits.Add(new v_TableInit { columnName = "MATE_CUSTID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "配偶客户编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "创建用户" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "创建时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "UPDATE_MAN", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "最后修改用户" });
+            v_TableInits.Add(new v_TableInit { columnName = "UPDATE_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "最后修改时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "OPER_ID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "操作员" });
+            v_TableInits.Add(new v_TableInit { columnName = "LASTDEAL_DATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "日期戳-有变化就更新" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "城市网点" });
+
+            this.TableInit("CUSTOMER_BASICINFO", v_TableInits, true, "个人基本信息表");
+        }
+
+        /// <summary>
+        /// 个人账户信息表结构初始化
+        /// </summary>
+        public void CustomerAcctInfoInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "CUSTID", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "客户编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "单位账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZH", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZHZT", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人账户状态" });
+            v_TableInits.Add(new v_TableInit { columnName = "KHRQ", columnTypeAndLimit = "TIMESTAMP", columnDesc = "开户日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "LOCK_DATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "封存日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "LOCK_REASON", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "封存原因" });
+            v_TableInits.Add(new v_TableInit { columnName = "UNLOCK_DATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "启封日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "XHRQ", columnTypeAndLimit = "TIMESTAMP", columnDesc = "销户日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "XHYY", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "销户原因" });
+            v_TableInits.Add(new v_TableInit { columnName = "ACCT_TYPE", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "账户类型 0：按月 1:一次性" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "单位缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "个人缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCJS", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人缴存基数" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWYJCE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "单位月缴存额" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRYJCE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人月缴存额" });
+            v_TableInits.Add(new v_TableInit { columnName = "MONTHPAYAMT", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "月汇缴额" });
+            v_TableInits.Add(new v_TableInit { columnName = "LASTPAYMONTH", columnTypeAndLimit = "TIMESTAMP", columnDesc = "末次汇缴月" });
+            v_TableInits.Add(new v_TableInit { columnName = "QJRQ", columnTypeAndLimit = "TIMESTAMP", columnDesc = "起缴日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "YCXBTJE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "一次性补贴金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "YCX_CHECK_FLAG", columnTypeAndLimit = "nvarchar2(255)", columnDesc = " 一次性缴存状态 0：未缴交 1：生成汇缴业务未记账 2：已复核" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZHYE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人账户余额" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZHSNJZYE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人账户上年结转余额" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZHSNJZRQ", columnTypeAndLimit = "TIMESTAMP", columnDesc = "个人账户上年结转日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZHDNGJYE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人账户当年归集余额" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRCKZHHM", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人存款账户号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRCKZHKHMC", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人存款账户开户名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRCKZHKHYHDM", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人存款账户开户银行代码" });
+            v_TableInits.Add(new v_TableInit { columnName = "CHECK_FLAG", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "核定标志" });
+            v_TableInits.Add(new v_TableInit { columnName = "LASTDEALDATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "日期戳" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "城市网点" });
+
+            this.TableInit("CUSTOMER_ACCTINFO", v_TableInits, true, "个人账户信息表");
+        }
+
+        /// <summary>
+        /// 个人基本信息/个人账户信息数据初始化
+        /// </summary>
+        /// <param name="city_cent"></param>
+        public void CustomerInfoInitData(string city_cent)
+        {
+            var sugarHelper = SugarHelper.Instance();
+            sugarHelper.ExecuteCommand("delete from CUSTOMER_BASICINFO ");
+            sugarHelper.ExecuteCommand("delete from CUSTOMER_ACCTINFO ");
+
+            using (var syBaseConn = SybaseConnector.Conn())
+            {
+               
+                //获取单位基本信息
+                var dwInfoList = sugarHelper.QueryList<D_CORPORATION_ACCTINFO>();
+
+                //获取个人基本信息
+                var org_grgjjxxSql = @" select * from grgjjxx  order by dwzh asc,grzh asc  ";
+                var org_grgjjxxSqlList = syBaseConn.Query<SD_grgjjxx>(org_grgjjxxSql).ToList();
+                List<D_CUSTOMER_ACCTINFO> D_CUSTOMER_ACCTINFO = org_grgjjxxSqlList
+                    .Select(x => new D_CUSTOMER_ACCTINFO
+                    {
+                        CITY_CENTNO = city_cent,
+                        CUSTID = Common.PersonCustIDGenerate(string.Empty, x.dwzh_gbk, x.grzh_gbk, true),
+                        ACCT_TYPE = x.i_btfs_gbk,
+                        CHECK_FLAG = null,
+                        DWJCBL = dwInfoList.FirstOrDefault(y => y.DWZH == x.dwzh_gbk).DWJCBL,
+                        DWZH = x.dwzh_gbk,
+                        DWYJCE = x.dwgjj_gbk ?? 0,
+                        GRCKZHHM = x.s_yh_grzh_gbk,
+                        GRJCBL = 0,
+                        GRJCJS = x.gze_gbk ?? 0,
+                        GRYJCE = 0,
+                        GRZH = $"{x.dwzh_gbk}{x.grzh_gbk}",
+                        GRZHYE = 0,
+                        GRZHSNJZYE = x.dc_snje_gbk ?? 0,
+                        GRZHDNGJYE = 0,
+                        GRZHZT = x.fcbj_gbk,
+                        KHRQ = x.dt_kaihu_gbk,
+                        MONTHPAYAMT = x.dwgjj_gbk ?? 0,
+                        YCX_CHECK_FLAG = x.i_jj_flag_gbk,
+                        YCXBTJE = x.dc_btje_gbk ?? 0,
+                        QJRQ = x.dt_qjrq_gbk,
+                        GRZHSNJZRQ = x.dt_snjzrq_gbk,
+                        LASTDEALDATE = DateTime.Now,
+                        LOCK_REASON = x.i_fc_status_gbk,
+                        LASTPAYMONTH = x.xcrq_gbk
+                    }).ToList();
+
+                sugarHelper.Add(D_CUSTOMER_ACCTINFO);
+
+                //获取个人基本信息
+                var org_grxinxiSql = @" select * from grxinxi  order by dwzh asc,grzh asc  ";
+                List<D_CUSTOMER_BASICINFO> D_CUSTOMER_BASICINFO = syBaseConn.Query<SD_grxinxi>(org_grxinxiSql)
+                    .Select(x => new D_CUSTOMER_BASICINFO
+                    {
+                        CITY_CENTNO = city_cent,
+                        CSNY = x.csny_gbk,
+                        GDDHHM = x.s_lxdh_gbk,
+                        ZJHM = x.sfzhm_gbk,
+                        XINGMING = x.grxm_gbk,
+                        XINGBIE = x.grxb_gbk,
+                        CUSTID = Common.PersonCustIDGenerate(x.sfzhm_gbk, x.dwzh_gbk, x.grzh_gbk, true),
+                        SJHM = x.s_sjh_gbk,
+                        WORK_DATE = org_grgjjxxSqlList.FirstOrDefault(y => y.dwzh_gbk == x.dwzh_gbk && y.grzh_gbk == x.grzh_gbk).dt_work_gbk,
+                        OPER_ID = org_grgjjxxSqlList.FirstOrDefault(y => y.dwzh_gbk == x.dwzh_gbk && y.grzh_gbk == x.grzh_gbk).s_shouliren_gbk,
+                    }).ToList();
+
+                sugarHelper.Add(D_CUSTOMER_BASICINFO);
+            }
+        }
+
 
         #endregion 客户管理相关
 
