@@ -66,12 +66,13 @@ namespace BtzjManagement.Api.Controllers
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("PersonKhMonthList")]
-        public v_ApiResult PersonKhMonthList(string dwzh, int page = 1, int size = 10,int KHTYPE =1, string status = "created")
+        [ProducesResponseType(typeof(s_ApiResult<Pager<v_Busi_Grkh>>), StatusCodes.Status200OK)]
+        public v_ApiResult PersonKhMonthList(string dwzh, int pageIndex = 1, int pageSize = 10,int KHTYPE =1, string status = "created")
         {
             v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var r = _personInfoService.PersonKhMonthList(CityCent(), dwzh, page, size, KHTYPE, status);
+                var r = _personInfoService.PersonKhMonthList(CityCent(), dwzh, pageIndex, pageSize, KHTYPE, status);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Message = ApiResultMessageConst.SUCCESS;
                 result.Content = r;
@@ -91,6 +92,7 @@ namespace BtzjManagement.Api.Controllers
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("PersonKHMonthModel")]
+        [ProducesResponseType(typeof(s_ApiResult<v_Busi_Grkh>), StatusCodes.Status200OK)]
         public v_ApiResult PersonKHMonthModel(string ywlsh, int id)
         {
             v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
@@ -139,3 +141,5 @@ namespace BtzjManagement.Api.Controllers
         
     }
 }
+
+

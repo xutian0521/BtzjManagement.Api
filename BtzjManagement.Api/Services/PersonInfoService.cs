@@ -360,7 +360,7 @@ namespace BtzjManagement.Api.Services
         {
             return SugarHelper.Instance().QueryMuch<D_GRKH, D_GRKH_ITEM, v_Busi_Grkh>(
                 (t1, t2) => new object[] { JoinType.Left, t1.YWLSH == t2.YWLSH },
-                  (t1, t2) => new v_Busi_Grkh { YWLSH = t1.YWLSH, CSNY = t2.CSNY, DWJCBL = t2.DWJCBL, DWZH = t2.DWZH, GRCKZHHM = t2.GRCKZHHM, GRCKZHKHMC = t2.GRCKZHKHMC, GRCKZHKHYHDM = t2.GRCKZHKHYHDM, GRJCJS = t2.GRJCJS, GRYJCE = t2.GRYJCE, KHTYPE = t1.KHTYPE, QJRQ = t2.QJRQ, SJHM = t2.SJHM, STATUS = t1.STATUS, XINGBIE = t2.XINGBIE, XINGMING = t2.XINGMING, YWYD = t2.YWYD, ZJHM = t2.ZJHM, ZJLX = t2.ZJLX, ID = t2.ID },
+                  (t1, t2) => new v_Busi_Grkh { YWLSH = t1.YWLSH, CSNY = t2.CSNY, DWJCBL = t2.DWJCBL, DWZH = t2.DWZH, GRCKZHHM = t2.GRCKZHHM, GRCKZHKHMC = t2.GRCKZHKHMC, GRCKZHKHYHDM = t2.GRCKZHKHYHDM, GRJCJS = t2.GRJCJS, GRYJCE = t2.GRYJCE, KHTYPE = t1.KHTYPE, QJRQ = t2.QJRQ, SJHM = t2.SJHM, STATUS = t1.STATUS, XINGBIE = t2.XINGBIE, XINGMING = t2.XINGMING, YWYD = t2.YWYD, ZJHM = t2.ZJHM, ZJLX = t2.ZJLX, ID = t2.ID, DWMC = t1.DWMC },
                     whereLambda: whereLambda,
                     whereif: whereif
                 ).FirstOrDefault();

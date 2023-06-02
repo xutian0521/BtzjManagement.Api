@@ -106,6 +106,10 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string DWZH { get; set; }
         /// <summary>
+        /// 单位名称
+        /// </summary>
+        public string DWMC { get; set; }
+        /// <summary>
         /// 开户类型(按月1，一次性2)
         /// </summary>
         public int KHTYPE { get; set; }
