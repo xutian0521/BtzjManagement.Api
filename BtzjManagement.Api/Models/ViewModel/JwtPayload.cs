@@ -16,7 +16,7 @@
         /// <summary>
         /// roleId
         /// </summary>
-        public int roleId { get; set; }
+        public string roleId { get; set; }
         /// <summary>
         /// 用户凭证过期时间
         /// </summary>

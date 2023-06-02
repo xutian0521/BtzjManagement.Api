@@ -9,6 +9,7 @@ using SqlSugar;
 using Microsoft.AspNetCore.Http;
 using YamlDotNet.Core;
 using Microsoft.Extensions.Configuration;
+using BtzjManagement.Api.Models.QueryModel;
 
 namespace BtzjManagement.Api.Controllers
 {
@@ -44,7 +45,7 @@ namespace BtzjManagement.Api.Controllers
         public v_ApiResult MenuTreeList(bool isFilterDisabledMenu = false)
         {
             var user = base.GetUser();
-            var list = _ruleService.MenuTreeList(user.roleId, 0, isFilterDisabledMenu);
+            var list = _ruleService.MenuTreeList(int.Parse( user.roleId), 0, isFilterDisabledMenu);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
 
@@ -113,10 +114,21 @@ namespace BtzjManagement.Api.Controllers
         /// <param name="roleId">角色id</param>
         /// <returns></returns>
         [HttpGet("LoadModifyRoleMenu")]
-        public List<v_SysMenu> LoadModifyRoleMenu(int roleId)
+        public v_ApiResult LoadModifyRoleMenu(int roleId)
         {
             var list = _ruleService.MenuTreeList(roleId, 0, false);
-            return list;
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
+        }
+        /// <summary>
+        /// 设置角色菜单
+        /// </summary>
+        /// <param name="roleId">角色id</param>
+        /// <returns></returns>
+        [HttpPost("SettingRoleMenu")]
+        public async Task<v_ApiResult> SettingRoleMenu([FromBody]P_SettingRoleMenu model)
+        {
+            var result = await _ruleService.SettingRoleMenuAsync(model.roleId, model.menuIds);
+            return new v_ApiResult(result.code, result.message);
         }
         //---------------------------------------------------用户-----------------------------------------------------
 
