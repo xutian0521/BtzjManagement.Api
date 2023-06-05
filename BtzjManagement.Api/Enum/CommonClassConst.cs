@@ -55,6 +55,33 @@ namespace BtzjManagement.Api.Enum
         public const string 户口迁出本地或出境定居 = "5";
         [Description("其他")]
         public const string 其他 = "6";
+        [Description("其他原因销户")]
+        public const string 其他原因销户 = "7";
+    }
+
+    /// <summary>
+    /// 封存具体原因
+    /// </summary>
+    public class LockReasonConst
+    {
+        [Description("正常")]
+        public const string 正常 = "0";
+        [Description("正常缴费状态")]
+        public const string 正常缴费状态 = "1";
+        [Description("通常原因封存状态")]
+        public const string 通常原因封存状态 = "2";
+        [Description("下岗封存状态")]
+        public const string 下岗封存状态 = "3";
+        [Description("提前退养封存状态")]
+        public const string 提前退养封存状态 = "4";
+        [Description("退休封存状态")]
+        public const string 退休封存状态 = "5";
+        [Description("终止（解除）合同封存状态")]
+        public const string 终止_解除合同封存状态 = "6";
+        [Description("死亡封存状态")]
+        public const string 死亡封存状态 = "7";
+        [Description("调出本市封存状态")]
+        public const string 调出本市封存状态 = "8";
     }
 
     /// <summary>
@@ -95,6 +122,8 @@ namespace BtzjManagement.Api.Enum
         #region 业务操作流程相关
         [Description("修改:表示该业务数据创建后被修改了。")]
         public const string 修改 = "update";
+        [Description("删除:表示该业务数据被删除。")]
+        public const string 删除 = "delete";
         #endregion
     }
 
@@ -202,7 +231,26 @@ namespace BtzjManagement.Api.Enum
         public const int 个人开户 = 1001;
     }
 
-
+    /// <summary>
+    /// 按月汇缴核定标志类型
+    /// </summary>
+    public class AyhjCheckFlagConst
+    {
+        [Description("未核定")]
+        public const string 未核定 = "0";
+        [Description("已核定")]
+        public const string 已核定 = "1";
+    }
+    /// <summary>
+    /// 单位员工开户标志
+    /// </summary>
+    public class OpenPerSalReadyConst
+    {
+        [Description("未开户")]
+        public const string 未开户 = "0";
+        [Description("已开户")]
+        public const string 已开户 = "1";
+    }
 }
 
 

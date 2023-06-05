@@ -69,7 +69,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 创建时间
         /// </summary>
-        public string CREATE_TIME { get; set; }
+        public DateTime? CREATE_TIME { get; set; }
         /// <summary>
         /// 最后修改用户
         /// </summary>
@@ -77,7 +77,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 最后修改时间
         /// </summary>
-        public string UPDATE_TIME { get; set; }
+        public DateTime? UPDATE_TIME { get; set; }
         /// <summary>
         /// 操作员
         /// </summary>

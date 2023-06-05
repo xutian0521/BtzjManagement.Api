@@ -47,15 +47,15 @@ namespace BtzjManagement.Api.Utils
         }
 
         /// <summary>
-        /// 单位账号左边补零
+        /// 账号左边补零
         /// </summary>
-        /// <param name="dwzh">单位账号</param>
+        /// <param name="num">账号</param>
         /// <param name="lenth">填充后达到几位数长度的字符串</param>
         /// <returns></returns>
-        public static string PaddingDwzh(int dwzh,int lenth)
+        public static string PaddingLeftZero(int num,int lenth)
         {
             //int billNo = 10;
-            string billNo_ = dwzh.ToString();
+            string billNo_ = num.ToString();
             //指定billNo为6位，不足位数时左边补零
             billNo_ = billNo_.PadLeft(lenth, '0');
             return billNo_;
@@ -74,11 +74,23 @@ namespace BtzjManagement.Api.Utils
         {
             if (isOldData)
             {
-                var num18 = PaddingDwzh(Convert.ToInt32($"{dwzh}{grzh}"), 18);
+                var num18 = PaddingLeftZero(Convert.ToInt32($"{dwzh}{grzh}"), 18);
                 return $"A{num18}{numLast}";
             }
 
-            return $"A{zjhm.ToLower()}{numLast}";
+            return $"A{zjhm.ToUpper()}{numLast}";
+        }
+
+        /// <summary>
+        /// 个人账号生成
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="grzhInt"></param>
+        /// <returns></returns>
+        public static string PersonGrzhGenerate(string dwzh,int grzhInt)
+        {
+            var grzhNum = PaddingLeftZero(grzhInt, 5);
+            return dwzh + grzhNum;
         }
 
        /// <summary>

@@ -967,10 +967,11 @@ namespace BtzjManagement.Api.Utils
 
         /// <summary>
         /// 查询单个值
-        /// </summary> 
-        /// <param name="sql">sql</param> 
-        /// <returns>单个值</returns>
-        object QuerySqlScalar(string sql);
+        /// </summary>
+        /// <param name="sql"></param>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
+        object QuerySqlScalar(string sql, params SugarParameter[] parameters);
 
         /// <summary>
         /// 分页查询

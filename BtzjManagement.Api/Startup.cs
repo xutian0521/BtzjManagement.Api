@@ -75,7 +75,6 @@ namespace BtzjManagement.Api
             services.AddSingleton<DataTransferService>();
             services.AddSingleton<CorporationService>();
 
-            services.AddSingleton<BusiCorporationService>();
             services.AddSingleton<FlowProcService>();
             services.AddSingleton<PersonInfoService>();
             services.AddSingleton<AccountService>();

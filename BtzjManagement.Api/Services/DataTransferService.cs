@@ -553,7 +553,7 @@ namespace BtzjManagement.Api.Services
                 var models = sD_Dwxinxis.Select(x =>
                 new D_CORPORATION_BASICINFO
                 {
-                    CUSTID = Common.PaddingDwzh(Convert.ToInt32(x.dwzh_gbk), 8),
+                    CUSTID = Common.PaddingLeftZero(Convert.ToInt32(x.dwzh_gbk), 8),
                     USCCID = x.s_zzjgdm_gbk,
                     DWDZ = x.dwdz_gbk,
                     DWFRDBXM = x.s_frdb_gbk,
@@ -638,7 +638,7 @@ namespace BtzjManagement.Api.Services
                 var models = sD_dwgjjxxs.Select(x =>
                 new D_CORPORATION_ACCTINFO
                 {
-                    CUSTID = Common.PaddingDwzh(Convert.ToInt32(x.dwzh_gbk), 8),
+                    CUSTID = Common.PaddingLeftZero(Convert.ToInt32(x.dwzh_gbk), 8),
                     CITY_CENTNO = city_cent,
                     DWZH = x.dwzh_gbk,
                     DWZHZT = x.fcbj_gbk,
@@ -711,13 +711,17 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "CSNY", columnTypeAndLimit = "TIMESTAMP", columnDesc = "出生日期" });
             v_TableInits.Add(new v_TableInit { columnName = "SJHM", columnTypeAndLimit = "varchar2(20byte)", columnDesc = "手机号码" });
             v_TableInits.Add(new v_TableInit { columnName = "DWJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "单位缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCBL", columnTypeAndLimit = "NUMBER(4, 2)", columnDesc = "个人缴存比例" });
             v_TableInits.Add(new v_TableInit { columnName = "GRJCJS", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人缴存基数" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWYJCE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "单位月缴存额" });
             v_TableInits.Add(new v_TableInit { columnName = "GRYJCE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "个人月缴存额" });
             v_TableInits.Add(new v_TableInit { columnName = "QJRQ", columnTypeAndLimit = "TIMESTAMP", columnDesc = "起缴日期" });
             v_TableInits.Add(new v_TableInit { columnName = "GRZHZT", columnTypeAndLimit = "VARCHAR2(2)", columnDesc = "个人账户状态" });
             v_TableInits.Add(new v_TableInit { columnName = "GRCKZHHM", columnTypeAndLimit = "varchar2(30)", columnDesc = "个人存款账户号码" });
             v_TableInits.Add(new v_TableInit { columnName = "GRCKZHKHMC", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "个人存款账户开户名称" });
             v_TableInits.Add(new v_TableInit { columnName = "GRCKZHKHYHDM", columnTypeAndLimit = "varchar2(30)", columnDesc = "个人存款账户开户银行代码" });
+            v_TableInits.Add(new v_TableInit { columnName = "WORK_DATE", columnTypeAndLimit = "TIMESTAMP", columnDesc = "工作时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "GDDHHM", columnTypeAndLimit = "nvarchar2(255)", columnDesc = "固定电话号码" });
 
             this.TableInit("GRKH_ITEM", v_TableInits, true, "个人开户业务明细表");
         }

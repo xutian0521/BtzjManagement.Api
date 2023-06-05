@@ -18,7 +18,6 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 单位名称
         /// </summary>
         public string DWMC { get; set; }
-
         /// <summary>
         /// 单位缴存比例
         /// </summary>
@@ -31,7 +30,10 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 统一社会信用代码
         /// </summary>
         public string USCCID { get; set; }
-
+        /// <summary>
+        /// 个人缴存比例
+        /// </summary>
+        public decimal GRJCBL { get; set; }
     }
 
     /// <summary>
