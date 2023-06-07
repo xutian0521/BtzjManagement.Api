@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BtzjManagement.Api.Enum;
+using BtzjManagement.Api.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -114,6 +116,17 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public int KHTYPE { get; set; }
         /// <summary>
+        /// 开户类型-DESC
+        /// </summary>
+        public string KHTYPE_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<int>(typeof(KhtypeConst), KHTYPE).desc;
+            }
+        }
+
+        /// <summary>
         /// 业务状态
         /// </summary>
         public string STATUS { get; set; }
@@ -130,6 +143,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string ZJLX { get; set; }
         /// <summary>
+        /// 证件类型-DESC
+        /// </summary>
+        public string ZJLX_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(ZjhmLxConst), ZJLX).desc;
+            }
+        }
+        /// <summary>
         /// 证件号码
         /// </summary>
         public string ZJHM { get; set; }
@@ -137,6 +160,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 性别
         /// </summary>
         public string XINGBIE { get; set; }
+        /// <summary>
+        /// 性别-DESC
+        /// </summary>
+        public string XINGBIE_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(XingBieConst), XINGBIE).desc;
+            }
+        }
         /// <summary>
         /// 出生日期
         /// </summary>
@@ -209,6 +242,17 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string ZJLX { get; set; }
         /// <summary>
+        /// 证件类型-DESC
+        /// </summary>
+        public string ZJLX_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(ZjhmLxConst), ZJLX).desc;
+            }
+        }
+
+        /// <summary>
         /// 证件号码
         /// </summary>
         public string ZJHM { get; set; }
@@ -216,6 +260,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 性别
         /// </summary>
         public string XINGBIE { get; set; }
+        /// <summary>
+        /// 性别-DESC
+        /// </summary>
+        public string XINGBIE_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(XingBieConst), XINGBIE).desc;
+            }
+        }
         /// <summary>
         /// 出生年月
         /// </summary>
@@ -238,6 +292,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string HYZK { get; set; }
         /// <summary>
+        /// 婚姻状况-DESC
+        /// </summary>
+        public string HYZK_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(HyzkConst), HYZK).desc;
+            }
+        }
+        /// <summary>
         /// 配偶客户编号
         /// </summary>
         public string MATE_CUSTID { get; set; }
@@ -255,6 +319,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string GRZHZT { get; set; }
         /// <summary>
+        /// 个人账户状态-DESC
+        /// </summary>
+        public string GRZHZT_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(GrzhztConst), GRZHZT).desc;
+            }
+        }
+        /// <summary>
         /// 开户日期
         /// </summary>
         public DateTime? KHRQ { get; set; }
@@ -266,6 +340,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 封存原因
         /// </summary>
         public string LOCK_REASON { get; set; }
+        /// <summary>
+        /// 封存原因-DESC
+        /// </summary>
+        public string LOCK_REASON_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(LockReasonConst), LOCK_REASON).desc;
+            }
+        }
         /// <summary>
         /// 启封日期
         /// </summary>
@@ -282,6 +366,17 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 账户类型 0：按月 1:一次性
         /// </summary>
         public string ACCT_TYPE { get; set; }
+        /// <summary>
+        /// 账户类型-DESC
+        /// </summary>
+        public string ACCT_TYPE_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<int>(typeof(KhtypeConst), Convert.ToInt32(ACCT_TYPE)).desc;
+            }
+        }
+
         /// <summary>
         /// 单位缴存比例
         /// </summary>
@@ -323,6 +418,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string YCX_CHECK_FLAG { get; set; }
         /// <summary>
+        /// 一次性缴存状态-DESC
+        /// </summary>
+        public string YCX_CHECK_FLAG_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(YcxCheckFlagConst), YCX_CHECK_FLAG).desc;
+            }
+        }
+        /// <summary>
         /// 个人账户余额
         /// </summary>
         public decimal GRZHYE { get; set; }
@@ -354,6 +459,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 核定标志
         /// </summary>
         public string CHECK_FLAG { get; set; }
+        /// <summary>
+        /// 核定标志-DESC
+        /// </summary>
+        public string CHECK_FLAG_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(AyhjCheckFlagConst), CHECK_FLAG).desc;
+            }
+        }
         /// <summary>
         /// 城市网点
         /// </summary>

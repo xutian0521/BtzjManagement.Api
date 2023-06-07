@@ -124,24 +124,45 @@ namespace BtzjManagement.Api.Services
                 {
                     var key = item.Key;
                     var name = item.FirstOrDefault();
-                    var vlaue = name;
+                    var value = name;
                     switch (name)
                     {
                         case "单位性质":
-                            vlaue = "danweixingzhi";
+                            value = "danweixingzhi";
                             break;
                         case "补贴资金来源":
-                            vlaue = "butiezijinlaiyuan";
+                            value = "butiezijinlaiyuan";
                             break;
                         case "银行":
-                            vlaue = "bank";
+                            value = "bank";
                             break;
                         case "性别":
-                            vlaue = "xingbie";
+                            value = "xingbie";
+                            break;
+                        case "封存状态":
+                            value = "lockreason";
+                            break;
+                        case "封存标记":
+                            value = "grzhzt";
+                            break;
+                        case "单位状态":
+                            value = "dwzhzt";
+                            break;
+                        case "婚姻状态":
+                            value = "hyzk";
+                            break;
+                        case "住房补贴方式":
+                            value = "khtype";
+                            break;
+                        case "支取原因":
+                            value = "drawreason";
+                            break;
+                        case "销户原因":
+                            value = "xiaohureason";
                             break;
                     }
 
-                    D_SYS_DATA_DICTIONARY tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = vlaue };
+                    D_SYS_DATA_DICTIONARY tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = value };
                     action += () => sugarHelper.AddReturnIdentity(tModel);
                 }
 
@@ -164,16 +185,16 @@ namespace BtzjManagement.Api.Services
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "8", s_value_gbk = Common.GBKToCp850("四舍五入到元"), s_name_gbk = "", i_flag_gbk = "jsff" });
 
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "01", s_value_gbk = Common.GBKToCp850("身份证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("军官证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("护照"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("外国人永居居留证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-                journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                //journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("军官证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                //journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("护照"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                //journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("外国人永居居留证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
+                //journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
 
 
                 action = null;
                 var listFather = sugarHelper.QueryList<D_SYS_DATA_DICTIONARY>();
 
-                foreach (var item in listFather)
+                foreach (var item in listFather)//一级节点
                 {
                     sortSon = 0;
                     var list = journey_Configs.Where(x => x.i_flag_gbk == item.ORIGIN_FLAG).Select(x => new D_SYS_DATA_DICTIONARY
@@ -217,6 +238,16 @@ namespace BtzjManagement.Api.Services
                     TYPE_KEY = tModelOpt.VAL,
                     VAL = "1000"
                 });
+                listOpt.Add(new D_SYS_DATA_DICTIONARY
+                 {
+                     CITY_CENTNO = city_cent,
+                     DESCRIPTION = "个人开户",
+                     LABEL = "个人开户",
+                     PARENT_ID = faId,
+                     SORT_ID = ++sortSon,
+                     TYPE_KEY = tModelOpt.VAL,
+                     VAL = "1001"
+                 });
 
                 sugarHelper.Add(listOpt);
                 #endregion

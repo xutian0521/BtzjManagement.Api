@@ -197,7 +197,6 @@ namespace BtzjManagement.Api.Services
         /// <param name="dwzh"></param>
         /// <param name="pageIndex"></param>
         /// <param name="pageSize"></param>
-        /// <param name="KHTYPE"></param>
         /// <param name="status"></param>
         /// <returns></returns>
         public Pager<v_Busi_Grkh> PersonKhMonthList(string city_cent, string dwzh, int pageIndex, int pageSize, string status = OptStatusConst.新建)
