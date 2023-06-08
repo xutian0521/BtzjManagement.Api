@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using NPinyin;
 
 namespace BtzjManagement.Api.Utils
 {
@@ -47,18 +48,50 @@ namespace BtzjManagement.Api.Utils
         }
 
         /// <summary>
-        /// 单位账号左边补零
+        /// 账号左边补零
         /// </summary>
-        /// <param name="dwzh">单位账号</param>
+        /// <param name="num">账号</param>
         /// <param name="lenth">填充后达到几位数长度的字符串</param>
         /// <returns></returns>
-        public static string PaddingDwzh(int dwzh,int lenth)
+        public static string PaddingLeftZero(int num,int lenth)
         {
             //int billNo = 10;
-            string billNo_ = dwzh.ToString();
+            string billNo_ = num.ToString();
             //指定billNo为6位，不足位数时左边补零
             billNo_ = billNo_.PadLeft(lenth, '0');
             return billNo_;
+        }
+
+        /// <summary>
+        /// 个人custid规则 A+18位数+0
+        /// </summary>
+        /// <param name="zjhm"></param>
+        /// <param name="dwzh"></param>
+        /// <param name="grzh"></param>
+        /// <param name="numLast"></param>
+        /// <param name="isOldData"></param>
+        /// <returns></returns>
+        public static string PersonCustIDGenerate(string zjhm, string dwzh = "", string grzh = "", bool isOldData = false, int numLast = 0)
+        {
+            if (isOldData)
+            {
+                var num18 = PaddingLeftZero(Convert.ToInt32($"{dwzh}{grzh}"), 18);
+                return $"A{num18}{numLast}";
+            }
+
+            return $"A{zjhm.ToUpper()}{numLast}";
+        }
+
+        /// <summary>
+        /// 个人账号生成
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="grzhInt"></param>
+        /// <returns></returns>
+        public static string PersonGrzhGenerate(string dwzh,int grzhInt)
+        {
+            var grzhNum = PaddingLeftZero(grzhInt, 5);
+            return dwzh + grzhNum;
         }
 
        /// <summary>
@@ -184,6 +217,48 @@ namespace BtzjManagement.Api.Utils
                 ip = httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             }
             return ip.Replace("'", "");
+        }
+
+        /// <summary>
+        /// 将汉字字符串转为拼音
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ConvertChineseToPinYin(string str)
+        {
+            string temp = "";
+            if (string.IsNullOrEmpty(str))
+                return temp;
+            foreach (var item in str.ToCharArray())
+            {
+                var a = Pinyin.GetPinyin(item);
+                temp += a;
+            }
+            return temp;
+        }
+
+        /// <summary>
+        /// 将汉字字符串转为拼音首字母
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="IsDw">是单位名称</param>
+        /// <returns></returns>
+        public static string ConvertChineseToPinYinShouZiMu(string str,bool IsDw = false)
+        {
+            string temp = "";
+            if (string.IsNullOrEmpty(str))
+                return temp;
+            if (IsDw)
+            {
+                str = str.Replace("行", "h");
+            }
+            
+            foreach (var item in str.ToCharArray())
+            {
+                var a = Pinyin.GetPinyin(item).ToArray().FirstOrDefault().ToString();
+                temp += a;
+            }
+            return temp;
         }
     }
 }

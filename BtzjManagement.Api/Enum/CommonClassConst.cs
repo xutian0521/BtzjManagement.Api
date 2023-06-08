@@ -55,6 +55,33 @@ namespace BtzjManagement.Api.Enum
         public const string 户口迁出本地或出境定居 = "5";
         [Description("其他")]
         public const string 其他 = "6";
+        [Description("其他原因销户")]
+        public const string 其他原因销户 = "7";
+    }
+
+    /// <summary>
+    /// 封存具体原因
+    /// </summary>
+    public class LockReasonConst
+    {
+        [Description("正常")]
+        public const string 正常 = "0";
+        [Description("正常缴费状态")]
+        public const string 正常缴费状态 = "1";
+        [Description("通常原因封存状态")]
+        public const string 通常原因封存状态 = "2";
+        [Description("下岗封存状态")]
+        public const string 下岗封存状态 = "3";
+        [Description("提前退养封存状态")]
+        public const string 提前退养封存状态 = "4";
+        [Description("退休封存状态")]
+        public const string 退休封存状态 = "5";
+        [Description("终止（解除）合同封存状态")]
+        public const string 终止_解除合同封存状态 = "6";
+        [Description("死亡封存状态")]
+        public const string 死亡封存状态 = "7";
+        [Description("调出本市封存状态")]
+        public const string 调出本市封存状态 = "8";
     }
 
     /// <summary>
@@ -95,6 +122,8 @@ namespace BtzjManagement.Api.Enum
         #region 业务操作流程相关
         [Description("修改:表示该业务数据创建后被修改了。")]
         public const string 修改 = "update";
+        [Description("删除:表示该业务数据被删除。")]
+        public const string 删除 = "delete";
         #endregion
     }
 
@@ -107,8 +136,6 @@ namespace BtzjManagement.Api.Enum
         public const string 男 = "1";
         [Description("女")]
         public const string 女 = "0";
-        [Description("未知")]
-        public const string 未知 = null;
     }
 
     /// <summary>
@@ -202,7 +229,142 @@ namespace BtzjManagement.Api.Enum
         public const int 个人开户 = 1001;
     }
 
+    /// <summary>
+    /// 按月汇缴核定标志类型
+    /// </summary>
+    public class AyhjCheckFlagConst
+    {
+        [Description("未核定")]
+        public const string 未核定 = "0";
+        [Description("已核定")]
+        public const string 已核定 = "1";
+    }
 
+    /// <summary>
+    /// 单位员工开户标志
+    /// </summary>
+    public class OpenPerSalReadyConst
+    {
+        [Description("未开户")]
+        public const string 未开户 = "0";
+        [Description("已开户")]
+        public const string 已开户 = "1";
+    }
+
+    /// <summary>
+    /// 婚姻状况
+    /// </summary>
+    public class HyzkConst
+    {
+        [Description("未婚")]
+        public const string 未婚 = "1";
+        [Description("已婚")]
+        public const string 已婚 = "2";
+        [Description("离异")]
+        public const string 离异 = "3";
+    }
+
+    /// <summary>
+    /// 补贴资金来源
+    /// </summary>
+    public class FromFlagConst
+    {
+        [Description("财政100%")]
+        public const string 财政100 = "1";
+        [Description("财政50%")]
+        public const string 财政50 = "2";
+        [Description("财政0%")]
+        public const string 财政0 = "3";
+    }
+
+    /// <summary>
+    /// 支取原因
+    /// </summary>
+    public class DrawReasonConst
+    {
+        [Description("购买,建造,翻建大修自住住房")]
+        public const string 购买_建造_翻建大修自住住房 = "1";
+        [Description("房租超出家庭工资收入的规定比例")]
+        public const string 房租超出家庭工资收入的规定比例 = "2";
+        [Description("偿还购房贷款本息")]
+        public const string 偿还购房贷款本息 = "3";
+        [Description("其他")]
+        public const string 其他 = "4";
+        [Description("离退休")]
+        public const string 离退休 = "5";
+    }
+
+    /// <summary>
+    /// 销户原因
+    /// </summary>
+    public class XiaoHuReasonConst
+    {
+        [Description("离休,退休")]
+        public const string 离休_退休 = "1";
+        [Description("丧失劳动能力,并与单位终止关系")]
+        public const string 丧失劳动能力并与单位终止关系 = "2";
+        [Description("户口迁出本地,或出境定居")]
+        public const string 户口迁出本地或出境定居 = "3";
+        [Description("购买商品房")]
+        public const string 购买商品房 = "4";
+        [Description("其它")]
+        public const string 其它 = "5";
+    }
+
+    /// <summary>
+    /// 计算方法
+    /// </summary>
+    public class CalcMethodConst
+    {
+        [Description("舍入到分")]
+        public const string 舍入到分 = "0";
+        [Description("见分进角")]
+        public const string 见分进角 = "1";
+        [Description("舍入到角")]
+        public const string 舍入到角 = "2";
+        [Description("见角进元")]
+        public const string 见角进元 = "3";
+        [Description("舍入到元")]
+        public const string 舍入到元 = "4";
+        [Description("见厘进分")]
+        public const string 见厘进分 = "5";
+        [Description("四舍五入到分")]
+        public const string 四舍五入到分 = "6";
+        [Description("四舍五入到角")]
+        public const string 四舍五入到角 = "7";
+        [Description("四舍五入到元")]
+        public const string 四舍五入到元 = "8";
+    }
+
+    /// <summary>
+    /// 证件号码类型
+    /// </summary>
+    public class ZjhmLxConst
+    {
+        [Description("身份证")]
+        public const string 身份证 = "01";
+        [Description("军官证")]
+        public const string 军官证 = "02";
+        [Description("护照")]
+        public const string 护照 = "03";
+        [Description("外国人永居居留证")]
+        public const string 外国人永居居留证 = "04";
+        [Description("其他")]
+        public const string 其他 = "05";
+    }
+
+    /// <summary>
+    /// 一次性缴存状态
+    /// </summary>
+    public class YcxCheckFlagConst
+    {
+        [Description("未缴交")]
+        public const string 未缴交 = "0";
+        [Description("生成汇缴业务未记账")]
+        public const string 生成汇缴业务未记账 = "1";
+        [Description("已复核")]
+        public const string 已复核 = "2";
+    }
 }
 
 

@@ -34,7 +34,7 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// <summary>
         /// 统一社会信用代码
         /// </summary>
-        public string USCCID { get; set; }
+        public string ZZJGDM { get; set; }
         /// <summary>
         /// 单位设立日期
         /// </summary>

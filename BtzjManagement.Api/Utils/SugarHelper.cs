@@ -2064,6 +2064,7 @@ namespace BtzjManagement.Api.Utils
         /// 查询集合
         /// </summary> 
         /// <param name="sql">sql</param> 
+        /// <param name="parameters">parameters</param> 
         /// <returns>实体</returns>
         public List<T> QueryDataTable<T>(string sql, List<SqlParameter> parameters) where T : class, new()
         {
@@ -2076,10 +2077,11 @@ namespace BtzjManagement.Api.Utils
         /// 查询单个值
         /// </summary> 
         /// <param name="sql">sql</param> 
+        /// <param name="parameters">parameters</param> 
         /// <returns>单个值</returns>
-        public object QuerySqlScalar(string sql)
+        public object QuerySqlScalar(string sql, params SugarParameter[] parameters)
         {
-            return DbContext.Ado.GetScalar(sql);
+            return DbContext.Ado.GetScalar(sql, parameters);
         }
         /// <summary>
         /// 分页查询

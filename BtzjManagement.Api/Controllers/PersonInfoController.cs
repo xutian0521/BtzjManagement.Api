@@ -59,19 +59,19 @@ namespace BtzjManagement.Api.Controllers
         /// 获取按月汇缴个人开户分页数据
         /// </summary>
         /// <param name="dwzh"></param>
-        /// <param name="page"></param>
-        /// <param name="size"></param>
-        /// <param name="KHTYPE"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
         /// <param name="status"></param>
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("PersonKhMonthList")]
-        public v_ApiResult PersonKhMonthList(string dwzh, int page = 1, int size = 10,int KHTYPE =1, string status = "created")
+        [ProducesResponseType(typeof(s_ApiResult<Pager<v_Busi_Grkh>>), StatusCodes.Status200OK)]
+        public v_ApiResult PersonKhMonthList(string dwzh, int pageIndex = 1, int pageSize = 10, string status = "created")
         {
             v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var r = _personInfoService.PersonKhMonthList(CityCent(), dwzh, page, size, KHTYPE, status);
+                var r = _personInfoService.PersonKhMonthList(CityCent(), dwzh, pageIndex, pageSize, status);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Message = ApiResultMessageConst.SUCCESS;
                 result.Content = r;
@@ -91,12 +91,13 @@ namespace BtzjManagement.Api.Controllers
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("PersonKHMonthModel")]
+        [ProducesResponseType(typeof(s_ApiResult<v_Busi_Grkh>), StatusCodes.Status200OK)]
         public v_ApiResult PersonKHMonthModel(string ywlsh, int id)
         {
             v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var r = _personInfoService.PersonKHMonthModel(ywlsh, id);
+                var r = _personInfoService.PersonKHMonthModel(ywlsh, id, CityCent());
                 if (r == null)
                 {
                     result.Message = "未查询到相关数据";
@@ -136,6 +137,53 @@ namespace BtzjManagement.Api.Controllers
             return result;
         }
 
-        
+        /// <summary>
+        /// 删除按月开户明细
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("RemovePersonKHMonthModel")]
+        public v_ApiResult RemovePersonKHMonthModel(P_PersonInfo_Delete pmodel)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var r = _personInfoService.RemovePersonKHMonthModel(pmodel, CityCent(), GetUser().userName);
+                result.Code = r.code;
+                result.Message = r.msg;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 提交按月汇缴个人开户业务
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("SubmitPersonInfoMonthCreated")]
+        public v_ApiResult SubmitPersonInfoMonthCreated(P_PersonInfo_Submit pmodel)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var rT = _personInfoService.SubmitPersonInfoMonthCreated(pmodel, GetUser().userName, CityCent());
+                result.Code = rT.code;
+                result.Message = rT.Item2;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }
+
+

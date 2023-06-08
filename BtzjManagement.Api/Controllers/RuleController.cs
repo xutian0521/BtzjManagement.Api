@@ -254,7 +254,7 @@ namespace BtzjManagement.Api.Controllers
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var list = _ruleService.GetDataDictionaryListByType(type,val);
+                var list = _ruleService.GetDataDictionaryListByType(type, CityCent(), val);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Content = list;
             }

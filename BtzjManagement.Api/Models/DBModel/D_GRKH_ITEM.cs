@@ -58,6 +58,10 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public decimal DWJCBL { get; set; }
         /// <summary>
+        /// 个人缴存比例
+        /// </summary>
+        public decimal GRJCBL { get; set; }
+        /// <summary>
         /// 个人缴存基数
         /// </summary>
         public decimal GRJCJS { get; set; }
@@ -65,6 +69,10 @@ namespace BtzjManagement.Api.Models.DBModel
         /// 个人月缴存额
         /// </summary>
         public decimal GRYJCE { get; set; }
+        /// <summary>
+        /// 单位月缴存额
+        /// </summary>
+        public decimal DWYJCE { get; set; }
         /// <summary>
         /// 起缴日期
         /// </summary>
@@ -85,6 +93,14 @@ namespace BtzjManagement.Api.Models.DBModel
         /// 个人存款账户开户银行代码
         /// </summary>
         public string GRCKZHKHYHDM { get; set; }
+        /// <summary>
+        /// 工作时间
+        /// </summary>
+        public DateTime? WORK_DATE { get; set; }
+        /// <summary>
+        /// 固定电话号码
+        /// </summary>
+        public string GDDHHM { get; set; }
     }
 }
 

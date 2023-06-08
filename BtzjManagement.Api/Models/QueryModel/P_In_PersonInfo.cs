@@ -82,5 +82,37 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// ID
         /// </summary>
         public int ID { get; set; }
+
+        /// <summary>
+        /// 个人缴存比例
+        /// </summary>
+        public decimal GRJCBL { get; set; }
+        /// <summary>
+        /// 单位月缴存额
+        /// </summary>
+        public decimal DWYJCE { get; set; }
+
+        /// <summary>
+        /// 工作时间
+        /// </summary>
+        public DateTime? WORK_DATE { get; set; }
+        /// <summary>
+        /// 固定电话号码
+        /// </summary>
+        public string GDDHHM { get; set; }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public class P_PersonInfo_Submit
+    {
+        public string ywlsh { get; set; }
+    }
+
+    public class P_PersonInfo_Delete
+    {
+        public string ywlsh { get; set; }
+        public int id { get; set; }
     }
 } 

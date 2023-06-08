@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BtzjManagement.Api.Enum;
+using BtzjManagement.Api.Utils;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -18,7 +20,6 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 单位名称
         /// </summary>
         public string DWMC { get; set; }
-
         /// <summary>
         /// 单位缴存比例
         /// </summary>
@@ -30,8 +31,11 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// <summary>
         /// 统一社会信用代码
         /// </summary>
-        public string USCCID { get; set; }
-
+        public string ZZJGDM { get; set; }
+        /// <summary>
+        /// 个人缴存比例
+        /// </summary>
+        public decimal GRJCBL { get; set; }
     }
 
     /// <summary>
@@ -67,6 +71,17 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string DWXZ { get; set; }
         /// <summary>
+        /// 单位性质-DESC
+        /// </summary>
+        public string DWXZ_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(DwxzConst), DWXZ).desc;
+            }
+        }
+
+        /// <summary>
         /// 单位邮编
         /// </summary>
         public string DWYB { get; set; }
@@ -77,7 +92,7 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// <summary>
         /// 统一社会信用代码
         /// </summary>
-        public string USCCID { get; set; }
+        public string ZZJGDM { get; set; }
         /// <summary>
         /// 单位设立日期
         /// </summary>
@@ -108,6 +123,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string DWFRDBZJLX { get; set; }
         /// <summary>
+        /// 单位法人代表证件类型-DESC
+        /// </summary>
+        public string DWFRDBZJLX_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(ZjhmLxConst), DWFRDBZJLX).desc;
+            }
+        }
+        /// <summary>
         /// 单位法人代表证件号码
         /// </summary>
         public string DWFRDBZJHM { get; set; }
@@ -127,6 +152,15 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 经办人证件类型
         /// </summary>
         public string JBRZJLX { get; set; }
+        /// <summary>
+        /// 经办人证件类型-DESC
+        /// </summary>
+        public string JBRZJLX_DESC {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(ZjhmLxConst), JBRZJLX).desc;
+            }
+        }
         /// <summary>
         /// 经办人证件号码
         /// </summary>
@@ -148,6 +182,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string FROMFLAG { get; set; }
         /// <summary>
+        /// 补贴资金来源-desc
+        /// </summary>
+        public string FROMFLAG_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(FromFlagConst), FROMFLAG).desc;
+            }
+        }
+        /// <summary>
         /// 受托银行名称
         /// </summary>
         public string STYHMC { get; set; }
@@ -163,6 +207,16 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 计算方法
         /// </summary>
         public string CALC_METHOD { get; set; }
+        /// <summary>
+        /// 计算方法-desc
+        /// </summary>
+        public string CALC_METHOD_DESC
+        {
+            get
+            {
+                return EnumHelper.GetEnumItemByValue<string>(typeof(CalcMethodConst), CALC_METHOD).desc;
+            }
+        }
     }
 
 }

@@ -56,6 +56,7 @@ namespace BtzjManagement.Api.Controllers
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("CorporationSelectList")]
+        [ProducesResponseType(typeof(s_ApiResult<List<v_CorporationSelect>>), StatusCodes.Status200OK)]
         public v_ApiResult CorporationSelectList(string searchKey)
         {
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
@@ -80,6 +81,7 @@ namespace BtzjManagement.Api.Controllers
         /// <returns></returns>
         [AcceptVerbs("GET")]
         [Route("CorporationCreatedModel")]
+        [ProducesResponseType(typeof(s_ApiResult<v_CorporationCreated>), StatusCodes.Status200OK)]
         public v_ApiResult CorporationCreatedModel(string tyxydm)
         {
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
@@ -98,7 +100,7 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 提交单位开户业务
         /// </summary>
-        /// <param name="ywlsh"></param>
+        /// <param name="pmodel"></param>
         /// <returns></returns>
         [AcceptVerbs("POST")]
         [Route("SubmitCorporationCreated")]
