@@ -101,11 +101,12 @@ namespace BtzjManagement.Api.Controllers
             try
             {
                 //_transferService.SysEnumInitStructure();
-                _transferService.UserInfoInitData(CityCent());
+                //_transferService.UserInfoInitData(CityCent());
+                _transferService.KMInitStructure(); 
                 //_transferService.SysMenuInitStructure();
                 //_transferService.SysRoleMenuInitData(CityCent());
                 //_transferService.SysRoleMenuInitData(CityCent());
-                
+
 
             }
             catch (Exception ex)

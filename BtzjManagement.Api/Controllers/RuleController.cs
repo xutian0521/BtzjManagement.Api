@@ -246,6 +246,7 @@ namespace BtzjManagement.Api.Controllers
         /// 获取枚举列表下拉选项
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="val"></param>
         /// <returns></returns>
         [HttpGet("GetDataDictionaryListByType")]
         public v_ApiResult GetDataDictionaryListByType(string type,string val="")

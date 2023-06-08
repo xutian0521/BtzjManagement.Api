@@ -32,8 +32,9 @@ namespace BtzjManagement.Api.Filter
                         StringBuilder sb = new StringBuilder();
                         foreach (var item in context.Request.Query)
                         {
-                            string dec = AESHelper.DecryptByAES(item.Value.ToString().Replace(" ", "+"));
-                            decryptSuccess = true;
+                            string dec = AESHelper.DecryptByAES(item.Value.ToString().Replace(" ", "+"), out bool isDecryptionSuccessful);
+                            decryptSuccess = isDecryptionSuccessful;
+
                             if (sb.Length > 0)
                             {
                                 sb.Append("&");
@@ -74,8 +75,8 @@ namespace BtzjManagement.Api.Filter
                             context.Items.Add("PostRequestIsEmpty", "1");
                         }
                         string dec = "";
-                        dec = AESHelper.DecryptByAES(requestBodyRaw);
-                        decryptSuccess = true;
+                        dec = AESHelper.DecryptByAES(requestBodyRaw, out bool isDecryptionSuccessful);
+                        decryptSuccess = isDecryptionSuccessful;
                         var RequestBody = new StreamReader(context.Request.BodyReader.AsStream()).ReadToEnd();//读取body
 
                         byte[] content1 = Encoding.UTF8.GetBytes(dec);

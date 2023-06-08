@@ -237,6 +237,8 @@ namespace BtzjManagement.Api.Services
                     VAL = "1",
                 });
                 sugarHelper.Add(listLimit);
+                //科目类型
+                sugarHelper.ExecuteCommand("");
                 //tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = 1, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = vlaue };
             }
             #endregion
@@ -723,7 +725,34 @@ namespace BtzjManagement.Api.Services
 
         #endregion 客户管理相关
 
+        #region 科目相关
+        /// <summary>
+        /// 菜单表结构初始化
+        /// </summary>
+        public void KMInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "S_KMBM", columnTypeAndLimit = "varchar2(128) not null", columnDesc = "科目编码" });
+            v_TableInits.Add(new v_TableInit { columnName = "I_GRADE", columnTypeAndLimit = "number(5) not null", columnDesc = "等级" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_BM1", columnTypeAndLimit = "varchar2(6) not null", columnDesc = "编码1" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_BM2", columnTypeAndLimit = "varchar2(6)", columnDesc = "编码2" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_BM3", columnTypeAndLimit = "varchar2(6)", columnDesc = "编码3" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_BM4", columnTypeAndLimit = "varchar2(6)", columnDesc = "编码4" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_MC1", columnTypeAndLimit = "varchar2(18)", columnDesc = "名称1" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_MC2", columnTypeAndLimit = "varchar2(36)", columnDesc = "名称2" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_MC3", columnTypeAndLimit = "varchar2(36)", columnDesc = "名称3" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_MC4", columnTypeAndLimit = "varchar2(20)", columnDesc = "名称4" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_KMMC", columnTypeAndLimit = "varchar2(60)", columnDesc = "科目名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "I_KMXZ", columnTypeAndLimit = "number(5) not null", columnDesc = "科目性质" });
+            v_TableInits.Add(new v_TableInit { columnName = "I_KMLX", columnTypeAndLimit = "number(5) not null", columnDesc = "科目类型" });
+            v_TableInits.Add(new v_TableInit { columnName = "DT_JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "截止日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "I_KMJD", columnTypeAndLimit = "number(5) not null", columnDesc = "科目精度" });
+            v_TableInits.Add(new v_TableInit { columnName = "S_MEMO", columnTypeAndLimit = "varchar2(100)", columnDesc = "备注" });
 
+
+            this.TableInit("KM", v_TableInits, true, "科目表");
+        }
+        #endregion
 
 
 

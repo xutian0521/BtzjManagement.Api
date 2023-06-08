@@ -20,6 +20,7 @@ using System.Data.SqlTypes;
 using System.Security.Cryptography;
 using System.Configuration;
 using System.Reflection;
+using System.ComponentModel.Design.Serialization;
 
 namespace BtzjManagement.Api.Services
 {
@@ -230,15 +231,26 @@ namespace BtzjManagement.Api.Services
         /// 根据枚举类型获取枚举列表-主要用于前端下拉列表渲染
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="val"></param>
         /// <returns></returns>
-        public List<v_SYS_DATA_DICTIONARY> GetDataDictionaryListByType(string type,string val="")
+        public List<D_SYS_DATA_DICTIONARY> GetDataDictionaryListByType(string type,string val="")
         {
-            return SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY>().Where(x => x.TYPE_KEY == type.Trim()).WhereIF(!string.IsNullOrEmpty(val), x => x.VAL == val).Select(x => new v_SYS_DATA_DICTIONARY
-            {
-                LABEL = x.LABEL,
-                TYPE_KEY = x.TYPE_KEY,
-                VAL = x.VAL
-            }).ToList();
+            return SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY, D_SYS_DATA_DICTIONARY>((d1, d2) => new object[] {
+                JoinType.Left, d1.ID ==d2.PARENT_ID  }).Where((d1, d2) => d1.TYPE_KEY == type.Trim())
+                .Select((d1, d2) => new D_SYS_DATA_DICTIONARY 
+                { 
+                    ID =  d2.ID,
+                    LABEL = d2.LABEL,
+                    CITY_CENTNO = d1.CITY_CENTNO,
+                    DESCRIPTION = d2.DESCRIPTION,
+                    ORIGIN_FLAG = d2.ORIGIN_FLAG,
+                    PARENT_ID = d2.PARENT_ID,
+                    REMARK = d2.REMARK,
+                    SORT_ID = d2.SORT_ID,
+                    TYPE_KEY = d1.TYPE_KEY,
+                    VAL = d2.VAL
+                })
+                .ToList();
         }
 
         /// <summary>
