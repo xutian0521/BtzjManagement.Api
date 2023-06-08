@@ -162,12 +162,22 @@ namespace BtzjManagement.Api.Services
                             break;
                     }
 
-                    D_SYS_DATA_DICTIONARY tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = name, LABEL = name, SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = value };
+                    D_SYS_DATA_DICTIONARY tModel = new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = name,
+                        LABEL = name,
+                        SORT_ID = ++sortFa,
+                        PARENT_ID = 0,
+                        ORIGIN_FLAG = key,
+                        VAL = "",
+                        TYPE_KEY = value
+                    };
                     action += () => sugarHelper.AddReturnIdentity(tModel);
                 }
 
-                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "jsff" };
-                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "zjhmlx" };
+                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "",TYPE_KEY = "jsff" };
+                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "" , TYPE_KEY = "zjhmlx" };
 
                 action += () => sugarHelper.AddReturnIdentity(tModelJsff);
                 action += () => sugarHelper.AddReturnIdentity(tModelZjlx);
@@ -192,9 +202,9 @@ namespace BtzjManagement.Api.Services
 
 
                 action = null;
-                var listFather = sugarHelper.QueryList<D_SYS_DATA_DICTIONARY>();
+                var listFather = sugarHelper.QueryList<D_SYS_DATA_DICTIONARY>();//一级节点
 
-                foreach (var item in listFather)//一级节点
+                foreach (var item in listFather)//二级节点
                 {
                     sortSon = 0;
                     var list = journey_Configs.Where(x => x.i_flag_gbk == item.ORIGIN_FLAG).Select(x => new D_SYS_DATA_DICTIONARY
@@ -204,7 +214,7 @@ namespace BtzjManagement.Api.Services
                         ORIGIN_FLAG = x.i_flag_gbk,
                         VAL = x.i_value_gbk,
                         CITY_CENTNO = city_cent,
-                        TYPE_KEY = item.VAL,
+                        TYPE_KEY = "",
                         SORT_ID = ++sortSon
                     }).ToList();
                     action += () => sugarHelper.Add(list);
@@ -214,7 +224,7 @@ namespace BtzjManagement.Api.Services
                 #region 公积金业务操作名称
                 var org_gjjop_configSql = @" select * from gjjop_config order by i_value asc ";
                 List<SD_gjjop_config> gjjop_config = syBaseConn.Query<SD_gjjop_config>(org_gjjop_configSql).ToList();
-                var tModelOpt = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjopttype", VAL = "gjjopttype" };
+                var tModelOpt = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjopttype", VAL = "", TYPE_KEY = "gjjopttype" };
                 var faId = sugarHelper.AddReturnIdentity(tModelOpt);
                 sortSon = 0;
                 var listOpt = gjjop_config.Select(x => new D_SYS_DATA_DICTIONARY
@@ -225,7 +235,7 @@ namespace BtzjManagement.Api.Services
                     ORIGIN_FLAG = x.i_flag_gbk,
                     PARENT_ID = faId,
                     SORT_ID = ++sortSon,
-                    TYPE_KEY = tModelOpt.VAL,
+                    TYPE_KEY = "",
                     VAL = x.i_value_gbk
                 }).ToList();
                 listOpt.Add(new D_SYS_DATA_DICTIONARY
@@ -235,26 +245,26 @@ namespace BtzjManagement.Api.Services
                     LABEL = "单位开户",
                     PARENT_ID = faId,
                     SORT_ID = ++sortSon,
-                    TYPE_KEY = tModelOpt.VAL,
+                    TYPE_KEY = "",
                     VAL = "1000"
                 });
                 listOpt.Add(new D_SYS_DATA_DICTIONARY
-                 {
-                     CITY_CENTNO = city_cent,
-                     DESCRIPTION = "个人开户",
-                     LABEL = "个人开户",
-                     PARENT_ID = faId,
-                     SORT_ID = ++sortSon,
-                     TYPE_KEY = tModelOpt.VAL,
-                     VAL = "1001"
-                 });
+                {
+                    CITY_CENTNO = city_cent,
+                    DESCRIPTION = "个人开户",
+                    LABEL = "个人开户",
+                    PARENT_ID = faId,
+                    SORT_ID = ++sortSon,
+                    TYPE_KEY = "",
+                    VAL = "1001"
+                });
 
                 sugarHelper.Add(listOpt);
                 #endregion
 
                 //相关限制配置参数
                 sortSon = 0;
-                var tModelLimit = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "gjjlimitconfig" };
+                var tModelLimit = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "",TYPE_KEY = "gjjlimitconfig" };
                 faId = sugarHelper.AddReturnIdentity(tModelLimit);
                 List<D_SYS_DATA_DICTIONARY> listLimit = new List<D_SYS_DATA_DICTIONARY>();
                 listLimit.Add(new D_SYS_DATA_DICTIONARY
@@ -264,7 +274,7 @@ namespace BtzjManagement.Api.Services
                     LABEL = "18",
                     PARENT_ID = faId,
                     SORT_ID = ++sortSon,
-                    TYPE_KEY = tModelLimit.VAL,
+                    TYPE_KEY = "",
                     VAL = "1",
                 });
                 sugarHelper.Add(listLimit);

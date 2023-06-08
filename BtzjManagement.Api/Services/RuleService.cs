@@ -230,15 +230,24 @@ namespace BtzjManagement.Api.Services
         /// 根据枚举类型获取枚举列表-主要用于前端下拉列表渲染
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="city_cent"></param>
+        /// <param name="val"></param>
         /// <returns></returns>
-        public List<v_SYS_DATA_DICTIONARY> GetDataDictionaryListByType(string type,string val="")
+        public List<v_SYS_DATA_DICTIONARY> GetDataDictionaryListByType(string type,string city_cent, string val="")
         {
-            return SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY>().Where(x => x.TYPE_KEY == type.Trim()).WhereIF(!string.IsNullOrEmpty(val), x => x.VAL == val).Select(x => new v_SYS_DATA_DICTIONARY
-            {
-                LABEL = x.LABEL,
-                TYPE_KEY = x.TYPE_KEY,
-                VAL = x.VAL
-            }).ToList();
+            List<(bool, Expression<Func<D_SYS_DATA_DICTIONARY, D_SYS_DATA_DICTIONARY, bool>>)> wherif = new List<(bool, Expression<Func<D_SYS_DATA_DICTIONARY, D_SYS_DATA_DICTIONARY, bool>>)>(); ;
+            wherif.Add(new(!string.IsNullOrEmpty(val), (t1, t2) => t2.VAL == val));
+
+            return SugarHelper.Instance().QueryMuch<D_SYS_DATA_DICTIONARY, D_SYS_DATA_DICTIONARY, v_SYS_DATA_DICTIONARY>(
+                (t1, t2) => new object[] { JoinType.Left, t1.ID == t2.PARENT_ID },
+                (t1, t2) => new v_SYS_DATA_DICTIONARY
+                {
+                    LABEL = t2.LABEL,
+                    TYPE_KEY = t1.TYPE_KEY,
+                    VAL = t2.VAL
+                },
+                (t1, t2) => t1.TYPE_KEY == type.Trim() && t1.CITY_CENTNO == city_cent,
+                wherif);
         }
 
         /// <summary>
