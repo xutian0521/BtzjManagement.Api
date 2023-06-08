@@ -9,6 +9,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using NPinyin;
 
 namespace BtzjManagement.Api.Utils
 {
@@ -216,6 +217,48 @@ namespace BtzjManagement.Api.Utils
                 ip = httpContext.Connection.RemoteIpAddress.MapToIPv4().ToString();
             }
             return ip.Replace("'", "");
+        }
+
+        /// <summary>
+        /// 将汉字字符串转为拼音
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
+        public static string ConvertChineseToPinYin(string str)
+        {
+            string temp = "";
+            if (string.IsNullOrEmpty(str))
+                return temp;
+            foreach (var item in str.ToCharArray())
+            {
+                var a = Pinyin.GetPinyin(item);
+                temp += a;
+            }
+            return temp;
+        }
+
+        /// <summary>
+        /// 将汉字字符串转为拼音首字母
+        /// </summary>
+        /// <param name="str"></param>
+        /// <param name="IsDw">是单位名称</param>
+        /// <returns></returns>
+        public static string ConvertChineseToPinYinShouZiMu(string str,bool IsDw = false)
+        {
+            string temp = "";
+            if (string.IsNullOrEmpty(str))
+                return temp;
+            if (IsDw)
+            {
+                str = str.Replace("行", "h");
+            }
+            
+            foreach (var item in str.ToCharArray())
+            {
+                var a = Pinyin.GetPinyin(item).ToArray().FirstOrDefault().ToString();
+                temp += a;
+            }
+            return temp;
         }
     }
 }

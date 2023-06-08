@@ -26,6 +26,10 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public string XINGMING { get; set; }
         /// <summary>
+        /// 姓名全拼
+        /// </summary>
+        public string XMQP { get; set; }
+        /// <summary>
         /// 证件类型
         /// </summary>
         public string ZJLX { get; set; }

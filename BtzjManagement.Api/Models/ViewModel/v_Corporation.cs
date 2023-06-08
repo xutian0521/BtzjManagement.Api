@@ -31,7 +31,7 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// <summary>
         /// 统一社会信用代码
         /// </summary>
-        public string USCCID { get; set; }
+        public string ZZJGDM { get; set; }
         /// <summary>
         /// 个人缴存比例
         /// </summary>
@@ -92,7 +92,7 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// <summary>
         /// 统一社会信用代码
         /// </summary>
-        public string USCCID { get; set; }
+        public string ZZJGDM { get; set; }
         /// <summary>
         /// 单位设立日期
         /// </summary>

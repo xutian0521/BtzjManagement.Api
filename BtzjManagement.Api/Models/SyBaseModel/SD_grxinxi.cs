@@ -18,11 +18,11 @@ namespace BtzjManagement.Api.Models.SyBaseModel
         private string s_sjh { get; set; }
 
 
-        public string dwzh_gbk { get { return dwzh; } }
-        public string grzh_gbk { get { return grzh; } }
+        public string dwzh_gbk { get { return Common.Cp850ToGBK(dwzh); } }
+        public string grzh_gbk { get { return Common.Cp850ToGBK(grzh); } }
         public string grxm_gbk { get { return Common.Cp850ToGBK(grxm); } }
-        public string grxb_gbk { get { return grxb; } }
-        public string sfzhm_gbk { get { return sfzhm; } }
+        public string grxb_gbk { get { return Common.Cp850ToGBK(grxb); } }
+        public string sfzhm_gbk { get { return Common.Cp850ToGBK(sfzhm); } }
         public DateTime? csny_gbk { get { return csny; } }
         public string s_lxdh_gbk { get { return Common.Cp850ToGBK(s_lxdh); } }
         public string s_sjh_gbk { get { return Common.Cp850ToGBK(s_sjh); } }

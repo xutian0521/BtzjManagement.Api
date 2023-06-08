@@ -23,6 +23,10 @@ namespace BtzjManagement.Api.Models.DBModel
         /// </summary>
         public string DWMC { get; set; }
         /// <summary>
+        /// 单位名称缩写
+        /// </summary>
+        public string DWMCSX { get; set; }
+        /// <summary>
         /// 单位地址
         /// </summary>
         public string DWDZ { get; set; }
@@ -41,7 +45,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 统一社会信用代码
         /// </summary>
-        public string USCCID { get; set; }
+        public string ZZJGDM { get; set; }
         /// <summary>
         /// 单位设立日期
         /// </summary>

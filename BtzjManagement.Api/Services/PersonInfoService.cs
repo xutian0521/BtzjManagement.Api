@@ -529,6 +529,7 @@ namespace BtzjManagement.Api.Services
                         WORK_DATE = item.WORK_DATE,
                         XINGBIE = item.XINGBIE,
                         XINGMING = item.XINGMING,
+                        XMQP = Common.ConvertChineseToPinYin(item.XINGMING),
                         ZJLX = item.ZJLX
                     };
                     action += () => sugarHelper.Add(basicModel);
@@ -667,7 +668,7 @@ namespace BtzjManagement.Api.Services
             var custid = string.Empty;//custid
 
             //看是否有账户信息
-            var acctList = GetV_CustomerInfos((t1, t2) => !string.IsNullOrEmpty(t1.ZJHM) && t1.ZJHM.ToLower() == zjhm.ToLower() && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent);
+            var acctList = GetV_CustomerInfos((t1, t2) => t1.ZJHM != null && t1.ZJHM.ToLower() == zjhm.ToLower() && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent);
             var acctInfoZC = acctList.FirstOrDefault(x => GrzhztNotAddGrzhztNotAdd.Contains(x.GRZHZT));
             if (acctInfoZC != null)
             {
@@ -675,7 +676,7 @@ namespace BtzjManagement.Api.Services
                 hasBasicInfo = true;
                 hasAcctInfo = true;
                 isWrong = true;
-                return (isWrong, hasAcctInfo, hasBasicInfo, custid, $"用户（{zjhm}）在单位（{acctInfoZC.DWZH}）已有{acctInfoZC.GRZHZT}状态的账户信息，操作失败 ");
+                return (isWrong, hasAcctInfo, hasBasicInfo, custid, $"用户（{zjhm}）在单位（{acctInfoZC.DWZH}）已有{EnumHelper.GetEnumItemByValue<string>(typeof(GrzhztConst), acctInfoZC.GRZHZT).desc}状态的账户信息，操作失败 ");
             }
 
             if (acctList.Count > 0)
@@ -688,7 +689,7 @@ namespace BtzjManagement.Api.Services
             else
             {
                 //查是否有基本信息
-                var custBasic = SugarHelper.Instance().QueryWhereList<D_CUSTOMER_BASICINFO>(x => !string.IsNullOrEmpty(x.ZJHM) && x.ZJHM.ToLower() == zjhm.ToLower()).OrderByDescending(x => x.CUSTID).FirstOrDefault();
+                var custBasic = SugarHelper.Instance().QueryWhereList<D_CUSTOMER_BASICINFO>(x => x.ZJHM != null && x.ZJHM.ToLower() == zjhm.ToLower()).OrderByDescending(x => x.CUSTID).FirstOrDefault();
                 if (custBasic != null)//已有基本信息
                 {
                     custid = custBasic.CUSTID;
