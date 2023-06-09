@@ -8,10 +8,6 @@ namespace BtzjManagement.Api.Models.QueryModel
     public class P_AddOrModifyKM
     {
         /// <summary>
-        /// 科目编号
-        /// </summary>
-        public string s_kmbh { get; set; }
-        /// <summary>
         /// 科目等级
         /// </summary>
         public int i_grade { get; set; }

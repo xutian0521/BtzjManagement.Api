@@ -98,5 +98,17 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
 
         public string I_KMJD_display { get; set; }
+        /// <summary>
+        /// 科目名称display
+        /// </summary>
+        public string S_KMMC_display { get; set; }
+        /// <summary>
+        /// 科目编号display
+        /// </summary>
+        public string S_KMBM_display { get; set; }
+        /// <summary>
+        /// 科目类型
+        /// </summary>
+        public string I_KMLX_display { get; set; }
     }
 }

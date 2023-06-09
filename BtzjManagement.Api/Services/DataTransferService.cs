@@ -176,8 +176,8 @@ namespace BtzjManagement.Api.Services
                     action += () => sugarHelper.AddReturnIdentity(tModel);
                 }
 
-                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "",TYPE_KEY = "jsff" };
-                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "" , TYPE_KEY = "zjhmlx" };
+                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "", TYPE_KEY = "jsff" };
+                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "", TYPE_KEY = "zjhmlx" };
 
                 action += () => sugarHelper.AddReturnIdentity(tModelJsff);
                 action += () => sugarHelper.AddReturnIdentity(tModelZjlx);
@@ -263,23 +263,93 @@ namespace BtzjManagement.Api.Services
                 #endregion
 
                 //相关限制配置参数
-                sortSon = 0;
-                var tModelLimit = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "",TYPE_KEY = "gjjlimitconfig" };
-                faId = sugarHelper.AddReturnIdentity(tModelLimit);
-                List<D_SYS_DATA_DICTIONARY> listLimit = new List<D_SYS_DATA_DICTIONARY>();
-                listLimit.Add(new D_SYS_DATA_DICTIONARY
                 {
-                    CITY_CENTNO = city_cent,
-                    DESCRIPTION = "单位开户统一信用代码长度限制",
-                    LABEL = "18",
-                    PARENT_ID = faId,
-                    SORT_ID = ++sortSon,
-                    TYPE_KEY = "",
-                    VAL = "1",
-                });
-                sugarHelper.Add(listLimit);
+                    sortSon = 0;
+                    var tModelLimit = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务限制配置", LABEL = "公积金业务限制配置", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "gjjlimitconfig", VAL = "", TYPE_KEY = "gjjlimitconfig" };
+                    faId = sugarHelper.AddReturnIdentity(tModelLimit);
+                    List<D_SYS_DATA_DICTIONARY> listLimit = new List<D_SYS_DATA_DICTIONARY>();
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "单位开户统一信用代码长度限制",
+                        LABEL = "18",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "1",
+                    });
+                
+                    sugarHelper.Add(listLimit);
+                }
                 //科目类型
-                sugarHelper.ExecuteCommand("");
+                {
+                    sortSon = 0;
+                    var tModelLimit = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "", LABEL = "科目类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "", VAL = "", TYPE_KEY = "kmlx" };
+                    faId = sugarHelper.AddReturnIdentity(tModelLimit);
+                    List<D_SYS_DATA_DICTIONARY> listLimit = new List<D_SYS_DATA_DICTIONARY>();
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "",
+                        LABEL = "资产",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "0",
+                    });
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "",
+                        LABEL = "费用",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "100",
+                    });
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "",
+                        LABEL = "负债",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "200",
+                    });
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "",
+                        LABEL = "权益",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "300",
+                    });
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "",
+                        LABEL = "收入",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "400",
+                    });
+                    listLimit.Add(new D_SYS_DATA_DICTIONARY
+                    {
+                        CITY_CENTNO = city_cent,
+                        DESCRIPTION = "",
+                        LABEL = "收支结余",
+                        PARENT_ID = faId,
+                        SORT_ID = ++sortSon,
+                        TYPE_KEY = "",
+                        VAL = "301",
+                    });
+                    sugarHelper.Add(listLimit);
+                }
+               
                 //tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = 1, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = vlaue };
             }
             #endregion

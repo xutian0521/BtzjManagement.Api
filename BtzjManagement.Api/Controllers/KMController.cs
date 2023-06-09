@@ -40,6 +40,18 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
         }
         /// <summary>
+        /// 科目树列表
+        /// </summary>
+        /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<v_KM>), StatusCodes.Status200OK)]
+        [HttpGet("GetKMTreeListBykmbm")]
+        public v_ApiResult GetKMTreeListBykmbm(string s_kmbm)
+        {
+            var user = base.GetUser();
+            var list = _kMService.GetKMTreeListBykmbm(s_kmbm);
+            return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
+        }
+        /// <summary>
         /// 添加或修改科目
         /// </summary>
         [HttpPost("AddOrModifyKM")]
@@ -55,11 +67,11 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="kmbm">科目编码</param>
         /// <returns></returns>
-        [HttpPost("DeleteKM")]
-        public async Task<v_ApiResult> DeleteKM([FromForm] string kmbm)
+        [HttpGet("DeleteKM")]
+        public async Task<v_ApiResult> DeleteKM(string s_kmbm)
         {
 
-            var result = await _kMService.DeleteKM(kmbm);
+            var result = await _kMService.DeleteKM(s_kmbm);
             return new v_ApiResult(result.code, result.message);
         }
         /// <summary>
