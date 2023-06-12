@@ -90,7 +90,7 @@ namespace BtzjManagement.Api.Services
         /// 添加或修改菜单
         /// </summary>
         public async Task<(int code, string message)> AddOrModifyMenuAsync(int id, int pId,
-            string title, string path, string icon, int sortId, bool isEnable, string remark, Guid userId)
+            string title, string path, string icon, int sortId, bool isEnable, string remark, int userId)
         {
             var model = new D_SYS_MENU();
             model.PID = pId;
