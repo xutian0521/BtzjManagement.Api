@@ -103,16 +103,47 @@ namespace BtzjManagement.Api.Models.QueryModel
     }
 
     /// <summary>
-    /// 
+    /// 业务提交
     /// </summary>
     public class P_PersonInfo_Submit
     {
+        /// <summary>
+        /// 业务流水号
+        /// </summary>
         public string ywlsh { get; set; }
     }
 
+    /// <summary>
+    /// 业务明细删除
+    /// </summary>
     public class P_PersonInfo_Delete
     {
+        /// <summary>
+        /// 业务流水号
+        /// </summary>
         public string ywlsh { get; set; }
+        /// <summary>
+        /// 业务明细id
+        /// </summary>
         public int id { get; set; }
     }
-} 
+
+    /// <summary>
+    /// 获取缴存额
+    /// </summary>
+    public class P_PersonInfo_CalcJce
+    {
+        /// <summary>
+        /// 个人缴存基数
+        /// </summary>
+        public decimal grjcjs { get; set; }
+        /// <summary>
+        /// 缴存比例
+        /// </summary>
+        public decimal jcbl { get; set; }
+        /// <summary>
+        /// 计算方法
+        /// </summary>
+        public string CALC_METHOD { get; set; }
+    }
+}

@@ -36,6 +36,10 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 个人缴存比例
         /// </summary>
         public decimal GRJCBL { get; set; }
+        /// <summary>
+        /// 计算方法
+        /// </summary>
+        public string CALC_METHOD { get; set; }
     }
 
     /// <summary>

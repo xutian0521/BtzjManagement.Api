@@ -230,7 +230,7 @@ namespace BtzjManagement.Api.Services
             Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = (t1, t2) => dwzhzts.Contains(t2.DWZHZT) && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent;
 
             List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)> wherif = new List<(bool, Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>>)>(); ;
-            wherif.Add(new(!string.IsNullOrEmpty(searchKey), (t1, t2) => t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.ZZJGDM.Contains(searchKey))));
+            wherif.Add(new(!string.IsNullOrEmpty(searchKey), (t1, t2) => t2.CITY_CENTNO == city_cent && (t1.DWMC.Contains(searchKey) || t2.DWZH.Contains(searchKey) || t1.ZZJGDM.Contains(searchKey) || t1.DWMCSX.Contains(searchKey))));
             var list = SugarHelper.Instance().QueryMuch<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, v_CorporationSelect>(
                 (t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID },
                 (t1, t2) => new v_CorporationSelect
@@ -240,7 +240,8 @@ namespace BtzjManagement.Api.Services
                     DWJCBL = t2.DWJCBL,
                     NEXTPAYMTH = t2.NEXTPAYMTH.Value.ToString("yyyy-MM-dd"),
                     ZZJGDM = t1.ZZJGDM,
-                    GRJCBL = t2.GRJCBL
+                    GRJCBL = t2.GRJCBL,
+                    CALC_METHOD = t2.CALC_METHOD
                 },
                 where, wherif);
 

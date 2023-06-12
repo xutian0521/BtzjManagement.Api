@@ -183,6 +183,30 @@ namespace BtzjManagement.Api.Controllers
 
             return result;
         }
+
+        /// <summary>
+        /// 获取缴存额
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("CalcYjce")]
+        public v_ApiResult CalcYjce(P_PersonInfo_CalcJce pmodel)
+        {
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var rT = _personInfoService.CalcYjce(pmodel);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Content = rT;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+
+            return result;
+        }
     }
 }
 

@@ -138,18 +138,45 @@ namespace BtzjManagement.Api.Services
                             break;
                         case "性别":
                             value = "xingbie";
+                            journey_Configs.RemoveAll(x => x.i_flag_gbk == item.Key);
+                            //journey_Configs.Add(new SD_journey_config { i_value_gbk = "0", s_value_gbk = Common.GBKToCp850("未知的性别"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "2", s_value_gbk = Common.GBKToCp850("女性"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "1", s_value_gbk = Common.GBKToCp850("男性"), s_name_gbk = "", i_flag_gbk = key });
+                            //journey_Configs.Add(new SD_journey_config { i_value_gbk = "9", s_value_gbk = Common.GBKToCp850("未说明的性别"), s_name_gbk = "", i_flag_gbk = key });
                             break;
                         case "封存状态":
                             value = "lockreason";
                             break;
                         case "封存标记":
                             value = "grzhzt";
+                            journey_Configs.RemoveAll(x => x.i_flag_gbk == item.Key);
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "01", s_value_gbk = Common.GBKToCp850("正常"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("封存"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("合并销户"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("外部转出销户"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("提取销户"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "06", s_value_gbk = Common.GBKToCp850("冻结"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "99", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = key });
+
                             break;
                         case "单位状态":
                             value = "dwzhzt";
+                            journey_Configs.RemoveAll(x => x.i_flag_gbk == item.Key);
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "01", s_value_gbk = Common.GBKToCp850("正常"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "02", s_value_gbk = Common.GBKToCp850("开户"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("缓缴"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("销户"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("封存"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "99", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = key });
                             break;
                         case "婚姻状态":
                             value = "hyzk";
+                            journey_Configs.RemoveAll(x => x.i_flag_gbk == item.Key);
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "10", s_value_gbk = Common.GBKToCp850("未婚"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "20", s_value_gbk = Common.GBKToCp850("已婚"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "30", s_value_gbk = Common.GBKToCp850("丧偶"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "40", s_value_gbk = Common.GBKToCp850("离婚"), s_name_gbk = "", i_flag_gbk = key });
+                            journey_Configs.Add(new SD_journey_config { i_value_gbk = "90", s_value_gbk = Common.GBKToCp850("未说明的婚姻状况"), s_name_gbk = "", i_flag_gbk = key });
                             break;
                         case "住房补贴方式":
                             value = "khtype";
@@ -176,14 +203,15 @@ namespace BtzjManagement.Api.Services
                     action += () => sugarHelper.AddReturnIdentity(tModel);
                 }
 
-                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "",TYPE_KEY = "jsff" };
-                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "" , TYPE_KEY = "zjhmlx" };
+                #region 计算方法，身份证类型
+                var tModelJsff = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "计算方法", LABEL = "计算方法", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "jsff", VAL = "", TYPE_KEY = "jsff" };
+                var tModelZjlx = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "证件号码类型", LABEL = "证件号码类型", SORT_ID = ++sortFa, PARENT_ID = 0, ORIGIN_FLAG = "zjhmlx", VAL = "", TYPE_KEY = "zjhmlx" };
 
                 action += () => sugarHelper.AddReturnIdentity(tModelJsff);
                 action += () => sugarHelper.AddReturnIdentity(tModelZjlx);
                 sugarHelper.InvokeTransactionScope(action);
 
-                //计算方法相关
+
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "0", s_value_gbk = Common.GBKToCp850("舍入到分"), s_name_gbk = "", i_flag_gbk = "jsff" });
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "1", s_value_gbk = Common.GBKToCp850("见分进角"), s_name_gbk = "", i_flag_gbk = "jsff" });
                 journey_Configs.Add(new SD_journey_config { i_value_gbk = "2", s_value_gbk = Common.GBKToCp850("舍入到角"), s_name_gbk = "", i_flag_gbk = "jsff" });
@@ -199,15 +227,15 @@ namespace BtzjManagement.Api.Services
                 //journey_Configs.Add(new SD_journey_config { i_value_gbk = "03", s_value_gbk = Common.GBKToCp850("护照"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
                 //journey_Configs.Add(new SD_journey_config { i_value_gbk = "04", s_value_gbk = Common.GBKToCp850("外国人永居居留证"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
                 //journey_Configs.Add(new SD_journey_config { i_value_gbk = "05", s_value_gbk = Common.GBKToCp850("其他"), s_name_gbk = "", i_flag_gbk = "zjhmlx" });
-
+                #endregion
 
                 action = null;
                 var listFather = sugarHelper.QueryList<D_SYS_DATA_DICTIONARY>();//一级节点
 
-                foreach (var item in listFather)//二级节点
+                foreach (var item in listFather)
                 {
                     sortSon = 0;
-                    var list = journey_Configs.Where(x => x.i_flag_gbk == item.ORIGIN_FLAG).Select(x => new D_SYS_DATA_DICTIONARY
+                    var list = journey_Configs.Where(x => x.i_flag_gbk == item.ORIGIN_FLAG).Select(x => new D_SYS_DATA_DICTIONARY //二级节点
                     {
                         PARENT_ID = item.ID,
                         LABEL = x.s_value_gbk,
@@ -684,7 +712,7 @@ namespace BtzjManagement.Api.Services
                     CUSTID = Common.PaddingLeftZero(Convert.ToInt32(x.dwzh_gbk), 8),
                     CITY_CENTNO = city_cent,
                     DWZH = x.dwzh_gbk,
-                    DWZHZT = x.fcbj_gbk,
+                    DWZHZT = Common.DwzhztConstSwitch(x.fcbj_gbk),
                     DWJCBL = Convert.ToDecimal(x.dwjj_bili_gbk),
                     STYHDM = x.i_yh_type_gbk,
                     STYHMC = "",
@@ -878,7 +906,7 @@ namespace BtzjManagement.Api.Services
                         GRZHYE = 0,
                         GRZHSNJZYE = x.dc_snje_gbk ?? 0,
                         GRZHDNGJYE = 0,
-                        GRZHZT = x.fcbj_gbk,
+                        GRZHZT = Common.GrzhztConstSwitch(x.fcbj_gbk),
                         KHRQ = x.dt_kaihu_gbk,
                         MONTHPAYAMT = x.dwgjj_gbk ?? 0,
                         YCX_CHECK_FLAG = x.i_jj_flag_gbk,
@@ -887,7 +915,8 @@ namespace BtzjManagement.Api.Services
                         GRZHSNJZRQ = x.dt_snjzrq_gbk,
                         LASTDEALDATE = DateTime.Now,
                         LOCK_REASON = x.i_fc_status_gbk,
-                        LASTPAYMONTH = x.xcrq_gbk
+                        LASTPAYMONTH = x.xcrq_gbk,
+                        XHYY=Common.GrXiaoHuReasonConstSwitch(x.fcbj_gbk),
                     }).ToList();
 
                 sugarHelper.Add(D_CUSTOMER_ACCTINFO);
@@ -900,10 +929,10 @@ namespace BtzjManagement.Api.Services
                         CITY_CENTNO = city_cent,
                         CSNY = x.csny_gbk,
                         GDDHHM = x.s_lxdh_gbk,
-                        ZJHM = string.IsNullOrEmpty(x.sfzhm_gbk)?x.sfzhm_gbk: x.sfzhm_gbk.Trim(),
+                        ZJHM = string.IsNullOrEmpty(x.sfzhm_gbk) ? x.sfzhm_gbk : x.sfzhm_gbk.Trim(),
                         XINGMING = x.grxm_gbk,
                         XMQP = Common.ConvertChineseToPinYin(x.grxm_gbk),
-                        XINGBIE = x.grxb_gbk,
+                        XINGBIE = Common.XingBieConstSwitch(x.grxb_gbk),
                         CUSTID = Common.PersonCustIDGenerate(x.sfzhm_gbk, x.dwzh_gbk, x.grzh_gbk, true),
                         SJHM = x.s_sjh_gbk,
                         WORK_DATE = org_grgjjxxSqlList.FirstOrDefault(y => y.dwzh_gbk == x.dwzh_gbk && y.grzh_gbk == x.grzh_gbk).dt_work_gbk,

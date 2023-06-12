@@ -587,6 +587,16 @@ namespace BtzjManagement.Api.Services
         }
 
         /// <summary>
+        /// 获取缴存额
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        public decimal CalcYjce(P_PersonInfo_CalcJce pmodel)
+        {
+            return Common.GetYjce(pmodel.jcbl, pmodel.grjcjs, pmodel.CALC_METHOD);
+        }
+
+        /// <summary>
         /// 获取按月汇缴个人开户业务数据
         /// </summary>
         /// <param name="whereLambda"></param>
