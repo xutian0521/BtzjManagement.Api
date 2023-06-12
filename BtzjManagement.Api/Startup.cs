@@ -77,7 +77,8 @@ namespace BtzjManagement.Api
 
             services.AddSingleton<FlowProcService>();
             services.AddSingleton<PersonInfoService>();
-            services.AddSingleton<AccountService>();
+            services.AddSingleton<AccountService>(); 
+            services.AddSingleton<KMService>();
 
         }
 

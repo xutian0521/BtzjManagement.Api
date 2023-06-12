@@ -95,8 +95,9 @@ namespace BtzjManagement.Api.Utils
         /// </summary>  
         /// <param name="input">密文字节数组</param>  
         /// <returns>返回解密后的字符串</returns>  
-        public static string DecryptByAES(string input)
+        public static string DecryptByAES(string input, out bool isDecryptionSuccessful)
         {
+            isDecryptionSuccessful = false;
             if (string.IsNullOrWhiteSpace(input))
             {
                 return input;
@@ -116,6 +117,7 @@ namespace BtzjManagement.Api.Utils
                     {
                         using (StreamReader srEncrypt = new StreamReader(csEncrypt))
                         {
+                            isDecryptionSuccessful |= true;
                             return srEncrypt.ReadToEnd();
                         }
                     }

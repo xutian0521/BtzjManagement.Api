@@ -246,6 +246,7 @@ namespace BtzjManagement.Api.Controllers
         /// 获取枚举列表下拉选项
         /// </summary>
         /// <param name="type"></param>
+        /// <param name="val"></param>
         /// <returns></returns>
         [HttpGet("GetDataDictionaryListByType")]
         public v_ApiResult GetDataDictionaryListByType(string type,string val="")
@@ -253,7 +254,7 @@ namespace BtzjManagement.Api.Controllers
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             try
             {
-                var list = _ruleService.GetDataDictionaryListByType(type, CityCent(), val);
+                var list = _ruleService.GetDataDictionaryListByType(type, val);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Content = list;
             }
