@@ -55,6 +55,10 @@ namespace BtzjManagement.Api.Controllers
                 //_transferService.Grkh_ItemInitStructure();
                 //_transferService.CustomerBasicInfoInitStructure();
                 //_transferService.CustomerAcctInfoInitStructure();
+
+                //缴存核定
+                //_transferService.MonthDWJCInitStructure();
+                //_transferService.MonthDWJCQCInitStructure();
             }
             catch (Exception ex)
             {

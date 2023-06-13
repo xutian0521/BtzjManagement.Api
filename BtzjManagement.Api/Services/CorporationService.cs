@@ -20,16 +20,20 @@ namespace BtzjManagement.Api.Services
     {
         FlowProcService _flowProcService;
         RuleService _ruleService;
+        private readonly IServiceProvider _serviceProvider;
+
 
         /// <summary>
         /// ctor
         /// </summary>
+        /// <param name="serviceProvider"></param>
         /// <param name="ruleService"></param>
         /// <param name="flowProcService"></param>
-        public CorporationService(FlowProcService flowProcService,RuleService ruleService)
+        public CorporationService(IServiceProvider serviceProvider,FlowProcService flowProcService,RuleService ruleService)
         {
             _flowProcService = flowProcService;
             _ruleService = ruleService;
+            _serviceProvider = serviceProvider;
         }
 
         /// <summary>
@@ -359,6 +363,32 @@ namespace BtzjManagement.Api.Services
             return (true, "提交成功");
         }
 
+        /// <summary>
+        /// 获取单位按月汇缴初始化相关数据
+        /// </summary>
+        /// <param name="city_cent"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="dwzh"></param>
+        /// <param name="searchKey"></param>
+        /// <returns></returns>
+        public v_PaymentMonthInit DwHjMonthInfo(string city_cent, string dwzh/*, int pageIndex,int pageSize,string searchKey = ""*/)
+        {
+            v_PaymentMonthInit result = new v_PaymentMonthInit { };
+            //单位人数，单位月缴存额
+            Expression<Func<D_CORPORATION_BASICINFO, D_CORPORATION_ACCTINFO, bool>> where = null;
+            where = (t1, t2) => t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent && t2.DWZH == dwzh;
+            var baseModel = GetCorporatiorn(where);
+            result.corporatiornInfo = baseModel;
+
+            //参与按月汇缴用户分页信息
+            //PersonInfoService _personInfoService = _serviceProvider.GetService(typeof(PersonInfoService)) as PersonInfoService;
+            //var grzhzt = new List<string> { GrzhztConst.正常, GrzhztConst.封存 };
+            //var pager = _personInfoService.DwJcbgPersonPageList(city_cent, pageIndex, pageSize, dwzh, searchKey, grzhzt, KhtypeConst.按月汇缴.ToString());
+            //result.pager = pager;
+
+            return result;
+        }
 
 
         /// <summary>
@@ -396,10 +426,20 @@ namespace BtzjManagement.Api.Services
                 FROMFLAG = t2.FROMFLAG,
                 STYHMC = t2.STYHMC,
                 STYHZH = t2.STYHZH,
-                DWZH = t2.DWZH
+                DWZH = t2.DWZH,
+                DWFCRS = t2.DWFCRS,
+                MONTHPAYTOTALAMT = t2.MONTHPAYTOTALAMT,
+                DWJCRS = t2.DWJCRS,
+                DWZGRS = t2.DWZGRS,
+                FACTINCOME = t2.FACTINCOME,
+                GRJCBL = t2.GRJCBL,
+                JZNY = t2.JZNY,
+                DWZHYE = t2.DWZHYE,
+                REGHANDBAL = t2.REGHANDBAL
             };
 
             return SugarHelper.Instance().QueryMuch((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, selectExpression, where).FirstOrDefault();
         }
+
     }
 }

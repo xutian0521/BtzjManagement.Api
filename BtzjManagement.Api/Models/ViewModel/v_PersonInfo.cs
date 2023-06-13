@@ -474,4 +474,33 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// </summary>
         public string CITY_CENTNO { get; set; }
     }
+
+
+    public class v_CorporationPersonInfo
+    {
+        /// <summary>
+        /// 单位账号
+        /// </summary>
+        public string dwzh { get; set; }
+        /// <summary>
+        /// 单位职工人数
+        /// </summary>
+        public int DWZGRS { get; set; }
+        /// <summary>
+        /// 单位封存人数
+        /// </summary>
+        public int DWFCRS { get; set; }
+        /// <summary>
+        /// 单位缴存人数
+        /// </summary>
+        public int DWJCRS { get; set; }
+        /// <summary>
+        /// 工资总数
+        /// </summary>
+        public decimal FACTINCOME { get; set; }
+        /// <summary>
+        /// 月缴存总额
+        /// </summary>
+        public decimal MONTHPAYTOTALAMT { get; set; }
+    }
 }

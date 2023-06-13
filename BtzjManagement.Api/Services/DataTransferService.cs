@@ -15,20 +15,17 @@ using Dapper.Contrib.Extensions;
 using System.Transactions;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
+using BtzjManagement.Api.Enum;
 
 namespace BtzjManagement.Api.Services
 {
     public class DataTransferService
     {
         #region 系统配置相关
-
-
-
         #region 系统用户，角色，权限，字典相关
-
-
+        #region 用户相关
         /// <summary>
-        /// 用户信息表数据初始化
+        /// 用户信息表结构初始化
         /// </summary>
         /// <param name="v"></param>
         internal void UserInfoInitData(string v)
@@ -47,8 +44,11 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("USER_INFO", v_TableInits, true, "用户信息表");
         }
+        #endregion
+
+        #region 角色相关
         /// <summary>
-        /// 角色表数据初始化
+        /// 角色表结构初始化
         /// </summary>
         /// <param name="v"></param>
         internal void SysRoleInitData(string v)
@@ -61,6 +61,9 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("SYS_ROLE", v_TableInits, true, "角色表");
         }
+        #endregion
+
+        #region 权限相关
         /// <summary>
         /// 角色菜单表数据初始化
         /// </summary>
@@ -78,8 +81,9 @@ namespace BtzjManagement.Api.Services
 
             this.TableInit("SYS_ROLE_MENU", v_TableInits, true, "角色菜单表");
         }
+        #endregion
 
-
+        #region 字典相关
         /// <summary>
         /// 数据字典表结构初始化
         /// </summary>
@@ -306,7 +310,7 @@ namespace BtzjManagement.Api.Services
                         TYPE_KEY = "",
                         VAL = "1",
                     });
-                
+
                     sugarHelper.Add(listLimit);
                 }
                 //科目类型
@@ -377,11 +381,14 @@ namespace BtzjManagement.Api.Services
                     });
                     sugarHelper.Add(listLimit);
                 }
-               
+
                 //tModel = new D_SYS_DATA_DICTIONARY { CITY_CENTNO = city_cent, DESCRIPTION = "公积金业务操作名称", LABEL = "公积金业务操作名称", SORT_ID = 1, PARENT_ID = 0, ORIGIN_FLAG = key, VAL = vlaue };
             }
             #endregion
         }
+        #endregion
+
+
         #endregion
 
         #region 菜单表相关
@@ -411,6 +418,8 @@ namespace BtzjManagement.Api.Services
         public void SysMenuInitData(string city_cent)
         {
             var sqlHelper = SugarHelper.Instance();
+            sqlHelper.ExecuteCommand(" delete from SYS_MENU ");
+
             var faModel = new D_SYS_MENU { NAME = "首页", IS_ENABLE = 1, PID = 0, REMARK = "首页", PATH = "homepage.html", ALIAS = "Home", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent };
             var faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
 
@@ -467,41 +476,45 @@ namespace BtzjManagement.Api.Services
             sonList.Add(new D_SYS_MENU { NAME = "批量入账", IS_ENABLE = 1, PID = faId, REMARK = "批量入账", PATH = "", ALIAS = "", SORT_ID = 20, ICON = "el-icon-location", CITY_CENTNO = city_cent });
             sqlHelper.Add(sonList);
 
-            faModel = new D_SYS_MENU { NAME = "数据统计", IS_ENABLE = 1, PID = 0, REMARK = "数据统计", PATH = "", ALIAS = "CountManager", SORT_ID = 90, ICON = "el-icon-location", CITY_CENTNO = city_cent };
+            faModel = new D_SYS_MENU { NAME = "系统管理", IS_ENABLE = 1, PID = 0, REMARK = "系统设置", PATH = "", ALIAS = "System", SORT_ID = 90, ICON = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
+            sonList = new List<D_SYS_MENU> { };
+            sonList.Add(new D_SYS_MENU { NAME = "字典管理", IS_ENABLE = 1, PID = faId, REMARK = "字典管理", PATH = "systemData.html", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SYS_MENU { NAME = "菜单管理", IS_ENABLE = 1, PID = faId, REMARK = "菜单管理", PATH = "systemMenu.html", ALIAS = "", SORT_ID = 20, ICON = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SYS_MENU { NAME = "用户管理", IS_ENABLE = 1, PID = faId, REMARK = "用户管理", PATH = "systemUser.html", ALIAS = "", SORT_ID = 30, ICON = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SYS_MENU { NAME = "角色管理", IS_ENABLE = 1, PID = faId, REMARK = "角色管理", PATH = "systemRole.html", ALIAS = "", SORT_ID = 40, ICON = "el-icon-location", CITY_CENTNO = city_cent });
+            sonList.Add(new D_SYS_MENU { NAME = "权限管理", IS_ENABLE = 1, PID = faId, REMARK = "权限管理", PATH = "", ALIAS = "", SORT_ID = 50, ICON = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SYS_MENU { NAME = "财务管理", IS_ENABLE = 1, PID = 0, REMARK = "财务管理", PATH = "", ALIAS = "Finance", SORT_ID = 90, ICON = "el-icon-location", CITY_CENTNO = city_cent };
+            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
+            sonList = new List<D_SYS_MENU> { };
+            sonList.Add(new D_SYS_MENU { NAME = "科目管理", IS_ENABLE = 1, PID = faId, REMARK = "科目管理", PATH = "page/business/km.html", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
+            sqlHelper.Add(sonList);
+
+            faModel = new D_SYS_MENU { NAME = "数据统计", IS_ENABLE = 1, PID = 0, REMARK = "数据统计", PATH = "", ALIAS = "CountManager", SORT_ID = 100, ICON = "el-icon-location", CITY_CENTNO = city_cent };
             faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
             sonList = new List<D_SYS_MENU> { };
             sonList.Add(new D_SYS_MENU { NAME = "数据对比", IS_ENABLE = 1, PID = faId, REMARK = "数据对比", PATH = "datastatistics.html", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
             sqlHelper.Add(sonList);
 
-            faModel = new D_SYS_MENU { NAME = "菜单管理", IS_ENABLE = 1, PID = 0, REMARK = "菜单管理", PATH = "", ALIAS = "Menu", SORT_ID = 100, ICON = "el-icon-location", CITY_CENTNO = city_cent };
-            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
-            sonList = new List<D_SYS_MENU> { };
-            sonList.Add(new D_SYS_MENU { NAME = "菜单管理", IS_ENABLE = 1, PID = faId, REMARK = "菜单管理", PATH = "", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
-            sqlHelper.Add(sonList);
 
-            faModel = new D_SYS_MENU { NAME = "用户管理", IS_ENABLE = 1, PID = 0, REMARK = "用户管理", PATH = "", ALIAS = "User", SORT_ID = 110, ICON = "el-icon-location", CITY_CENTNO = city_cent };
-            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
-            sonList = new List<D_SYS_MENU> { };
-            sonList.Add(new D_SYS_MENU { NAME = "用户管理", IS_ENABLE = 1, PID = faId, REMARK = "用户管理", PATH = "", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
-            sqlHelper.Add(sonList);
-
-            faModel = new D_SYS_MENU { NAME = "角色管理", IS_ENABLE = 1, PID = 0, REMARK = "角色管理", PATH = "", ALIAS = "Role", SORT_ID = 120, ICON = "el-icon-location", CITY_CENTNO = city_cent };
-            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
-            sonList = new List<D_SYS_MENU> { };
-            sonList.Add(new D_SYS_MENU { NAME = "角色管理", IS_ENABLE = 1, PID = faId, REMARK = "角色管理", PATH = "", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
-            sqlHelper.Add(sonList);
-
-            faModel = new D_SYS_MENU { NAME = "权限管理", IS_ENABLE = 1, PID = 0, REMARK = "权限管理", PATH = "", ALIAS = "Permission", SORT_ID = 130, ICON = "el-icon-location", CITY_CENTNO = city_cent };
-            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
-            sonList = new List<D_SYS_MENU> { };
-            sonList.Add(new D_SYS_MENU { NAME = "权限管理", IS_ENABLE = 1, PID = faId, REMARK = "权限管理", PATH = "", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
-            sqlHelper.Add(sonList);
-
-            faModel = new D_SYS_MENU { NAME = "系统设置", IS_ENABLE = 1, PID = 0, REMARK = "系统设置", PATH = "", ALIAS = "System", SORT_ID = 140, ICON = "el-icon-location", CITY_CENTNO = city_cent };
-            faId = sqlHelper.AddReturnIdentity<D_SYS_MENU>(faModel);
-            sonList = new List<D_SYS_MENU> { };
-            sonList.Add(new D_SYS_MENU { NAME = "系统设置", IS_ENABLE = 1, PID = faId, REMARK = "系统设置", PATH = "", ALIAS = "", SORT_ID = 10, ICON = "el-icon-location", CITY_CENTNO = city_cent });
-            sqlHelper.Add(sonList);
+            #region 处理菜单权限
+            var list = sqlHelper.QueryWhereList<D_SYS_MENU>(x => x.CITY_CENTNO == city_cent);
+            foreach (var item in list)
+            {
+                var modelRo = new D_SYS_ROLE_MENU
+                {
+                    CAN_ADD = 1,
+                    CAN_AUDIT = 1,
+                    CAN_DELETE = 1,
+                    CAN_EDIT = 1,
+                    MENU_ID = item.ID,
+                    ROLE_ID = 1
+                };
+                sqlHelper.Add(modelRo);
+            }
+            #endregion
         }
 
         #endregion 菜单表相关
@@ -559,8 +572,6 @@ namespace BtzjManagement.Api.Services
             this.TableInit("FLOWPROC", v_TableInits, true, "操作流程日志表");
         }
         #endregion 业务流程表
-
-
 
         #region 系统配置表相关
         /// <summary>
@@ -799,13 +810,30 @@ namespace BtzjManagement.Api.Services
                     CALC_METHOD = x.i_jsff_gbk,
                     REGHANDBAL = 0,
                     MONTHPAYTOTALAMT = Convert.ToDecimal(x.yjje_gbk),
-                    OPENPERSALREADY = "0",
+                    OPENPERSALREADY = OpenPerSalReadyConst.未开户,
                     FROMFLAG = x.i_btly_gbk,
                     NEXTPAYMTH = Convert.ToDateTime(x.xcrq_gbk),
-                    JZNY = Convert.ToDateTime(x.xcrq_gbk).AddMonths(-1).ToString("yyyyMM")
+                    JZNY = Convert.ToDateTime(x.xcrq_gbk).AddMonths(-1).ToString("yyyyMM"),
+                    GRJCBL = 0,
                 }).ToList();
 
-                SugarHelper.Instance().Add(models);
+                var sqlHelper = SugarHelper.Instance();
+                sqlHelper.Add(models);
+
+                var dwAccList = sqlHelper.QueryWhereList<D_CORPORATION_ACCTINFO>(x => x.CITY_CENTNO == city_cent);
+
+                var sql = string.Empty;
+                foreach (var item in dwAccList)
+                {
+                    //单位挂账余额
+                    sql = $"select dc_ye  from zm where s_kmbm = '219666{item.DWZH}' order by l_incode desc ";
+                    item.REGHANDBAL = syBaseConn.QueryFirstOrDefault<decimal>(sql);
+
+                    //单位账户余额
+                    sql = $"select ljye from kmmanager where kmbm = '201{item.DWZH}' ";
+                    item.DWZHYE = syBaseConn.QueryFirstOrDefault<decimal>(sql);
+                    sqlHelper.Update(item);
+                }
             }
             #endregion
         }
@@ -953,12 +981,12 @@ namespace BtzjManagement.Api.Services
 
             using (var syBaseConn = SybaseConnector.Conn())
             {
-               
+
                 //获取单位基本信息
                 var dwInfoList = sugarHelper.QueryList<D_CORPORATION_ACCTINFO>();
 
                 //获取个人基本信息
-                var org_grgjjxxSql = @" select * from grgjjxx  order by dwzh asc,grzh asc  ";
+                var org_grgjjxxSql = @" select a.*,b.ljye grzhye from grgjjxx a left join kmmanager b on b.bm1 = '201' and b.bm2 = a.dwzh and b.bm3=a.grzh order by dwzh asc,grzh asc  ";
                 var org_grgjjxxSqlList = syBaseConn.Query<SD_grgjjxx>(org_grgjjxxSql).ToList();
                 List<D_CUSTOMER_ACCTINFO> D_CUSTOMER_ACCTINFO = org_grgjjxxSqlList
                     .Select(x => new D_CUSTOMER_ACCTINFO
@@ -975,7 +1003,7 @@ namespace BtzjManagement.Api.Services
                         GRJCJS = x.gze_gbk ?? 0,
                         GRYJCE = 0,
                         GRZH = $"{x.dwzh_gbk}{x.grzh_gbk}",
-                        GRZHYE = 0,
+                        GRZHYE = x.grzhye,
                         GRZHSNJZYE = x.dc_snje_gbk ?? 0,
                         GRZHDNGJYE = 0,
                         GRZHZT = Common.GrzhztConstSwitch(x.fcbj_gbk),
@@ -988,7 +1016,7 @@ namespace BtzjManagement.Api.Services
                         LASTDEALDATE = DateTime.Now,
                         LOCK_REASON = x.i_fc_status_gbk,
                         LASTPAYMONTH = x.xcrq_gbk,
-                        XHYY=Common.GrXiaoHuReasonConstSwitch(x.fcbj_gbk),
+                        XHYY = Common.GrXiaoHuReasonConstSwitch(x.fcbj_gbk),
                     }).ToList();
 
                 sugarHelper.Add(D_CUSTOMER_ACCTINFO);
@@ -1012,6 +1040,49 @@ namespace BtzjManagement.Api.Services
                     }).ToList();
 
                 sugarHelper.Add(D_CUSTOMER_BASICINFO);
+
+                var sql = @" SELECT DWZH,SUM(GRJCJS) FACTINCOME,SUM(MONTHPAYAMT) MONTHPAYTOTALAMT,SUM(grzhztall) DWZGRS,SUM(grzhzt02) DWFCRS,SUM(grzhzt01_02) DWJCRS
+                            FROM 
+                            (
+	                            SELECT DWZH,
+				                             CASE 
+						                             WHEN GRZHZT in ('01','02') AND ACCT_TYPE = 0 THEN grjcjs 
+						                             ELSE 0 
+				                             END AS grjcjs,MONTHPAYAMT,1 grzhztall,
+				                             CASE 
+						                             WHEN GRZHZT = '02' AND ACCT_TYPE = 0 THEN 1 
+						                             ELSE 0 
+				                             END AS grzhzt02,
+				                             CASE 
+						                             WHEN GRZHZT in('01','02') AND ACCT_TYPE = 0 THEN 1 
+						                             ELSE 0 
+				                             END AS grzhzt01_02
+	                            FROM CUSTOMER_ACCTINFO where CITY_CENTNO = :CITY_CENTNO
+                            ) tt
+                            GROUP BY dwzh ";
+
+                var dwPersonInfo = sugarHelper.QueryDataTable<v_CorporationPersonInfo>(sql, new List<Microsoft.Data.SqlClient.SqlParameter> { new Microsoft.Data.SqlClient.SqlParameter("CITY_CENTNO", city_cent) });
+
+                //获取单位账户信息表
+                var dwAcctList = sugarHelper.QueryWhereList<D_CORPORATION_ACCTINFO>(x => x.CITY_CENTNO == city_cent);
+
+                Action action = null;
+                foreach (var item in dwPersonInfo)
+                {
+                    var dwAcct = dwAcctList.FirstOrDefault(x => x.DWZH == item.dwzh);
+                    if (dwAcct != null)
+                    {
+                        dwAcct.DWZGRS = item.DWZGRS;
+                        dwAcct.DWFCRS = item.DWFCRS;
+                        dwAcct.DWJCRS = item.DWJCRS;
+                        dwAcct.FACTINCOME = item.FACTINCOME;
+                        dwAcct.MONTHPAYTOTALAMT = item.MONTHPAYTOTALAMT;
+                        dwAcct.OPENPERSALREADY = OpenPerSalReadyConst.已开户;
+                        action += () => sugarHelper.Update(dwAcct);
+                    }
+                }
+
+                sugarHelper.InvokeTransactionScope(action);
             }
         }
 
@@ -1046,6 +1117,68 @@ namespace BtzjManagement.Api.Services
             this.TableInit("KM", v_TableInits, true, "科目表");
         }
         #endregion
+
+        #region 缴存核定相关
+        /// <summary>
+        /// 按月汇缴业务表
+        /// </summary>
+        public void MonthDWJCInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "业务流水号" });
+            v_TableInits.Add(new v_TableInit { columnName = "BATCHNO", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "批次号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "NVARCHAR2(20)", columnDesc = "单位账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWJCBL", columnTypeAndLimit = "NUMBER(4,2)", columnDesc = "单位缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCBL", columnTypeAndLimit = "NUMBER(4,2)", columnDesc = "个人缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "PAYMTH", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "汇缴月份" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWJCRS", columnTypeAndLimit = "NUMBER(18)", columnDesc = "本月汇缴人数" });
+            v_TableInits.Add(new v_TableInit { columnName = "MTHPAYAMT", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "本月汇缴金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "LASTMTHPAYNUM", columnTypeAndLimit = "NUMBER(18)", columnDesc = "上月汇缴人数" });
+            v_TableInits.Add(new v_TableInit { columnName = "LASTMTHPAY", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "上月汇缴金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "MTHPAYNUMPLS", columnTypeAndLimit = "NUMBER(18)", columnDesc = "本月增加人数" });
+            v_TableInits.Add(new v_TableInit { columnName = "MTHPAYAMTPLS", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "本月增加金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "MTHPAYNUMMNS", columnTypeAndLimit = "NUMBER(18)", columnDesc = "本月减少人数" });
+            v_TableInits.Add(new v_TableInit { columnName = "MTHPAYAMTMNS", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "本月减少金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "BASECHGNUM", columnTypeAndLimit = "NUMBER(18)", columnDesc = "基数调整人数" });
+            v_TableInits.Add(new v_TableInit { columnName = "BASECHGAMT", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "基数调整金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "保存时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "CREATE_MAN", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "保存人" });
+            v_TableInits.Add(new v_TableInit { columnName = "SUBMIT_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "提交时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "SUBMIT_MAN", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "提交人" });
+            v_TableInits.Add(new v_TableInit { columnName = "VERIFY_TIME", columnTypeAndLimit = "TIMESTAMP", columnDesc = "审核时间" });
+            v_TableInits.Add(new v_TableInit { columnName = "VERIFY_MAN", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "审核人" });
+            v_TableInits.Add(new v_TableInit { columnName = "STATUS", columnTypeAndLimit = "NVARCHAR2(30)", columnDesc = "业务状态" });
+            v_TableInits.Add(new v_TableInit { columnName = "VCHRNOS", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "凭证号字符串" });
+            v_TableInits.Add(new v_TableInit { columnName = "MEMO", columnTypeAndLimit = "NVARCHAR2(1000)", columnDesc = "备注" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360)", columnDesc = "城市网点编号" });
+            this.TableInit("MONTH_DWJC", v_TableInits, true, "按月汇缴业务表");
+        }
+
+        /// <summary>
+        /// 按月汇缴清册表
+        /// </summary>
+        public void MonthDWJCQCInitStructure()
+        {
+            List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            v_TableInits.Add(new v_TableInit { columnName = "YWLSH", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "业务流水号" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "NVARCHAR2(20)", columnDesc = "单位账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "PAYMTH", columnTypeAndLimit = "NVARCHAR2(255)", columnDesc = "汇缴月份" });
+            v_TableInits.Add(new v_TableInit { columnName = "ZJHM", columnTypeAndLimit = "NVARCHAR2(18)", columnDesc = "证件号码" });
+            v_TableInits.Add(new v_TableInit { columnName = "XINGMING", columnTypeAndLimit = "NVARCHAR2(120)", columnDesc = "个人姓名" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRZH", columnTypeAndLimit = "NVARCHAR2(20)", columnDesc = "个人账号" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCJS", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "个人缴存基数" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWJCBL", columnTypeAndLimit = "NUMBER(4,2)", columnDesc = "单位缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRJCBL", columnTypeAndLimit = "NUMBER(4,2)", columnDesc = "个人缴存比例" });
+            v_TableInits.Add(new v_TableInit { columnName = "REMITPAYAMT", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "汇缴金额" });
+            v_TableInits.Add(new v_TableInit { columnName = "DWYJCE", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "单位月缴存额" });
+            v_TableInits.Add(new v_TableInit { columnName = "GRYJCE", columnTypeAndLimit = "NUMBER(18,2)", columnDesc = "个人月缴存额" });
+            this.TableInit("MONTH_DWJCQC", v_TableInits, true, "按月汇缴业务清册表");
+        }
+
+        #endregion
+
 
 
 

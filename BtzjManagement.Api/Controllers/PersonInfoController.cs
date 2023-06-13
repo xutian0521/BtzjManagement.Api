@@ -207,6 +207,46 @@ namespace BtzjManagement.Api.Controllers
 
             return result;
         }
+
+        /// <summary>
+        /// 获取单位缴存变更分页数据
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchKey"></param>
+        /// <param name="type">all：所有账户状态；dwhj:正常，封存状态</param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("DwJcbgPageList")]
+        [ProducesResponseType(typeof(s_ApiResult<Pager<v_CustomerInfo>>), StatusCodes.Status200OK)]
+        public v_ApiResult DwJcbgPageList(string dwzh, int pageIndex = 1, int pageSize = 10, string searchKey = "",string type = "all")
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+           
+            try
+            {
+                List<string> grzhzt = new List<string> { };
+                if (type == "dwhj")
+                {
+                    grzhzt.AddRange(new List<string> { GrzhztConst.正常, GrzhztConst.封存 });
+                }
+                var r = _personInfoService.DwJcbgPersonPageList(CityCent(), pageIndex, pageSize, dwzh, searchKey, grzhzt);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Message = ApiResultMessageConst.SUCCESS;
+                result.Content = r;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+
+
+       
+
     }
 }
 

@@ -597,6 +597,34 @@ namespace BtzjManagement.Api.Services
         }
 
         /// <summary>
+        /// 获取单位缴存变更数据
+        /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="dwzh">单位账号</param>
+        /// <param name="searchkey">搜索关键字</param>
+        /// <param name="city_cent">城市编码</param>
+        /// <param name="grStatusList">个人账号状态</param>
+        /// <returns></returns>
+        public Pager<v_CustomerInfo> DwJcbgPersonPageList(string city_cent, int pageIndex, int pageSize, string dwzh, string searchkey,List<string> grStatusList = null,string KhtypeConst = "")
+        {
+            List<(bool, Expression<Func<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, bool>>)> whereIf = new List<(bool, Expression<Func<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, bool>>)>();
+            whereIf.Add(new(!string.IsNullOrEmpty(searchkey), (t1, t2) => t1.XMQP.Contains(searchkey) || t1.XINGMING.Contains(searchkey) || t1.ZJHM.Contains(searchkey) || t2.GRZH.Contains(searchkey)));
+            whereIf.Add(new(grStatusList != null && grStatusList.Count > 0, (t1, t2) => grStatusList.Contains(t2.GRZHZT)));
+            whereIf.Add(new(!string.IsNullOrEmpty(KhtypeConst), (t1, t2) => t2.ACCT_TYPE == KhtypeConst));
+
+            int total = 0;
+            var acctList = GetV_CustomerInfos(
+                pageIndex, pageSize, out total,
+                whereLambda: (t1, t2) => t2.DWZH == dwzh && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent,
+                whereif: whereIf,
+                orders: new List<OrderByClause> { new OrderByClause { Order = OrderSequence.Desc, Sort = "KHRQ" } }
+                );
+            Pager<v_CustomerInfo> pager = new Pager<v_CustomerInfo> { total = total, list = acctList };
+            return pager;
+        }
+
+        /// <summary>
         /// 获取按月汇缴个人开户业务数据
         /// </summary>
         /// <param name="whereLambda"></param>
@@ -678,7 +706,7 @@ namespace BtzjManagement.Api.Services
             var custid = string.Empty;//custid
 
             //看是否有账户信息
-            var acctList = GetV_CustomerInfos((t1, t2) => t1.ZJHM != null && t1.ZJHM.ToLower() == zjhm.ToLower() && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent);
+            var acctList = GetV_CustomerInfos(0, int.MaxValue, out int total, (t1, t2) => t1.ZJHM != null && t1.ZJHM.ToLower() == zjhm.ToLower() && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent);
             var acctInfoZC = acctList.FirstOrDefault(x => GrzhztNotAddGrzhztNotAdd.Contains(x.GRZHZT));
             if (acctInfoZC != null)
             {
@@ -712,12 +740,17 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 获取基本信息_账户信息
         /// </summary>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="totalCnt"></param>
         /// <param name="whereLambda"></param>
         /// <param name="whereif"></param>
+        /// <param name="orders"></param>
         /// <returns></returns>
-        internal List<v_CustomerInfo> GetV_CustomerInfos(Expression<Func<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, bool>> whereLambda = null, List<(bool, Expression<Func<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, bool>>)> whereif = null)
+        internal List<v_CustomerInfo> GetV_CustomerInfos(int pageIndex, int pageSize, out int totalCnt, Expression<Func<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, bool>> whereLambda = null, List<(bool, Expression<Func<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, bool>>)> whereif = null,List<OrderByClause> orders = null)
         {
-            var vModelList = SugarHelper.Instance().QueryMuch<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, v_CustomerInfo>(
+            var vModelList = SugarHelper.Instance().QueryMuchDescriptorPageList<D_CUSTOMER_BASICINFO, D_CUSTOMER_ACCTINFO, v_CustomerInfo>(
+                pageIndex, pageSize, out totalCnt,
                 (t1, t2) => new object[] { JoinType.Left, t1.CUSTID == t2.CUSTID },
                 (t1, t2) => new v_CustomerInfo
                 {
@@ -763,7 +796,8 @@ namespace BtzjManagement.Api.Services
                     ZJLX = t1.ZJLX
                 },
                 whereLambda,
-                whereif
+                whereif,
+                OrderBys: orders
                 );
             return vModelList;
         }

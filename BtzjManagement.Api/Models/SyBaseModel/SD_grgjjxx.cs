@@ -11,11 +11,6 @@ namespace BtzjManagement.Api.Models.SyBaseModel
     /// </summary>
     public class SD_grgjjxx
     {
-
-
-
-
-
         private string cbbj { get; set; }
         private decimal? czgjj { get; set; }
         /// <summary>
@@ -115,6 +110,10 @@ namespace BtzjManagement.Api.Models.SyBaseModel
         /// 下次日期
         /// </summary>
         private DateTime? xcrq { get; set; }
+        /// <summary>
+        /// 个人账号余额
+        /// </summary>
+        public decimal grzhye { get; set; }
 
 
 

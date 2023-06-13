@@ -247,9 +247,9 @@ namespace BtzjManagement.Api.Enum
     public class KhtypeConst
     {
         [Description("按月汇缴")]
-        public const int 按月汇缴 = 1;
+        public const int 按月汇缴 = 0;
         [Description("一次性汇缴")]
-        public const int 一次性汇缴 = 2;
+        public const int 一次性汇缴 = 1;
     }
 
     /// <summary>

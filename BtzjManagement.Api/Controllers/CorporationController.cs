@@ -120,5 +120,34 @@ namespace BtzjManagement.Api.Controllers
 
             return result;
         }
+
+        /// <summary>
+        /// 根据单位账号获取单位按月汇缴页面初始数据
+        /// </summary>
+        /// <param name="dwzh">单位账号</param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchKey"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("DwHjMonthInfo")]
+        [ProducesResponseType(typeof(s_ApiResult<v_PaymentMonthInit>), StatusCodes.Status200OK)]
+        public v_ApiResult DwHjMonthInfo(string dwzh/*, int pageIndex = 1, int pageSize = 10, string searchKey = ""*/)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+
+            try
+            {
+                var r = _corporationService.DwHjMonthInfo(CityCent(), dwzh/*, pageIndex, pageSize,  searchKey*/);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Message = ApiResultMessageConst.SUCCESS;
+                result.Content = r;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
     }
 }
