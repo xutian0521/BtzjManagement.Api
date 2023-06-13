@@ -49,7 +49,7 @@ namespace BtzjManagement.Api.Services
         public List<v_SysMenu> MenuTreeList(int roleId, int pId, bool isFilterDisabledMenu)
         {
             var query = SugarSimple.Instance().Queryable< D_SYS_ROLE_MENU, D_SYS_MENU>((rm, m) => new object[] {
-                JoinType.Left, rm.MENU_ID ==m.ID  });
+                JoinType.Left, rm.MENU_ID ==m.ID  }).OrderBy((rm, m) => m.SORT_ID);
             query = query.Where((rm, m) => m.PID == pId && rm.ROLE_ID == roleId);
             query = isFilterDisabledMenu ? query.Where((rm, m) => m.IS_ENABLE == 1) : query;
 
@@ -417,7 +417,8 @@ namespace BtzjManagement.Api.Services
         /// <param name="realName">真实姓名</param>
         /// <param name="remark">备注</param>
         /// <returns></returns>
-        public async Task<(int code, string message)> AddOrModifyUser(int id, string userName,string password, string roleId, string realName, string remark)
+        public async Task<(int code, string message)> AddOrModifyUser(
+            int id, string userName,string password, string roleId, string realName, string remark)
         {
             var _Salt = _configuration.GetValue<string>("Salt");
             if (id == 0)

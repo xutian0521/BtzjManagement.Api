@@ -86,6 +86,7 @@ namespace BtzjManagement.Api.Services
             {
                 item.S_KMMC_display = this.convertKMMC_display(item).Item1;
                 item.S_KMBM_display = this.convertKMMC_display(item).Item2;
+                item.S_KMBM_KMMC_display = item.S_KMBM_display + "-" + item.S_KMMC_display;
                 if (dict.FirstOrDefault(x => x.VAL == item.I_KMXZ.ToString()) != null)
                 {
                     var f = dict.FirstOrDefault(x => x.VAL == item.I_KMXZ.ToString());
@@ -114,7 +115,8 @@ namespace BtzjManagement.Api.Services
                     item2.Subs.AddRange(list3);
                 }
             }
-            root.Add(new v_KM() { S_KMBM ="0", I_GRADE = 0, S_KMMC_display = "科目", S_KMBM_display = "科目", Subs = list1 });
+            root.Add(new v_KM() { S_KMBM ="0", I_GRADE = 0, S_KMMC_display = "科目",
+                S_KMBM_KMMC_display = "科目", S_KMBM_display = "科目", Subs = list1 });
             return root;
         }
 
