@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http;
 using YamlDotNet.Core;
 using Microsoft.Extensions.Configuration;
 using BtzjManagement.Api.Models.QueryModel;
+using BtzjManagement.Api.Models.DBModel;
 
 namespace BtzjManagement.Api.Controllers
 {
@@ -49,7 +50,7 @@ namespace BtzjManagement.Api.Controllers
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list );
         }
 
-       
+
         /// <summary>
         /// 添加或修改菜单
         /// </summary>
@@ -70,6 +71,7 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 获取父级菜单枚举
         /// </summary>
+        [ProducesResponseType(typeof(s_ApiResult<List<D_SYS_MENU>>), StatusCodes.Status200OK)]
         [HttpGet("ParentMenuEnums")]
         public async Task<v_ApiResult> ParentMenuEnums()
         {
@@ -81,6 +83,7 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="id">菜单id</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<D_SYS_MENU>), StatusCodes.Status200OK)]
         [HttpGet("LoadModifyMenu")]
         public async Task<v_ApiResult> LoadModifyMenu(int id)
         {
@@ -105,6 +108,7 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="roleId">角色id</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<List<v_SysMenu>>), StatusCodes.Status200OK)]
         [HttpGet("LoadModifyRoleMenu")]
         public v_ApiResult LoadModifyRoleMenu(int roleId)
         {
@@ -114,7 +118,7 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 设置角色菜单
         /// </summary>
-        /// <param name="roleId">角色id</param>
+        /// <param name="model">角色model</param>
         /// <returns></returns>
         [HttpPost("SettingRoleMenu")]
         public async Task<v_ApiResult> SettingRoleMenu([FromBody]P_SettingRoleMenu model)
@@ -128,6 +132,7 @@ namespace BtzjManagement.Api.Controllers
         /// 用户列表
         /// </summary>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<Pager<D_USER_INFO>>), StatusCodes.Status200OK)]
         [HttpGet("UserList")]
         public async Task<v_ApiResult> UserList(string userName, string roleId, int pageIndex = 1, int pageSize = 10)
         {
@@ -137,18 +142,12 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 添加或修改用户
         /// </summary>
-        /// <param name="id">id</param>
-        /// <param name="userName">用户名</param>
-        /// <param name="password">密码</param>
-        /// <param name="roleId">角色id</param>
-        /// <param name="realName">真实姓名</param>
-        /// <param name="remark">备注</param>
+        /// <param name="p">p</param>
         /// <returns></returns>
         [HttpPost("AddOrModifyUser")]
-        public async Task<v_ApiResult> AddOrModifyUser([FromForm] int id, [FromForm]string userName, [FromForm] string password,
-            [FromForm] string roleId, [FromForm] string realName, [FromForm] string remark)
+        public async Task<v_ApiResult> AddOrModifyUser(P_AddOrModifyUser p)
         {
-            var r = await _ruleService.AddOrModifyUser(id, userName, password, roleId, realName, remark);
+            var r = await _ruleService.AddOrModifyUser(p.id, p.userName, p.password, p.roleId, p.realName, p.remark);
             return new v_ApiResult(r.code, r.message, null);
         }
 
@@ -169,6 +168,7 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="id">用户id</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<D_USER_INFO>), StatusCodes.Status200OK)]
         [HttpGet("LoadModifyUserInfo")]
         public async Task<v_ApiResult> LoadModifyUserInfo(string id)
         {
@@ -182,6 +182,7 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="id">角色id</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<D_SYS_ROLE>), StatusCodes.Status200OK)]
         [HttpGet("LoadModifyRoleInfo")]
         public async Task<v_ApiResult> LoadModifyRoleInfo(int id)
         {
@@ -196,6 +197,7 @@ namespace BtzjManagement.Api.Controllers
         /// <param name="pageIndex">页码</param>
         /// <param name="pageSize">页容量</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<Pager<D_SYS_ROLE>>), StatusCodes.Status200OK)]
         [HttpGet("RoleList")]
         public async Task<v_ApiResult> RoleList(string roleName, int pageIndex = 1, int pageSize = 10)
         {
@@ -205,16 +207,14 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 新增或修改角色
         /// </summary>
-        /// <param name="id">角色id</param>
-        /// <param name="roleName">角色名</param>
-        /// <param name="remark">备注</param>
+        /// <param name="p">p</param>
         /// <returns></returns>
         [HttpPost("AddOrModifyRole")]
-        public async Task<v_ApiResult> AddOrModifyRole([FromForm] int id, [FromForm] string roleName, [FromForm] string remark)
+        public async Task<v_ApiResult> AddOrModifyRole(P_AddOrModifyRole p)
         {
             //var user = this.HttpContext.Items["User"] as JwtPayload;
             //Guid userId = Guid.Parse(user.userId);
-            var r = await _ruleService.AddOrModifyRoleAsync(id, roleName, remark);
+            var r = await _ruleService.AddOrModifyRoleAsync(p.id, p.roleName, p.remark);
             return new v_ApiResult(r.code, r.message);
         }
         /// <summary>
@@ -237,9 +237,10 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 获取枚举列表下拉选项
         /// </summary>
-        /// <param name="type"></param>
-        /// <param name="val"></param>
+        /// <param name="type">字典类型</param>
+        /// <param name="val">字典值</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<List<D_SYS_DATA_DICTIONARY>>), StatusCodes.Status200OK)]
         [HttpGet("GetDataDictionaryListByType")]
         public v_ApiResult GetDataDictionaryListByType(string type,string val="")
         {
@@ -261,6 +262,7 @@ namespace BtzjManagement.Api.Controllers
         /// 字典列表递归
         /// </summary>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<List<v_SYS_DATA_DICTIONARY>>), StatusCodes.Status200OK)]
         [HttpGet("GetDataDictionaryTreeList")]
         public v_ApiResult GetDataDictionaryTreeList()
         {
@@ -271,6 +273,7 @@ namespace BtzjManagement.Api.Controllers
         /// 数据字典类型
         /// </summary>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<List<D_SYS_DATA_DICTIONARY>>), StatusCodes.Status200OK)]
         [HttpGet("GetDataDictionaryListByParent")]
         public async Task<v_ApiResult> GetDataDictionaryListByParent()
         {
@@ -282,6 +285,7 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="id">字典id</param>
         /// <returns></returns>
+        [ProducesResponseType(typeof(s_ApiResult<v_SYS_DATA_DICTIONARY>), StatusCodes.Status200OK)]
         [HttpGet("LoadModifyEnumInfoById")]
         public async Task<v_ApiResult> LoadModifyEnumInfoById(int id)
         {
@@ -292,21 +296,14 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 新增或修改枚举字典
         /// </summary>
-        /// <param name="id">字典id</param>
-        /// <param name="dataKey">字典key</param>
-        /// <param name="dataKeyAlias">字典别名</param>
-        /// <param name="pId">父级id</param>
-        /// <param name="dataValue">字典值</param>
-        /// <param name="dataDescription">描述</param>
-        /// <param name="sortId">排序</param>
+        /// <param name="p">p</param>
         /// <returns></returns>
         [HttpPost("AddOrModifyEnum")]
-        public async Task<v_ApiResult> AddOrModifyEnum(
-            [FromForm] int id, [FromForm] string dataKey, [FromForm] string dataKeyAlias, [FromForm] int? pId,
-            [FromForm] string dataValue, [FromForm] string dataDescription, [FromForm] int? sortId)
+        public async Task<v_ApiResult> AddOrModifyEnum(P_AddOrModifyEnum p)
         {
-            var result = await _ruleService.AddOrModifyEnum(id, dataKey, dataKeyAlias,
-                pId == null ? 0 : pId.GetValueOrDefault(), dataValue, dataDescription, sortId == null ? 0 : sortId.GetValueOrDefault());
+            var result = await _ruleService.AddOrModifyEnum(p.id, p.dataKey, p.dataKeyAlias,
+                p.pId == null ? 0 : p.pId.GetValueOrDefault(), p.dataValue, p.dataDescription,
+                p.sortId == null ? 0 : p.sortId.GetValueOrDefault());
             return new v_ApiResult(result.code, result.message);
         }
         /// <summary>
