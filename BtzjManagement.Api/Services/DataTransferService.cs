@@ -99,7 +99,7 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "SORT_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
             v_TableInits.Add(new v_TableInit { columnName = "DESCRIPTION", columnTypeAndLimit = "NVARCHAR2(360)", columnDesc = "描述" });
             v_TableInits.Add(new v_TableInit { columnName = "ORIGIN_FLAG", columnTypeAndLimit = "NVARCHAR2(20)", columnDesc = "原sybase i_flag 字段留存" });
-            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360byte)", columnDesc = "城市网点编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360)", columnDesc = "城市网点编号" });
 
             this.TableInit("SYS_DATA_DICTIONARY", v_TableInits, true, "数据字典表");
         }
@@ -399,15 +399,15 @@ namespace BtzjManagement.Api.Services
         {
             List<v_TableInit> v_TableInits = new List<v_TableInit> { };
             v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-            v_TableInits.Add(new v_TableInit { columnName = "NAME", columnTypeAndLimit = "NVARCHAR2(50 BYTE) NOT NULL", columnDesc = "菜单名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "NAME", columnTypeAndLimit = "NVARCHAR2(50) NOT NULL", columnDesc = "菜单名称" });
             v_TableInits.Add(new v_TableInit { columnName = "ALIAS", columnTypeAndLimit = "NVARCHAR2(20)", columnDesc = "菜单名称别名" });
             v_TableInits.Add(new v_TableInit { columnName = "PID", columnTypeAndLimit = "NUMBER(11, 0) NOT NULL", columnDesc = "分类节点id" });
-            v_TableInits.Add(new v_TableInit { columnName = "PATH", columnTypeAndLimit = "NVARCHAR2(100 BYTE)", columnDesc = "路由" });
-            v_TableInits.Add(new v_TableInit { columnName = "ICON", columnTypeAndLimit = "NVARCHAR2(50 BYTE)", columnDesc = "菜单图标" });
+            v_TableInits.Add(new v_TableInit { columnName = "PATH", columnTypeAndLimit = "NVARCHAR2(100)", columnDesc = "路由" });
+            v_TableInits.Add(new v_TableInit { columnName = "ICON", columnTypeAndLimit = "NVARCHAR2(50)", columnDesc = "菜单图标" });
             v_TableInits.Add(new v_TableInit { columnName = "SORT_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
             v_TableInits.Add(new v_TableInit { columnName = "IS_ENABLE", columnTypeAndLimit = "NUMBER(5,0)", columnDesc = "是否可用 0:不可用，1:可用" });
-            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "NVARCHAR2(200 BYTE)", columnDesc = "备注" });
-            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360byte)", columnDesc = "城市网点编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "REMARK", columnTypeAndLimit = "NVARCHAR2(200)", columnDesc = "备注" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360)", columnDesc = "城市网点编号" });
 
             this.TableInit("SYS_MENU", v_TableInits, true, "菜单信息表");
         }
@@ -533,7 +533,7 @@ namespace BtzjManagement.Api.Services
             v_TableInits.Add(new v_TableInit { columnName = "SORT_ID", columnTypeAndLimit = "NUMBER(10)", columnDesc = "排序" });
             v_TableInits.Add(new v_TableInit { columnName = "ENABLED", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否启用(即前端能否获取到该节点) 0:不使用  1：使用" });
             v_TableInits.Add(new v_TableInit { columnName = "REQUIRED", columnTypeAndLimit = "NUMBER(10)", columnDesc = "是否必传(ENABLED为1时该字段才生效) 0:不是必传，1:是必传" });
-            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360byte)", columnDesc = "城市网点编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "CITY_CENTNO", columnTypeAndLimit = "NVARCHAR2(360)", columnDesc = "城市网点编号" });
 
             this.TableInit("IMAGE_MENU", v_TableInits, true, "影像类型表");
         }

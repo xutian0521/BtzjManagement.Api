@@ -149,5 +149,27 @@ namespace BtzjManagement.Api.Controllers
             }
             return result;
         }
+
+        /// <summary>
+        /// 按月汇缴核定暂存
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        public v_ApiResult MonthHjCreate(P_MonthHjCreate pmodel)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+            try
+            {
+                var r = _corporationService.MonthHjCreate(pmodel, GetUser().userName, CityCent());
+                result.Code = r.code;
+                result.Message = r.msg;
+                result.Content = new v_MonthHjCreate { batchNo = r.batchNo };
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
     }
 }

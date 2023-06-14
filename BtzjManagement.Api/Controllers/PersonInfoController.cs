@@ -231,7 +231,7 @@ namespace BtzjManagement.Api.Controllers
                 {
                     grzhzt.AddRange(new List<string> { GrzhztConst.正常, GrzhztConst.封存 });
                 }
-                var r = _personInfoService.DwJcbgPersonPageList(CityCent(), pageIndex, pageSize, dwzh, searchKey, grzhzt);
+                var r = _personInfoService.DwJcbgPersonPageList(CityCent(), 1, int.MaxValue, dwzh, searchKey, grzhzt);
                 result.Code = ApiResultCodeConst.SUCCESS;
                 result.Message = ApiResultMessageConst.SUCCESS;
                 result.Content = r;

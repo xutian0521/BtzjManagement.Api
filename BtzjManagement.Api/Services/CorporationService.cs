@@ -21,7 +21,16 @@ namespace BtzjManagement.Api.Services
         FlowProcService _flowProcService;
         RuleService _ruleService;
         private readonly IServiceProvider _serviceProvider;
+        private readonly object lockObject = new object();
 
+        /// <summary>
+        /// 能录入和修改的状态
+        /// </summary>
+        List<string> statusListCanAddUpdate = new List<string> { OptStatusConst.新建, OptStatusConst.终审退回, OptStatusConst.初审退回 };
+        /// <summary>
+        /// 业务在途的状态-此时不能修改
+        /// </summary>
+        List<string> statusListProcess = new List<string> { OptStatusConst.初审出错, OptStatusConst.等待初审, OptStatusConst.终审出错, OptStatusConst.等待终审 };
 
         /// <summary>
         /// ctor
@@ -245,7 +254,8 @@ namespace BtzjManagement.Api.Services
                     NEXTPAYMTH = t2.NEXTPAYMTH.Value.ToString("yyyy-MM-dd"),
                     ZZJGDM = t1.ZZJGDM,
                     GRJCBL = t2.GRJCBL,
-                    CALC_METHOD = t2.CALC_METHOD
+                    CALC_METHOD = t2.CALC_METHOD,
+                    JZNY = t2.JZNY,
                 },
                 where, wherif);
 
@@ -439,6 +449,195 @@ namespace BtzjManagement.Api.Services
             };
 
             return SugarHelper.Instance().QueryMuch((t1, t2) => new object[] { JoinType.Inner, t1.CUSTID == t2.CUSTID }, selectExpression, where).FirstOrDefault();
+        }
+
+        /// <summary>
+        /// 按月汇缴核定暂存
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <param name="optMan"></param>
+        /// <param name="city_cent"></param>
+        public (int code, string msg, string batchNo) MonthHjCreate(P_MonthHjCreate pmodel, string optMan, string city_cent)
+        {
+            var msg = ApiResultMessageConst.SUCCESS;
+            var code = ApiResultCodeConst.SUCCESS;
+            lock (lockObject)
+            {
+                PersonInfoService _personInfoService = _serviceProvider.GetService(typeof(PersonInfoService)) as PersonInfoService;
+                var grzhzt = new List<string> { };
+                var sugarHelper = SugarHelper.Instance();
+
+                if (pmodel.monthLength < 1)
+                {
+                    code = ApiResultCodeConst.ERROR;
+                    msg = "请输入要汇缴的月数";
+                    return (code, msg, string.Empty);
+                }
+
+                //先查有没有在途业务(缴存变更，转移，汇缴)，有在途的不能新增
+                List<string> PayMthList = new List<string>();
+                for (int i = 0; i < pmodel.monthLength; i++)
+                {
+                    PayMthList.Add(Common.CalcPayMonth(pmodel.monthStart, i));
+                }
+
+                var dwjcList = MonthDwjcModelList(pmodel.dwzh, PayMthList, city_cent);
+
+                statusListProcess.Add(OptStatusConst.已归档);
+                foreach (var item in dwjcList)
+                {
+                    if (statusListProcess.Contains(item.STATUS))
+                    {
+                        code = ApiResultCodeConst.ERROR;
+                        msg += $"单位业务月度：{item.PAYMTH}存在{EnumHelper.GetEnumItemByValue<string>(typeof(OptStatusConst), item.STATUS).key}状态的数据！";
+                    }
+                }
+                if (code != ApiResultCodeConst.SUCCESS)
+                {
+                    return (code, msg, string.Empty);
+                }
+
+                //查单位信息
+                var dwInfo = GetCorporatiorn((t1, t2) => t2.DWZH == pmodel.dwzh && t1.CITY_CENTNO == city_cent && t2.CITY_CENTNO == city_cent);
+                if (dwInfo.NEXTPAYMTH.Value.ToString("yyyy-MM") != pmodel.monthStart)
+                {
+                    code = ApiResultCodeConst.ERROR;
+                    msg = $"汇缴起始月{pmodel.monthStart}和单位的当前业务月度{dwInfo.NEXTPAYMTH.Value.ToString("yyyy-MM")}不一致！";
+                    return (code, msg, string.Empty);
+                }
+
+                //从个人账户信息获取该单位月缴存额
+                var payAmtAcct = GetPayAmtByCustomerAcct(pmodel.dwzh, city_cent);
+
+                if (payAmtAcct * pmodel.monthLength != pmodel.payamt)
+                {
+                    code = ApiResultCodeConst.ERROR;
+                    msg = $"汇缴金额({pmodel.payamt})和单位实际应缴金额({payAmtAcct * pmodel.monthLength})不一致！";
+                    return (code, msg, string.Empty);
+                }
+
+
+                //有暂存数据再次暂存直接删除再重新写数据
+                Action action = null;
+                List<string> delYwlsh = dwjcList.Select(x => x.YWLSH).ToList();
+                if (delYwlsh.Count > 0)
+                {
+                    action += () =>
+                    {
+                        //删除清册
+                        sugarHelper.Delete<D_MONTH_DWJCQC>(x => delYwlsh.Contains(x.YWLSH));
+                        //删除主表
+                        sugarHelper.Delete<D_MONTH_DWJC>(x => delYwlsh.Contains(x.YWLSH));
+                        //清除之前的日志
+                        sugarHelper.Delete<D_FLOWPROC>(x => delYwlsh.Contains(x.YWLSH));
+
+                        //写入日志
+                        //_flowProcService.AddFlowProc(item.YWLSH, item.ID, dwzh, nameof(GjjOptType.单位汇缴), optMan, OptStatusConst.删除, sugarHelper: sugarHelper, memo: $"单位({dwzh})业务月度({payamt}) 汇缴暂存数据清除(重新核定)");
+                    };
+                    sugarHelper.InvokeTransactionScope(action);
+                }
+
+                //获取单位当前月的用户数据
+                var personList = _personInfoService.DwJcbgPersonPageList(city_cent, 1, int.MaxValue, pmodel.dwzh, string.Empty, grzhzt, KhtypeConst.按月汇缴.ToString());
+                var batch = Common.UniqueYwlsh();//批次号
+                                                 //写入清册
+                                                 // 获取锁
+                                                 // 需要执行的线程安全代码
+                foreach (var payMth in PayMthList)
+                {
+                    action = null;
+                    //获取上月的汇缴数据
+                    var lastPayMth = Common.CalcLastPayMonth(payMth);
+                    var lastMonthHj = sugarHelper.First<D_MONTH_DWJC>(x => x.CITY_CENTNO == city_cent && x.DWZH == pmodel.dwzh && x.PAYMTH == lastPayMth);
+                    if (lastMonthHj == null)
+                    {
+                        lastMonthHj = new D_MONTH_DWJC
+                        {
+                            MTHPAYAMT = dwInfo.MONTHPAYTOTALAMT,
+                            DWJCRS = dwInfo.DWJCRS
+                        };
+                    }
+
+                    var ywlsh = Common.UniqueYwlsh();
+                    //主表
+                    D_MONTH_DWJC dwjc = new D_MONTH_DWJC
+                    {
+                        YWLSH = ywlsh,
+                        BATCHNO = batch,
+                        CITY_CENTNO = city_cent,
+                        CREATE_MAN = optMan,
+                        CREATE_TIME = DateTime.Now,
+                        DWZH = pmodel.dwzh,
+                        STATUS = OptStatusConst.新建,
+                        DWJCBL = dwInfo.DWJCBL,
+                        DWJCRS = dwInfo.DWJCRS,
+                        GRJCBL = dwInfo.GRJCBL,
+                        MTHPAYAMT = payAmtAcct,
+                        PAYMTH = payMth,
+                        //todo: 做了缴存变更后赋值
+                        BASECHGAMT = 0,
+                        BASECHGNUM = 0,
+                        LASTMTHPAY = lastMonthHj.MTHPAYAMT,
+                        LASTMTHPAYNUM = lastMonthHj.DWJCRS,
+                        MTHPAYAMTMNS = payAmtAcct < lastMonthHj.MTHPAYAMT ? lastMonthHj.MTHPAYAMT - payAmtAcct : 0,
+                        MTHPAYAMTPLS = payAmtAcct > lastMonthHj.MTHPAYAMT ? payAmtAcct - lastMonthHj.MTHPAYAMT : 0,
+                        MTHPAYNUMMNS = dwInfo.DWJCRS < lastMonthHj.DWJCRS ? lastMonthHj.DWJCRS - dwInfo.DWJCRS : 0,
+                        MTHPAYNUMPLS = dwInfo.DWJCRS > lastMonthHj.DWJCRS ? dwInfo.DWJCRS - lastMonthHj.DWJCRS : 0,
+                    };
+                    //清册
+                    List<D_MONTH_DWJCQC> qcList = personList.list.Select(x => new D_MONTH_DWJCQC
+                    {
+                        DWJCBL = x.DWJCBL,
+                        DWYJCE = x.DWYJCE,
+                        DWZH = pmodel.dwzh,
+                        GRJCBL = x.GRJCBL,
+                        GRJCJS = x.GRJCJS,
+                        GRYJCE = x.GRYJCE,
+                        GRZH = x.GRZH,
+                        PAYMTH = payMth,
+                        REMITPAYAMT = x.DWYJCE + x.GRYJCE,
+                        XINGMING = x.XINGMING,
+                        YWLSH = ywlsh,
+                        ZJHM = x.ZJHM
+                    }).ToList();
+
+                    action += () =>
+                    {
+                        var id = sugarHelper.AddReturnIdentity(dwjc);
+                        sugarHelper.Add(qcList);
+                        //写入日志
+                        _flowProcService.AddFlowProc(ywlsh, id, pmodel.dwzh, nameof(GjjOptType.单位汇缴), optMan, OptStatusConst.新建, sugarHelper: sugarHelper, memo: $"单位({pmodel.dwzh}) 业务月度({pmodel.payamt})汇缴暂存数据新增");
+                    };
+
+                    sugarHelper.InvokeTransactionScope(action);
+                }
+
+                return (code, msg, batch);
+            }
+        }
+
+        /// <summary>
+        /// 按月汇缴暂存数据删除
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="batchNo"></param>
+        /// <param name="ywlsh"></param>
+        /// <param name="optMan"></param>
+        /// <param name="city_cent"></param>
+        public void MonthHjDel(string dwzh,string batchNo,string ywlsh, string optMan, string city_cent)
+        {
+        
+        }
+
+
+        internal List<D_MONTH_DWJC> MonthDwjcModelList(string dwzh,List<string> PayMthList,string city_cent)
+        {
+            return SugarHelper.Instance().QueryWhereList<D_MONTH_DWJC>(x => x.CITY_CENTNO == city_cent && x.DWZH == dwzh && PayMthList.Contains(x.PAYMTH));
+        }
+
+        internal decimal GetPayAmtByCustomerAcct(string dwzh,string city_cent)
+        {
+            return SugarHelper.Instance().QueryWhereList<D_CUSTOMER_ACCTINFO>(x => x.DWZH == dwzh && x.CITY_CENTNO == city_cent && x.GRZHZT == GrzhztConst.正常).Sum(x => x.MONTHPAYAMT);
         }
 
     }

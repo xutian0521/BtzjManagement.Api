@@ -412,5 +412,26 @@ namespace BtzjManagement.Api.Utils
 
 
         }
+
+        /// <summary>
+        /// 获取汇缴月度
+        /// </summary>
+        /// <param name="monthStart">汇缴开始月份（还没缴过）</param>
+        /// <param name="addMonthLength"></param>
+        /// <returns></returns>
+        public static string CalcPayMonth(string monthStart, int addMonthLength)
+        {
+            return Convert.ToDateTime(monthStart).AddMonths(addMonthLength).ToString("yyyyMM");
+        }
+
+        /// <summary>
+        /// 根据业务月度获取上个业务月度
+        /// </summary>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public static string CalcLastPayMonth(string month)
+        {
+            return Convert.ToDateTime(month.Insert(4, "-")).AddMonths(-1).ToString("yyyyMM");
+        }
     }
 }

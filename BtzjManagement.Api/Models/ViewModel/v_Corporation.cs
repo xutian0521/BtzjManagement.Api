@@ -40,6 +40,11 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 计算方法
         /// </summary>
         public string CALC_METHOD { get; set; }
+
+        /// <summary>
+        /// 缴至年月
+        /// </summary>
+        public string JZNY { get; set; }
     }
 
     /// <summary>
@@ -225,15 +230,15 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// <summary>
         /// 单位职工人数
         /// </summary>
-        public decimal DWZGRS { get; set; }
+        public int DWZGRS { get; set; }
         /// <summary>
         /// 单位缴存人数
         /// </summary>
-        public decimal DWJCRS { get; set; }
+        public int DWJCRS { get; set; }
         /// <summary>
         /// 单位封存人数
         /// </summary>
-        public decimal DWFCRS { get; set; }
+        public int DWFCRS { get; set; }
         /// <summary>
         /// 工资总数
         /// </summary>

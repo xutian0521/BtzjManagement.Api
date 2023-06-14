@@ -9,6 +9,7 @@ namespace BtzjManagement.Api.Models.DBModel
     /// <summary>
     /// 按月汇缴清册表
     /// </summary>
+    [SugarTable("MONTH_DWJCQC")]
     public class D_MONTH_DWJCQC
     {
         /// <summary>
