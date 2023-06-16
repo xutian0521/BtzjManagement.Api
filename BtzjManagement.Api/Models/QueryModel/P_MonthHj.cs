@@ -27,4 +27,32 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// </summary>
         public string dwzh { get; set; }
     }
+
+    public class P_MonthHjModelDel
+    {
+        /// <summary>
+        /// 单位账号
+        /// </summary>
+        public string dwzh { get; set; }
+        /// <summary>
+        /// 批次号
+        /// </summary>
+        public string batchNo { get; set; }
+        /// <summary>
+        /// 业务流水号
+        /// </summary>
+        public string ywlsh { get; set; }
+    }
+
+    public class P_MonthHjModelSubmit
+    {
+        /// <summary>
+        /// 单位账号
+        /// </summary>
+        public string dwzh { get; set; }
+        /// <summary>
+        /// 批次号
+        /// </summary>
+        public string batchNo { get; set; }
+    }
 }

@@ -38,7 +38,7 @@ namespace BtzjManagement.Api.Services
         /// <param name="serviceProvider"></param>
         /// <param name="ruleService"></param>
         /// <param name="flowProcService"></param>
-        public CorporationService(IServiceProvider serviceProvider,FlowProcService flowProcService,RuleService ruleService)
+        public CorporationService(IServiceProvider serviceProvider, FlowProcService flowProcService, RuleService ruleService)
         {
             _flowProcService = flowProcService;
             _ruleService = ruleService;
@@ -62,9 +62,9 @@ namespace BtzjManagement.Api.Services
         /// <param name="city_cent"></param>
         /// <param name="optMan"></param>
         /// <returns></returns>
-        public v_ApiResult CreateUpdateCorporation(P_In_Corporation_Add pmodel,string city_cent,string optMan)
+        public v_ApiResult CreateUpdateCorporation(P_In_Corporation_Add pmodel, string city_cent, string optMan)
         {
-            v_ApiResult result = new v_ApiResult() { Code= ApiResultCodeConst.ERROR };
+            v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR };
             var sugarHelper = SugarHelper.Instance();
 
             if (string.IsNullOrEmpty(pmodel.DWMC))
@@ -148,7 +148,7 @@ namespace BtzjManagement.Api.Services
                     GRJCBL = 0
                 };
 
-                action += () => 
+                action += () =>
                 {
                     //写业务数据
                     D_BUSI_CORPORATION model = new D_BUSI_CORPORATION
@@ -164,7 +164,7 @@ namespace BtzjManagement.Api.Services
                     var id = sugarHelper.AddReturnIdentity(model);
                     sugarHelper.Add(basicModel); //写单位基本信息
                     sugarHelper.Add(acctModel);//写单位账户信息
-                    _flowProcService.AddFlowProc(ywlsh, id, dwzh, nameof(GjjOptType.单位开户), optMan, OptStatusConst.新建, sugarHelper: sugarHelper); 
+                    _flowProcService.AddFlowProc(ywlsh, id, dwzh, nameof(GjjOptType.单位开户), optMan, OptStatusConst.新建, sugarHelper: sugarHelper);
                 };
                 sugarHelper.InvokeTransactionScope(action);
                 result.Content = ywlsh;
@@ -218,7 +218,7 @@ namespace BtzjManagement.Api.Services
                 acctDwModel.DWZHZT = DwzhztConst.正常;
                 acctDwModel.GRJCBL = 0;
                 action += () => sugarHelper.Update(acctDwModel);
-                action+=() => _flowProcService.AddFlowProc(busiModel.YWLSH, busiModel.ID, acctDwModel.DWZH, nameof(GjjOptType.单位开户), optMan, OptStatusConst.修改, sugarHelper: sugarHelper);
+                action += () => _flowProcService.AddFlowProc(busiModel.YWLSH, busiModel.ID, acctDwModel.DWZH, nameof(GjjOptType.单位开户), optMan, OptStatusConst.修改, sugarHelper: sugarHelper);
                 sugarHelper.InvokeTransactionScope(action);
                 result.Content = busiModel.YWLSH;
             }
@@ -273,7 +273,7 @@ namespace BtzjManagement.Api.Services
         /// <param name="tyxydm"></param>
         /// <param name="city_cent"></param>
         /// <returns></returns>
-        public v_ApiResult CorporationCreatedModel(string tyxydm,string city_cent)
+        public v_ApiResult CorporationCreatedModel(string tyxydm, string city_cent)
         {
             v_CorporationCreated contentModel = new v_CorporationCreated();
             v_ApiResult result = new v_ApiResult() { Code = ApiResultCodeConst.ERROR, Content = contentModel };
@@ -287,7 +287,7 @@ namespace BtzjManagement.Api.Services
             //业务数据-业务数据
             var bus_model = SugarHelper.Instance().First<D_BUSI_CORPORATION>(x => x.UNIQUE_KEY.ToUpper() == tyxydm.ToUpper() && x.CITY_CENTNO == city_cent && x.BUSITYPE == GjjOptType.单位开户 && status.Contains(x.STATUS));
 
-            if(bus_model == null)//不存在保存的数据
+            if (bus_model == null)//不存在保存的数据
             {
                 result.Code = ApiResultCodeConst.SUCCESS;
                 return result;
@@ -319,7 +319,7 @@ namespace BtzjManagement.Api.Services
         /// <param name="optMan"></param>
         /// <param name="city_cent"></param>
         /// <returns></returns>
-        public (bool,string) SubmitCorporationCreated(P_In_Corporation_Submit pmodel, string optMan,string city_cent)
+        public (bool, string) SubmitCorporationCreated(P_In_Corporation_Submit pmodel, string optMan, string city_cent)
         {
             if (pmodel == null || string.IsNullOrEmpty(pmodel.ywlsh))
             {
@@ -333,7 +333,7 @@ namespace BtzjManagement.Api.Services
                 return (false, "未查询到相关业务");
             }
 
-            if(busiModel.STATUS == OptStatusConst.已归档)
+            if (busiModel.STATUS == OptStatusConst.已归档)
             {
                 return (false, "当前业务已提交成功，请勿重复提交");
             }
@@ -483,18 +483,10 @@ namespace BtzjManagement.Api.Services
 
                 var dwjcList = MonthDwjcModelList(pmodel.dwzh, PayMthList, city_cent);
 
-                statusListProcess.Add(OptStatusConst.已归档);
-                foreach (var item in dwjcList)
+                var listProcess = dwjcList.Where(x => statusListProcess.Contains(x.STATUS) || x.STATUS == OptStatusConst.已归档).Select(x => $"业务月度({x.PAYMTH})的汇缴业务为{EnumHelper.GetEnumItemByValue<string>(typeof(OptStatusConst), x.STATUS).key}");
+                if (listProcess.Count() > 0)
                 {
-                    if (statusListProcess.Contains(item.STATUS))
-                    {
-                        code = ApiResultCodeConst.ERROR;
-                        msg += $"单位业务月度：{item.PAYMTH}存在{EnumHelper.GetEnumItemByValue<string>(typeof(OptStatusConst), item.STATUS).key}状态的数据！";
-                    }
-                }
-                if (code != ApiResultCodeConst.SUCCESS)
-                {
-                    return (code, msg, string.Empty);
+                    return (ApiResultCodeConst.ERROR, string.Join("!", listProcess), string.Empty);
                 }
 
                 //查单位信息
@@ -540,9 +532,7 @@ namespace BtzjManagement.Api.Services
                 //获取单位当前月的用户数据
                 var personList = _personInfoService.DwJcbgPersonPageList(city_cent, 1, int.MaxValue, pmodel.dwzh, string.Empty, grzhzt, KhtypeConst.按月汇缴.ToString());
                 var batch = Common.UniqueYwlsh();//批次号
-                                                 //写入清册
-                                                 // 获取锁
-                                                 // 需要执行的线程安全代码
+                //写入清册                              
                 foreach (var payMth in PayMthList)
                 {
                     action = null;
@@ -608,10 +598,9 @@ namespace BtzjManagement.Api.Services
                         //写入日志
                         _flowProcService.AddFlowProc(ywlsh, id, pmodel.dwzh, nameof(GjjOptType.单位汇缴), optMan, OptStatusConst.新建, sugarHelper: sugarHelper, memo: $"单位({pmodel.dwzh}) 业务月度({pmodel.payamt})汇缴暂存数据新增");
                     };
-
-                    sugarHelper.InvokeTransactionScope(action);
+                    sugarHelper.InvokeTransactionScope(action);//因为需要查询上月的数据，所有事务放在循环里面执行
                 }
-
+                
                 return (code, msg, batch);
             }
         }
@@ -619,26 +608,207 @@ namespace BtzjManagement.Api.Services
         /// <summary>
         /// 按月汇缴暂存数据删除
         /// </summary>
-        /// <param name="dwzh"></param>
-        /// <param name="batchNo"></param>
-        /// <param name="ywlsh"></param>
+        /// <param name="pmodel"></param>
         /// <param name="optMan"></param>
         /// <param name="city_cent"></param>
-        public void MonthHjDel(string dwzh,string batchNo,string ywlsh, string optMan, string city_cent)
+        public (int code,string msg) MonthHjModelDel(P_MonthHjModelDel pmodel, string optMan, string city_cent)
         {
-        
+            List<(bool, Expression<Func<D_MONTH_DWJC, bool>>)> whereIf = new List<(bool, Expression<Func<D_MONTH_DWJC, bool>>)>();
+            whereIf.Add(new(!string.IsNullOrEmpty(pmodel.ywlsh), x => x.YWLSH == pmodel.ywlsh));
+
+            var sugarHelper = SugarHelper.Instance();
+            //查对应的数据
+            List<D_MONTH_DWJC> hjList = sugarHelper.QueryWhereList<D_MONTH_DWJC>(x => x.DWZH == pmodel.dwzh && x.CITY_CENTNO == city_cent && x.BATCHNO == pmodel.batchNo, whereIf: whereIf);
+
+            if (hjList.Count == 0)
+            {
+                return (ApiResultCodeConst.ERROR, "未查询到相关汇缴业务数据");
+            }
+
+            var listProcess = hjList.Where(x => statusListProcess.Contains(x.STATUS) || x.STATUS == OptStatusConst.已归档).Select(x => $"业务月度({x.PAYMTH})的汇缴业务为{EnumHelper.GetEnumItemByValue<string>(typeof(OptStatusConst), x.STATUS).key}");
+            if (listProcess.Count() > 0)
+            {
+                return (ApiResultCodeConst.ERROR,string.Join("!", listProcess));
+            }
+
+            Action action = null;
+            foreach (var item in hjList)
+            {
+                action += () =>
+                {
+                    sugarHelper.Delete(item);//删除业务表
+                    sugarHelper.Delete<D_MONTH_DWJCQC>(x => x.YWLSH == item.YWLSH);//删除清册
+                    //记录日志
+                    _flowProcService.AddFlowProc(item.YWLSH, item.ID, item.DWZH, nameof(GjjOptType.单位汇缴), optMan, OptStatusConst.删除, $"撤销业务月度({item.PAYMTH})汇缴数据", sugarHelper);
+                };
+            }
+            sugarHelper.InvokeTransactionScope(action);
+
+            return (ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS);
         }
 
+        /// <summary>
+        /// 按月汇缴暂存数据提交
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <param name="optMan"></param>
+        /// <param name="city_cent"></param>
+        /// <returns></returns>
+        public (int code, string msg) MonthHjModelSubmit(P_MonthHjModelSubmit pmodel, string optMan, string city_cent)
+        {
+            var sugarHelper = SugarHelper.Instance();
+            //查对应的数据
+            List<D_MONTH_DWJC> hjList = sugarHelper.QueryWhereList<D_MONTH_DWJC>(x => x.DWZH == pmodel.dwzh && x.CITY_CENTNO == city_cent && x.BATCHNO == pmodel.batchNo);
 
-        internal List<D_MONTH_DWJC> MonthDwjcModelList(string dwzh,List<string> PayMthList,string city_cent)
+            if(hjList.Count == 0)
+            {
+                return (ApiResultCodeConst.ERROR, "未查询到需要提交的汇缴业务数据");
+            }
+
+            var listProcess = hjList.Where(x => statusListProcess.Contains(x.STATUS) || x.STATUS == OptStatusConst.已归档).Select(x => $"业务月度({x.PAYMTH})的汇缴业务为{EnumHelper.GetEnumItemByValue<string>(typeof(OptStatusConst), x.STATUS).key}");
+            if (listProcess.Count() > 0)
+            {
+                return (ApiResultCodeConst.ERROR, string.Join("!", listProcess));
+            }
+
+            Action action = null;
+            foreach (var item in hjList)
+            {
+                item.STATUS = OptStatusConst.等待初审;
+                item.SUBMIT_MAN = optMan;
+                item.SUBMIT_TIME = DateTime.Now;
+
+                action += () =>
+                {
+                    sugarHelper.Update(item);//更新业务表数据
+
+                    //记录日志
+                    _flowProcService.AddFlowProc(item.YWLSH, item.ID, item.DWZH, nameof(GjjOptType.单位汇缴), optMan, OptStatusConst.等待初审, sugarHelper:sugarHelper);
+                };
+            }
+            sugarHelper.InvokeTransactionScope(action);
+
+            return (ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS);
+        }
+
+        /// <summary>
+        /// 获取按月缴存业务数据
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="PayMthList"></param>
+        /// <param name="city_cent"></param>
+        /// <returns></returns>
+        internal List<D_MONTH_DWJC> MonthDwjcModelList(string dwzh, List<string> PayMthList, string city_cent)
         {
             return SugarHelper.Instance().QueryWhereList<D_MONTH_DWJC>(x => x.CITY_CENTNO == city_cent && x.DWZH == dwzh && PayMthList.Contains(x.PAYMTH));
         }
 
-        internal decimal GetPayAmtByCustomerAcct(string dwzh,string city_cent)
+
+        /// <summary>
+        /// 根据单位账号和业务状态获取对应的按月汇缴业务数据
+        /// </summary>
+        /// <param name="statusType"></param>
+        /// <param name="city_cent"></param>
+        /// <param name="dwzh"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public Pager<v_MonthHj> MonthDwjcModelPageList(string statusType, string city_cent, string dwzh, int pageIndex, int pageSize)
+        {
+            List<string> statusList = new List<string>() { "test" };//不存在的状态
+            List<OrderByClause> orders = new List<OrderByClause> { new OrderByClause { Order = OrderSequence.Asc, Sort = "PAYMTH" } }; ;
+            if (statusType == "wtj")
+            {
+                statusList.AddRange(statusListCanAddUpdate);
+            }
+            else if (statusType == "process")
+            {
+                statusList.AddRange(statusListProcess);
+            }
+            else if (statusType == "complete")
+            {
+                statusList.Add(OptStatusConst.已归档);
+                orders = new List<OrderByClause> { new OrderByClause { Order = OrderSequence.Desc, Sort = "PAYMTH" } };
+            }
+            else if (statusType == "all")
+            {
+                statusList = new List<string>();
+            }
+
+            List<(bool, Expression<Func<D_MONTH_DWJC, bool>>)> whereIf = new List<(bool, Expression<Func<D_MONTH_DWJC, bool>>)>();
+            whereIf.Add(new(statusList != null && statusList.Count > 0, t1 => statusList.Contains(t1.STATUS)));
+
+            int totalCnt = 0;
+            Pager<v_MonthHj> page = new Pager<v_MonthHj> { total = totalCnt, list = new List<v_MonthHj>() };
+
+            var pageList = SugarHelper.Instance().QueryPageList<D_MONTH_DWJC>(pageIndex, pageSize, out totalCnt,
+                (t1) => t1.DWZH == dwzh && t1.CITY_CENTNO == city_cent,
+                whereIf: whereIf,
+                OrderBys: orders).Select(x => new v_MonthHj
+                {
+                    BASECHGAMT = x.BASECHGAMT,
+                    BATCHNO = x.BATCHNO,
+                    BASECHGNUM = x.BASECHGNUM,
+                    CREATE_MAN = x.CREATE_MAN,
+                    CREATE_TIME = x.CREATE_TIME,
+                    VCHRNOS = x.VCHRNOS,
+                    VERIFY_MAN = x.VERIFY_MAN,
+                    DWJCBL = x.DWJCBL,
+                    DWJCRS = x.DWJCRS,
+                    DWZH = x.DWZH,
+                    GRJCBL = x.GRJCBL,
+                    LASTMTHPAY = x.LASTMTHPAY,
+                    ID = x.ID,
+                    LASTMTHPAYNUM = x.LASTMTHPAYNUM,
+                    MEMO = x.MEMO,
+                    MTHPAYAMT = x.MTHPAYAMT,
+                    MTHPAYAMTMNS = x.MTHPAYAMTMNS,
+                    MTHPAYAMTPLS = x.MTHPAYAMTPLS,
+                    MTHPAYNUMMNS = x.MTHPAYNUMMNS,
+                    MTHPAYNUMPLS = x.MTHPAYNUMPLS,
+                    PAYMTH = x.PAYMTH,
+                    STATUS = x.STATUS,
+                    SUBMIT_MAN = x.SUBMIT_MAN,
+                    SUBMIT_TIME = x.SUBMIT_TIME,
+                    VERIFY_TIME = x.VERIFY_TIME,
+                    YWLSH = x.YWLSH,
+                });
+            page.total = totalCnt;
+            page.list = pageList;
+            return page;
+        }
+
+        /// <summary>
+        /// 根据单位账号查询个人账号表中的月缴存额
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="city_cent"></param>
+        /// <returns></returns>
+        internal decimal GetPayAmtByCustomerAcct(string dwzh, string city_cent)
         {
             return SugarHelper.Instance().QueryWhereList<D_CUSTOMER_ACCTINFO>(x => x.DWZH == dwzh && x.CITY_CENTNO == city_cent && x.GRZHZT == GrzhztConst.正常).Sum(x => x.MONTHPAYAMT);
         }
 
+        /// <summary>
+        /// 根据业务流水号获取按月汇缴清册数据
+        /// </summary>
+        /// <param name="ywlsh"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        public Pager<D_MONTH_DWJCQC> MonthDwjcQcModelPageList(string ywlsh, int pageIndex, int pageSize)
+        {
+            List<OrderByClause> orders = new List<OrderByClause> { new OrderByClause { Order = OrderSequence.Asc, Sort = "GRZH" } };
+
+            int totalCnt = 0;
+            Pager<D_MONTH_DWJCQC> page = new Pager<D_MONTH_DWJCQC> { total = totalCnt, list = new List<D_MONTH_DWJCQC>() };
+
+            var pageList = SugarHelper.Instance().QueryPageList<D_MONTH_DWJCQC>(pageIndex, pageSize, out totalCnt,
+                (t1) => t1.YWLSH == ywlsh,
+                OrderBys: orders);
+            page.total = totalCnt;
+            page.list = pageList;
+            return page;
+        }
     }
 }

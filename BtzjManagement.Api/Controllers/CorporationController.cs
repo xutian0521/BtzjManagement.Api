@@ -155,6 +155,9 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <param name="pmodel"></param>
         /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("MonthHjCreate")]
+        [ProducesResponseType(typeof(s_ApiResult<Pager<v_MonthHjCreate>>), StatusCodes.Status200OK)]
         public v_ApiResult MonthHjCreate(P_MonthHjCreate pmodel)
         {
             v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
@@ -164,6 +167,112 @@ namespace BtzjManagement.Api.Controllers
                 result.Code = r.code;
                 result.Message = r.msg;
                 result.Content = new v_MonthHjCreate { batchNo = r.batchNo };
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 获取单位按月汇缴业务分页数据
+        /// </summary>
+        /// <param name="dwzh"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <param name="searchKey"></param>
+        /// <param name="statusType"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("MonthDwjcModelPageList")]
+        [ProducesResponseType(typeof(s_ApiResult<Pager<v_MonthHj>>), StatusCodes.Status200OK)]
+        public v_ApiResult MonthDwjcModelPageList(string dwzh, int pageIndex = 1, int pageSize = 10, string statusType = "wtj")
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+
+            try
+            {
+                var r = _corporationService.MonthDwjcModelPageList(statusType, CityCent(), dwzh, pageIndex, pageSize);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Message = ApiResultMessageConst.SUCCESS;
+                result.Content = r;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 根据业务流水号获取按月汇缴清册数据
+        /// </summary>
+        /// <param name="ywlsh"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns></returns>
+        [AcceptVerbs("GET")]
+        [Route("MonthDwjcQcModelPageList")]
+        [ProducesResponseType(typeof(s_ApiResult<Pager<D_MONTH_DWJCQC>>), StatusCodes.Status200OK)]
+        public v_ApiResult MonthDwjcQcModelPageList(string ywlsh, int pageIndex = 1, int pageSize = 10)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+
+            try
+            {
+                var r = _corporationService.MonthDwjcQcModelPageList(ywlsh, pageIndex, pageSize);
+                result.Code = ApiResultCodeConst.SUCCESS;
+                result.Message = ApiResultMessageConst.SUCCESS;
+                result.Content = r;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// 按月汇缴-撤销保存状态业务数据
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("MonthHjModelDel")]
+        public v_ApiResult MonthHjModelDel(P_MonthHjModelDel pmodel)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+
+            try
+            {
+                var r = _corporationService.MonthHjModelDel(pmodel, GetUser().userName, CityCent());
+                result.Code = r.code;
+                result.Message = r.msg;
+            }
+            catch (Exception ex)
+            {
+                result.Message = ex.Message;
+            }
+            return result;
+        }
+
+        /// <summary>
+        ///  按月汇缴-提交保存状态业务数据
+        /// </summary>
+        /// <param name="pmodel"></param>
+        /// <returns></returns>
+        [AcceptVerbs("POST")]
+        [Route("MonthHjModelSubmit")]
+        public v_ApiResult MonthHjModelSubmit(P_MonthHjModelSubmit pmodel)
+        {
+            v_ApiResult result = new v_ApiResult { Code = ApiResultCodeConst.ERROR };
+
+            try
+            {
+                var r = _corporationService.MonthHjModelSubmit(pmodel, GetUser().userName, CityCent());
+                result.Code = r.code;
+                result.Message = r.msg;
             }
             catch (Exception ex)
             {
