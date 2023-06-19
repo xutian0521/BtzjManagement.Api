@@ -481,7 +481,7 @@ namespace BtzjManagement.Api.Services
                     PayMthList.Add(Common.CalcPayMonth(pmodel.monthStart, i));
                 }
 
-                var dwjcList = MonthDwjcModelList(pmodel.dwzh, PayMthList, city_cent);
+                var dwjcList = MonthDwjcModelList(pmodel.dwzh, pmodel.monthStart.Replace("-", ""), city_cent);
 
                 var listProcess = dwjcList.Where(x => statusListProcess.Contains(x.STATUS) || x.STATUS == OptStatusConst.已归档).Select(x => $"业务月度({x.PAYMTH})的汇缴业务为{EnumHelper.GetEnumItemByValue<string>(typeof(OptStatusConst), x.STATUS).key}");
                 if (listProcess.Count() > 0)
@@ -698,9 +698,9 @@ namespace BtzjManagement.Api.Services
         /// <param name="PayMthList"></param>
         /// <param name="city_cent"></param>
         /// <returns></returns>
-        internal List<D_MONTH_DWJC> MonthDwjcModelList(string dwzh, List<string> PayMthList, string city_cent)
+        internal List<D_MONTH_DWJC> MonthDwjcModelList(string dwzh, string PayMth, string city_cent)
         {
-            return SugarHelper.Instance().QueryWhereList<D_MONTH_DWJC>(x => x.CITY_CENTNO == city_cent && x.DWZH == dwzh && PayMthList.Contains(x.PAYMTH));
+            return SugarHelper.Instance().QueryWhereList<D_MONTH_DWJC>(x => x.CITY_CENTNO == city_cent && x.DWZH == dwzh && Convert.ToInt32(x.PAYMTH) >= Convert.ToInt32(PayMth));
         }
 
 
