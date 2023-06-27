@@ -65,7 +65,7 @@ namespace BtzjManagement.Api.Services
                 S_MC4 = y.S_MC4,
                 S_MEMO = y.S_MEMO,
                 I_KMJD_display = y.I_KMJD == 0 ? "借方科目" : "贷方科目"
-            }).ToList();
+            }).OrderBy(x => x.S_KMBM).ToList();
             var dict = SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY, D_SYS_DATA_DICTIONARY>((d1, d2) => new object[] {
                 JoinType.Left, d1.ID ==d2.PARENT_ID  }).Where((d1, d2) => d1.TYPE_KEY == "kmlx")
     .Select((d1, d2) => new D_SYS_DATA_DICTIONARY
@@ -87,9 +87,9 @@ namespace BtzjManagement.Api.Services
                 item.S_KMMC_display = this.convertKMMC_display(item).Item1;
                 item.S_KMBM_display = this.convertKMMC_display(item).Item2;
                 item.S_KMBM_KMMC_display = item.S_KMBM_display + "-" + item.S_KMMC_display;
-                if (dict.FirstOrDefault(x => x.VAL == item.I_KMXZ.ToString()) != null)
+                if (dict.FirstOrDefault(x => x.VAL == item.I_KMLX.ToString()) != null)
                 {
-                    var f = dict.FirstOrDefault(x => x.VAL == item.I_KMXZ.ToString());
+                    var f = dict.FirstOrDefault(x => x.VAL == item.I_KMLX.ToString());
                     item.I_KMLX_display = f.LABEL;
                 }
             }
@@ -146,12 +146,33 @@ namespace BtzjManagement.Api.Services
                 S_MC4 = y.S_MC4,
                 S_MEMO = y.S_MEMO,
                 I_KMJD_display = y.I_KMJD == 0 ? "借方科目" : "贷方科目"
-            }).ToList();
+            }).OrderBy(x => x.S_KMBM).ToList();
+            var dict = SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY, D_SYS_DATA_DICTIONARY>((d1, d2) => new object[] {
+                JoinType.Left, d1.ID ==d2.PARENT_ID  }).Where((d1, d2) => d1.TYPE_KEY == "kmlx")
+                .Select((d1, d2) => new D_SYS_DATA_DICTIONARY
+                {
+                ID = d2.ID,
+                LABEL = d2.LABEL,
+                CITY_CENTNO = d1.CITY_CENTNO,
+                DESCRIPTION = d2.DESCRIPTION,
+                ORIGIN_FLAG = d2.ORIGIN_FLAG,
+                PARENT_ID = d2.PARENT_ID,
+                REMARK = d2.REMARK,
+                SORT_ID = d2.SORT_ID,
+                TYPE_KEY = d1.TYPE_KEY,
+                VAL = d2.VAL
+                })
+                .ToList();
             foreach (var item in allKms)
             {
                 item.S_KMMC_display = this.convertKMMC_display(item).Item1;
                 item.S_KMBM_display = this.convertKMMC_display(item).Item2;
                 item.S_KMBM_display = item.S_KMBM;
+                if (dict.FirstOrDefault(x => x.VAL == item.I_KMLX.ToString()) != null)
+                {
+                    var f = dict.FirstOrDefault(x => x.VAL == item.I_KMLX.ToString());
+                    item.I_KMLX_display = f.LABEL;
+                }
             }
             var one = allKms.Where(x => x.S_KMBM == s_kmbm).FirstOrDefault();
             if (s_kmbm == "0")

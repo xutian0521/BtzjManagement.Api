@@ -102,7 +102,8 @@ namespace BtzjManagement.Api.Controllers
         {
             try
             {
-                _transferService.SysDataDictionaryInitData(CityCent());
+                _transferService.HJInitStructure();
+                //_transferService.SysDataDictionaryInitData(CityCent());
                 //_transferService.SysEnumInitStructure();
                 //_transferService.UserInfoInitData(CityCent());
                 //_transferService.KMInitStructure(); 
