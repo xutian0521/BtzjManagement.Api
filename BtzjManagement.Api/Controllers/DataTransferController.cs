@@ -55,6 +55,10 @@ namespace BtzjManagement.Api.Controllers
                 //_transferService.Grkh_ItemInitStructure();
                 //_transferService.CustomerBasicInfoInitStructure();
                 //_transferService.CustomerAcctInfoInitStructure();
+
+                //缴存核定
+                //_transferService.MonthDWJCInitStructure();
+                //_transferService.MonthDWJCQCInitStructure();
             }
             catch (Exception ex)
             {
@@ -81,10 +85,9 @@ namespace BtzjManagement.Api.Controllers
                 //单位管理
                 //_transferService.CorporationBasicInfoInitData(CityCent());
                 //_transferService.CorporationAcctInfoInitData(CityCent());
-                //_transferService.CustomerInfoInitData(CityCent());
 
                 //客户管理
-
+                //_transferService.CustomerInfoInitData(CityCent());
             }
             catch (Exception ex)
             {

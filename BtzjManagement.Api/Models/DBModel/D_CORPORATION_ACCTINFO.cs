@@ -46,15 +46,15 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 单位职工人数
         /// </summary>
-        public decimal DWZGRS { get; set; }
+        public int DWZGRS { get; set; }
         /// <summary>
         /// 单位缴存人数
         /// </summary>
-        public decimal DWJCRS { get; set; }
+        public int DWJCRS { get; set; }
         /// <summary>
         /// 单位封存人数
         /// </summary>
-        public decimal DWFCRS { get; set; }
+        public int DWFCRS { get; set; }
         /// <summary>
         /// 工资总数
         /// </summary>

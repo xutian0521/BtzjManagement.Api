@@ -36,6 +36,15 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 个人缴存比例
         /// </summary>
         public decimal GRJCBL { get; set; }
+        /// <summary>
+        /// 计算方法
+        /// </summary>
+        public string CALC_METHOD { get; set; }
+
+        /// <summary>
+        /// 缴至年月
+        /// </summary>
+        public string JZNY { get; set; }
     }
 
     /// <summary>
@@ -217,6 +226,58 @@ namespace BtzjManagement.Api.Models.ViewModel
                 return EnumHelper.GetEnumItemByValue<string>(typeof(CalcMethodConst), CALC_METHOD).desc;
             }
         }
+
+        /// <summary>
+        /// 单位职工人数
+        /// </summary>
+        public int DWZGRS { get; set; }
+        /// <summary>
+        /// 单位缴存人数
+        /// </summary>
+        public int DWJCRS { get; set; }
+        /// <summary>
+        /// 单位封存人数
+        /// </summary>
+        public int DWFCRS { get; set; }
+        /// <summary>
+        /// 工资总数
+        /// </summary>
+        public decimal FACTINCOME { get; set; }
+        /// <summary>
+        /// 月缴存总额
+        /// </summary>
+        public decimal MONTHPAYTOTALAMT { get; set; }
+        /// <summary>
+        /// 缴至年月
+        /// </summary>
+        public string JZNY { get; set; }
+        /// <summary>
+        /// 个人缴存比例
+        /// </summary>
+        public decimal GRJCBL { get; set; }
+        /// <summary>
+        /// 单位账户余额
+        /// </summary>
+        public decimal DWZHYE { get; set; }
+        /// <summary>
+        /// 挂账户余额
+        /// </summary>
+        public decimal REGHANDBAL { get; set; }
+    }
+
+    /// <summary>
+    /// 按月汇缴页面初始化数据
+    /// </summary>
+    public class v_PaymentMonthInit
+    {
+        /// <summary>
+        /// 单位信息
+        /// </summary>
+        public v_BaseCorporatiorn corporatiornInfo { get; set; }
+        /// <summary>
+        /// 用户信息分页数据
+        /// </summary>
+        //public Pager<v_CustomerInfo> pager;
     }
 
 }

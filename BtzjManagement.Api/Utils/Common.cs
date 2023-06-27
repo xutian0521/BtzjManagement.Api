@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using NPinyin;
+using BtzjManagement.Api.Enum;
 
 namespace BtzjManagement.Api.Utils
 {
@@ -259,6 +260,178 @@ namespace BtzjManagement.Api.Utils
                 temp += a;
             }
             return temp;
+        }
+
+        #region sybase对应类型转贯标
+        /// <summary>
+        /// 单位账号状态
+        /// </summary>
+        public static string DwzhztConstSwitch(string org_dwzhzt)
+        {
+            switch (org_dwzhzt)
+            {
+                case DwzhztConstOld.正常:
+                    return DwzhztConst.正常;
+                case DwzhztConstOld.封存:
+                    return DwzhztConst.封存;
+                case DwzhztConstOld.作废:
+                    return DwzhztConst.其他;
+                default:
+                    return org_dwzhzt;
+            }
+        }
+
+        /// <summary>
+        /// 个人账号状态
+        /// </summary>
+        /// <param name="org_grzhzt"></param>
+        /// <returns></returns>
+        public static string GrzhztConstSwitch(string org_grzhzt)
+        {
+            switch (org_grzhzt)
+            {
+                case GrzhztConstOld.正常:
+                    return GrzhztConst.正常;
+                case GrzhztConstOld.封存:
+                    return GrzhztConst.封存;
+                case GrzhztConstOld.丧失劳动能力并与单位终止关系:
+                    return GrzhztConst.提取销户;
+                case GrzhztConstOld.户口迁出本地或出境定居:
+                    return GrzhztConst.提取销户;
+                case GrzhztConstOld.离休退休:
+                    return GrzhztConst.提取销户;
+                case GrzhztConstOld.转出:
+                    return GrzhztConst.外部转出销户;
+                case GrzhztConstOld.其他:
+                    return GrzhztConst.其他;
+                case GrzhztConstOld.其他原因销户:
+                    return GrzhztConst.其他;
+                default:
+                    return org_grzhzt;
+            }
+        }
+
+        /// <summary>
+        /// 个人销户原因对照
+        /// </summary>
+        /// <param name="org_grzhzt"></param>
+        /// <returns></returns>
+        public static string GrXiaoHuReasonConstSwitch(string org_grzhzt)
+        {
+            switch (org_grzhzt)
+            {
+                case GrzhztConstOld.正常:
+                    return "";
+                case GrzhztConstOld.封存:
+                    return "";
+                case GrzhztConstOld.丧失劳动能力并与单位终止关系:
+                    return DrawReasonConst.完全丧失劳动能力_并与单位终止劳动关系;
+                case GrzhztConstOld.户口迁出本地或出境定居:
+                    return DrawReasonConst.户口迁出所在市_县或出境定居;
+                case GrzhztConstOld.离休退休:
+                    return DrawReasonConst.离休_退休;
+                case GrzhztConstOld.转出:
+                    return "";
+                case GrzhztConstOld.其他:
+                    return DrawReasonConst.其他;
+                case GrzhztConstOld.其他原因销户:
+                    return DrawReasonConst.其他;
+                default:
+                    return org_grzhzt;
+            }
+        }
+
+        /// <summary>
+        /// 性别
+        /// </summary>
+        /// <param name="org_dwzhzt"></param>
+        /// <returns></returns>
+        public static string XingBieConstSwitch(string org_dwzhzt)
+        {
+            switch (org_dwzhzt)
+            {
+                case XingBieConstOld.女:
+                    return XingBieConst.女性;
+                case XingBieConstOld.男:
+                    return XingBieConst.男性;
+                default:
+                    return org_dwzhzt;
+            }
+        }
+        #endregion
+
+        /// <summary>
+        /// 获取月缴存额
+        /// </summary>
+        /// <param name="jcbl">缴存比例，不是百分比</param>
+        /// <param name="grjcsj">个人缴存基数</param>
+        /// <param name="method">计算方法-对应 CalcMethodConst类型</param>
+        /// <returns></returns>
+        public static decimal GetYjce(decimal jcbl, decimal grjcsj, string method)
+        {
+            var jcbl_Percent = jcbl / 100;
+            switch (method)
+            {
+                case CalcMethodConst.舍入到分:
+                    return Math.Truncate(grjcsj * jcbl_Percent * 100) / 100;
+                case CalcMethodConst.舍入到角:
+                    return Math.Truncate(grjcsj * jcbl_Percent * 10) / 10;
+                case CalcMethodConst.舍入到元:
+                    return Math.Truncate(grjcsj * jcbl_Percent);
+
+                case CalcMethodConst.四舍五入到分:
+                    return Math.Round(grjcsj * jcbl_Percent, 2);
+                case CalcMethodConst.四舍五入到角:
+                    return Math.Round(grjcsj * jcbl_Percent, 1);
+                case CalcMethodConst.四舍五入到元:
+                    return Math.Round(grjcsj * jcbl_Percent);
+
+                case CalcMethodConst.见厘进分:
+                    return Math.Ceiling(grjcsj * jcbl_Percent * 100) / 100;
+                case CalcMethodConst.见分进角:
+                    return Math.Ceiling(grjcsj * jcbl_Percent * 10) / 10;
+                case CalcMethodConst.见角进元:
+                    return Math.Ceiling(grjcsj * jcbl_Percent);
+                default:
+                    throw new Exception();
+            }
+
+
+            //var jcbl = 15.233M;
+            //var grjcjs = 5555.23M;
+            //var www = jcbl / 100 * grjcjs;
+            //var tt = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.舍入到分);
+            //var tt11 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.舍入到角);
+            //var tt22 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.舍入到元);
+            //var tt33 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.四舍五入到分);
+            //var tt44 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.四舍五入到角);
+            //var tt55 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.四舍五入到元);
+            //var tt66 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.见厘进分);
+            //var tt77 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.见分进角);
+            //var tt88 = Utils.Common.GetYjce(jcbl, grjcjs, Enum.CalcMethodConst.见角进元);
+
+
+        }
+
+        /// <summary>
+        /// 获取汇缴月度
+        /// </summary>
+        /// <param name="monthStart">汇缴开始月份（还没缴过）</param>
+        /// <param name="addMonthLength"></param>
+        /// <returns></returns>
+        public static string CalcPayMonth(string monthStart, int addMonthLength)
+        {
+            return Convert.ToDateTime(monthStart).AddMonths(addMonthLength).ToString("yyyyMM");
+        }
+
+        /// <summary>
+        /// 根据业务月度获取上个业务月度
+        /// </summary>
+        /// <param name="month"></param>
+        /// <returns></returns>
+        public static string CalcLastPayMonth(string month)
+        {
+            return Convert.ToDateTime(month.Insert(4, "-")).AddMonths(-1).ToString("yyyyMM");
         }
     }
 }
