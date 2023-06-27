@@ -350,11 +350,11 @@ namespace BtzjManagement.Api.Services
             int updateResult = 0;
             if (id > 0) //修改
             {
-                updateResult = await SugarSimple.Instance().Insertable(model).ExecuteCommandAsync();
+                updateResult = await SugarSimple.Instance().Updateable(model).ExecuteCommandAsync();
             }
             else //新增
             {
-                updateResult = await SugarSimple.Instance().Updateable(model).ExecuteCommandAsync();
+                insertResult = await SugarSimple.Instance().Insertable(model).ExecuteCommandAsync();
             }
 
             return insertResult > 0 || updateResult > 0 ? (ApiResultCodeConst.SUCCESS, "操作成功") : (ApiResultCodeConst.ERROR, "操作失败");
