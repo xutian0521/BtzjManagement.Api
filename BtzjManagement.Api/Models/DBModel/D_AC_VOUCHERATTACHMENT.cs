@@ -2,13 +2,16 @@
 
 namespace BtzjManagement.Api.Models.DBModel
 {
-    [SugarTable("PZ_FUJI", "单位汇缴_凭证附件表")]
-    public class D_PZ_FUJI
+    /// <summary>
+    /// 账目凭证附件表
+    /// </summary>
+    [SugarTable("AC_VOUCHERATTACHMENT")]
+    public class D_AC_VOUCHERATTACHMENT
     {
         /// <summary>
         /// ID
         /// </summary>
-        [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "PZ_FUJI_SEQ")]
+        [SugarColumn(IsPrimaryKey = true, OracleSequenceName = "AC_VOUCHERATTACHMENT_SEQ")]
         public int ID { get; set; }
 
         /// <summary>
@@ -19,7 +22,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 附件数量
         /// </summary>
-        public int I_FJ_COUNT { get; set; }
+        public int ATTACHMENTCOUNT { get; set; }
     }
 
 }

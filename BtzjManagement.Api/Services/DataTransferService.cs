@@ -1187,25 +1187,25 @@ namespace BtzjManagement.Api.Services
         public void HJInitStructure()
         {
 
-            //{
-            //    List<v_TableInit> v_TableInits = new List<v_TableInit> { };
-            //    v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "ATTACHMENTCOUNT", columnTypeAndLimit = "number(5) not null", columnDesc = "附件数量" });
+            {
+                List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+                v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
+                v_TableInits.Add(new v_TableInit { columnName = "ATTACHMENTCOUNT", columnTypeAndLimit = "number(5) not null", columnDesc = "附件数量" });
 
-            //    this.TableInit("CERTIFICATEATTACHMENT", v_TableInits, true, "账目凭证附件表");
-            //}
-            //{
-            //    List<v_TableInit> v_TableInits = new List<v_TableInit> { };
-            //    v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "YEAR", columnTypeAndLimit = "number(5) not null", columnDesc = "年" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "MONTH", columnTypeAndLimit = "number(5) not null", columnDesc = "月" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "MONTHREPEATEDLY", columnTypeAndLimit = "number(5) not null", columnDesc = "月份多次" });
-            //    v_TableInits.Add(new v_TableInit { columnName = "CERTIFICATETYPE", columnTypeAndLimit = "number(5) not null", columnDesc = "凭证类型" });
+                this.TableInit("AC_VOUCHERATTACHMENT", v_TableInits, true, "账目凭证附件表");
+            }
+            {
+                List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+                v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
+                v_TableInits.Add(new v_TableInit { columnName = "YEAR", columnTypeAndLimit = "number(5) not null", columnDesc = "年" });
+                v_TableInits.Add(new v_TableInit { columnName = "MONTH", columnTypeAndLimit = "number(5) not null", columnDesc = "月" });
+                v_TableInits.Add(new v_TableInit { columnName = "MONTHREPEATEDLY", columnTypeAndLimit = "number(5) not null", columnDesc = "月份多次" });
+                v_TableInits.Add(new v_TableInit { columnName = "VOUCHERTYPE", columnTypeAndLimit = "number(5) not null", columnDesc = "凭证类型" });
 
-            //    this.TableInit("CERTIFICATENOMAPPING", v_TableInits, true, "账目凭证对应表");
-            //}
+                this.TableInit("AC_VOUCHERNOMAPPING", v_TableInits, true, "账目凭证对应表");
+            }
 
             {
                 List<v_TableInit> v_TableInits = new List<v_TableInit> { };
@@ -1224,7 +1224,7 @@ namespace BtzjManagement.Api.Services
                 v_TableInits.Add(new v_TableInit { columnName = "ZHAIYAO", columnTypeAndLimit = "varchar2(40) not null", columnDesc = "摘要" });
 
 
-                this.TableInit("ACCOUNTLEDGER", v_TableInits, true, "总账信息表");
+                this.TableInit("AC_ACCOUNTLEDGER", v_TableInits, true, "总账信息表");
             }
             {
                 List<v_TableInit> v_TableInits = new List<v_TableInit> { };
@@ -1241,7 +1241,7 @@ namespace BtzjManagement.Api.Services
 
                 v_TableInits.Add(new v_TableInit { columnName = "JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
 
-                this.TableInit("ACCOUNTDETAILS", v_TableInits, true, "明细账信息表");
+                this.TableInit("AC_ACCOUNTDETAILS", v_TableInits, true, "明细账信息表");
             }
             {
                 List<v_TableInit> v_TableInits = new List<v_TableInit> { };
@@ -1258,7 +1258,7 @@ namespace BtzjManagement.Api.Services
 
                 v_TableInits.Add(new v_TableInit { columnName = "JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
 
-                this.TableInit("ACCOUNTCERTIFICATENO", v_TableInits, true, "记账凭证表");
+                this.TableInit("AC_ACCOUNTVOUCHERNO", v_TableInits, true, "记账凭证表");
             }
 
         }
