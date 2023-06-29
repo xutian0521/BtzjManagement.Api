@@ -44,11 +44,11 @@ namespace BtzjManagement.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [ProducesResponseType(typeof(s_ApiResult<v_KM>), StatusCodes.Status200OK)]
-        [HttpGet("GetKMTreeListBykmbm")]
-        public v_ApiResult GetKMTreeListBykmbm(string s_kmbm)
+        [HttpGet("GetKMTreeListByKMBH")]
+        public v_ApiResult GetKMTreeListByKMBH(string KMBH)
         {
             var user = base.GetUser();
-            var list = _kMService.GetKMTreeListBykmbm(s_kmbm);
+            var list = _kMService.GetKMTreeListByKMBH(KMBH);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, list);
         }
         /// <summary>
@@ -65,24 +65,24 @@ namespace BtzjManagement.Api.Controllers
         /// <summary>
         /// 删除菜单
         /// </summary>
-        /// <param name="kmbm">科目编码</param>
+        /// <param name="KMBH">科目编号</param>
         /// <returns></returns>
         [HttpGet("DeleteKM")]
-        public async Task<v_ApiResult> DeleteKM(string s_kmbm)
+        public async Task<v_ApiResult> DeleteKM(string KMBH)
         {
 
-            var result = await _kMService.DeleteKM(s_kmbm);
+            var result = await _kMService.DeleteKM(KMBH);
             return new v_ApiResult(result.code, result.message);
         }
         /// <summary>
         /// 载入修改菜单信息
         /// </summary>
-        /// <param name="kmbm">科目编码</param>
+        /// <param name="KMBH">科目编号</param>
         /// <returns></returns>
         [HttpGet("LoadModifyKM")]
-        public async Task<v_ApiResult> LoadModifyKM(string kmbm)
+        public async Task<v_ApiResult> LoadModifyKM(string KMBH)
         {
-            var one = await _kMService.LoadModifyKM(kmbm);
+            var one = await _kMService.LoadModifyKM(KMBH);
             return new v_ApiResult(ApiResultCodeConst.SUCCESS, ApiResultMessageConst.SUCCESS, one);
         }
 

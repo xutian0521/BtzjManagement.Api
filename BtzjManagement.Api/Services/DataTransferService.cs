@@ -1096,22 +1096,22 @@ namespace BtzjManagement.Api.Services
         public void KMInitStructure()
         {
             List<v_TableInit> v_TableInits = new List<v_TableInit> { };
-            v_TableInits.Add(new v_TableInit { columnName = "S_KMBM", columnTypeAndLimit = "varchar2(128) not null", columnDesc = "科目编码" });
-            v_TableInits.Add(new v_TableInit { columnName = "I_GRADE", columnTypeAndLimit = "number(5) not null", columnDesc = "等级" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_BM1", columnTypeAndLimit = "varchar2(6) not null", columnDesc = "编码1" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_BM2", columnTypeAndLimit = "varchar2(6)", columnDesc = "编码2" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_BM3", columnTypeAndLimit = "varchar2(6)", columnDesc = "编码3" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_BM4", columnTypeAndLimit = "varchar2(6)", columnDesc = "编码4" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_MC1", columnTypeAndLimit = "varchar2(18)", columnDesc = "名称1" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_MC2", columnTypeAndLimit = "varchar2(36)", columnDesc = "名称2" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_MC3", columnTypeAndLimit = "varchar2(36)", columnDesc = "名称3" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_MC4", columnTypeAndLimit = "varchar2(20)", columnDesc = "名称4" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_KMMC", columnTypeAndLimit = "varchar2(60)", columnDesc = "科目名称" });
-            v_TableInits.Add(new v_TableInit { columnName = "I_KMXZ", columnTypeAndLimit = "number(5) not null", columnDesc = "科目性质" });
-            v_TableInits.Add(new v_TableInit { columnName = "I_KMLX", columnTypeAndLimit = "number(5) not null", columnDesc = "科目类型" });
-            v_TableInits.Add(new v_TableInit { columnName = "DT_JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "截止日期" });
-            v_TableInits.Add(new v_TableInit { columnName = "I_KMJD", columnTypeAndLimit = "number(5) not null", columnDesc = "科目精度" });
-            v_TableInits.Add(new v_TableInit { columnName = "S_MEMO", columnTypeAndLimit = "varchar2(100)", columnDesc = "备注" });
+            v_TableInits.Add(new v_TableInit { columnName = "KMBH", columnTypeAndLimit = "varchar2(19) not null", columnDesc = "科目编号" });
+            v_TableInits.Add(new v_TableInit { columnName = "KMJB", columnTypeAndLimit = "number(5) not null", columnDesc = "等级" });
+            v_TableInits.Add(new v_TableInit { columnName = "BH1", columnTypeAndLimit = "varchar2(6) not null", columnDesc = "编号1" });
+            v_TableInits.Add(new v_TableInit { columnName = "BH2", columnTypeAndLimit = "varchar2(6)", columnDesc = "编号2" });
+            v_TableInits.Add(new v_TableInit { columnName = "BH3", columnTypeAndLimit = "varchar2(6)", columnDesc = "编号3" });
+            v_TableInits.Add(new v_TableInit { columnName = "BH4", columnTypeAndLimit = "varchar2(6)", columnDesc = "编号4" });
+            v_TableInits.Add(new v_TableInit { columnName = "MC1", columnTypeAndLimit = "varchar2(18)", columnDesc = "名称1" });
+            v_TableInits.Add(new v_TableInit { columnName = "MC2", columnTypeAndLimit = "varchar2(36)", columnDesc = "名称2" });
+            v_TableInits.Add(new v_TableInit { columnName = "MC3", columnTypeAndLimit = "varchar2(36)", columnDesc = "名称3" });
+            v_TableInits.Add(new v_TableInit { columnName = "MC4", columnTypeAndLimit = "varchar2(20)", columnDesc = "名称4" });
+            v_TableInits.Add(new v_TableInit { columnName = "KMMC", columnTypeAndLimit = "varchar2(20)", columnDesc = "科目名称" });
+            v_TableInits.Add(new v_TableInit { columnName = "KMXZ", columnTypeAndLimit = "number(5) not null", columnDesc = "科目性质" });
+            v_TableInits.Add(new v_TableInit { columnName = "KMLX", columnTypeAndLimit = "number(5) not null", columnDesc = "科目类型" });
+            v_TableInits.Add(new v_TableInit { columnName = "JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
+            v_TableInits.Add(new v_TableInit { columnName = "KMJD", columnTypeAndLimit = "number(5) not null", columnDesc = "科目借贷" });
+            v_TableInits.Add(new v_TableInit { columnName = "MEMO", columnTypeAndLimit = "varchar2(100)", columnDesc = "备注" });
 
 
             this.TableInit("KM", v_TableInits, true, "科目表");
@@ -1179,88 +1179,88 @@ namespace BtzjManagement.Api.Services
 
         #endregion
 
-        #region 汇缴相关
+        #region 凭证相关
 
         /// <summary>
         /// 汇缴表结构初始化
         /// </summary>
         public void HJInitStructure()
         {
-            { 
+
+            //{
+            //    List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            //    v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "ATTACHMENTCOUNT", columnTypeAndLimit = "number(5) not null", columnDesc = "附件数量" });
+
+            //    this.TableInit("CERTIFICATEATTACHMENT", v_TableInits, true, "账目凭证附件表");
+            //}
+            //{
+            //    List<v_TableInit> v_TableInits = new List<v_TableInit> { };
+            //    v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "YEAR", columnTypeAndLimit = "number(5) not null", columnDesc = "年" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "MONTH", columnTypeAndLimit = "number(5) not null", columnDesc = "月" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "MONTHREPEATEDLY", columnTypeAndLimit = "number(5) not null", columnDesc = "月份多次" });
+            //    v_TableInits.Add(new v_TableInit { columnName = "CERTIFICATETYPE", columnTypeAndLimit = "number(5) not null", columnDesc = "凭证类型" });
+
+            //    this.TableInit("CERTIFICATENOMAPPING", v_TableInits, true, "账目凭证对应表");
+            //}
+
+            {
                 List<v_TableInit> v_TableInits = new List<v_TableInit> { };
                 v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
-                v_TableInits.Add(new v_TableInit { columnName = "ZHAIYAO", columnTypeAndLimit = "varchar2(255) not null", columnDesc = "摘要" });
                 v_TableInits.Add(new v_TableInit { columnName = "KMBH", columnTypeAndLimit = "varchar2(19) not null", columnDesc = "科目编号" });
-                v_TableInits.Add(new v_TableInit { columnName = "JFFSE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "借方发生额" });
-                v_TableInits.Add(new v_TableInit { columnName = "DFFSE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "贷方发生额" });
-                v_TableInits.Add(new v_TableInit { columnName = "FJDJS", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "附件单据数" });
+                v_TableInits.Add(new v_TableInit { columnName = "KMMC", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "科目名称" });
+
+                v_TableInits.Add(new v_TableInit { columnName = "QCYE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "期初余额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QCYEFX", columnTypeAndLimit = "varchar2(2) not null", columnDesc = "期初余额方向" });
+                v_TableInits.Add(new v_TableInit { columnName = "JFFSE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "借方发生额" });
+                v_TableInits.Add(new v_TableInit { columnName = "DFFSE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "贷方发生额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QMYE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "期末余额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QMYEFX", columnTypeAndLimit = "varchar2(2) not null", columnDesc = "期末余额方向" });
+
                 v_TableInits.Add(new v_TableInit { columnName = "JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
-                v_TableInits.Add(new v_TableInit { columnName = "DWZH", columnTypeAndLimit = "varchar2(30)", columnDesc = "单位账号" });
-                v_TableInits.Add(new v_TableInit { columnName = "FSRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "发生日期" });
-                v_TableInits.Add(new v_TableInit { columnName = "HJYF", columnTypeAndLimit = "number(5) not null", columnDesc = "汇缴月份" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_FLAG", columnTypeAndLimit = "number(5) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_HJ_YEAR", columnTypeAndLimit = "number(5) not null", columnDesc = "汇缴年份" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_HJ_MONTH", columnTypeAndLimit = "number(5) not null", columnDesc = "汇缴月份" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_HJFS", columnTypeAndLimit = "number(5) not null", columnDesc = "汇缴方式" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_USERNAME", columnTypeAndLimit = "number(5) not null", columnDesc = "操作人姓名" });
-                v_TableInits.Add(new v_TableInit { columnName = "DC_HJJE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "合计金额" });
+                v_TableInits.Add(new v_TableInit { columnName = "ZHAIYAO", columnTypeAndLimit = "varchar2(40) not null", columnDesc = "摘要" });
 
 
-                this.TableInit("OPERATION_GJJ_ENTER", v_TableInits, true, "单位汇缴主表");
+                this.TableInit("ACCOUNTLEDGER", v_TableInits, true, "总账信息表");
             }
             {
                 List<v_TableInit> v_TableInits = new List<v_TableInit> { };
                 v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
-                v_TableInits.Add(new v_TableInit { columnName = "GRZH", columnTypeAndLimit = "varchar2(30) not null", columnDesc = "个人账号" });
-                v_TableInits.Add(new v_TableInit { columnName = "JE", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "金额" });
-                v_TableInits.Add(new v_TableInit { columnName = "DC_DWGJJ", columnTypeAndLimit = "NUMBER(18, 2)", columnDesc = "单位公积金" });
+                v_TableInits.Add(new v_TableInit { columnName = "KMBH", columnTypeAndLimit = "varchar2(19) not null", columnDesc = "科目编号" });
+                v_TableInits.Add(new v_TableInit { columnName = "ZHAIYAO", columnTypeAndLimit = "varchar2(40) not null", columnDesc = "摘要" });
 
+                v_TableInits.Add(new v_TableInit { columnName = "QCYE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "期初余额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QCYEFX", columnTypeAndLimit = "varchar2(2) not null", columnDesc = "期初余额方向" });
+                v_TableInits.Add(new v_TableInit { columnName = "JFFSE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "借方发生额" });
+                v_TableInits.Add(new v_TableInit { columnName = "DFFSE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "贷方发生额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QMYE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "期末余额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QMYEFX", columnTypeAndLimit = "varchar2(2) not null", columnDesc = "期末余额方向" });
 
-                this.TableInit("OPERATION_GJJ_ENTER_FORGR", v_TableInits, true, "单位汇缴个人子表主表");
-            }
+                v_TableInits.Add(new v_TableInit { columnName = "JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
 
-            {
-                List<v_TableInit> v_TableInits = new List<v_TableInit> { };
-                v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_FJ_COUNT", columnTypeAndLimit = "number(5) not null", columnDesc = "记账凭证号" });
-
-                this.TableInit("PZ_FUJI", v_TableInits, true, "单位汇缴_凭证附件表");
+                this.TableInit("ACCOUNTDETAILS", v_TableInits, true, "明细账信息表");
             }
             {
                 List<v_TableInit> v_TableInits = new List<v_TableInit> { };
                 v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "记账凭证号" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_YEAR", columnTypeAndLimit = "number(5) not null", columnDesc = "年" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_MONTH", columnTypeAndLimit = "number(5) not null", columnDesc = "月" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_MONTH_PZH", columnTypeAndLimit = "number(5) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_PZ_TYPE", columnTypeAndLimit = "number(5) not null", columnDesc = "凭证类型" });
+                v_TableInits.Add(new v_TableInit { columnName = "KMBH", columnTypeAndLimit = "varchar2(19) not null", columnDesc = "科目编号" });
+                v_TableInits.Add(new v_TableInit { columnName = "ZHAIYAO", columnTypeAndLimit = "varchar2(40) not null", columnDesc = "摘要" });
 
-                this.TableInit("PZH_MAP", v_TableInits, true, "单位汇缴_凭证对应表");
+                v_TableInits.Add(new v_TableInit { columnName = "QCYE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "期初余额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QCYEFX", columnTypeAndLimit = "varchar2(2) not null", columnDesc = "期初余额方向" });
+                v_TableInits.Add(new v_TableInit { columnName = "JFFSE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "借方发生额" });
+                v_TableInits.Add(new v_TableInit { columnName = "DFFSE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "贷方发生额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QMYE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "期末余额" });
+                v_TableInits.Add(new v_TableInit { columnName = "QMYEFX", columnTypeAndLimit = "varchar2(2) not null", columnDesc = "期末余额方向" });
+
+                v_TableInits.Add(new v_TableInit { columnName = "JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
+
+                this.TableInit("ACCOUNTCERTIFICATENO", v_TableInits, true, "记账凭证表");
             }
 
-            {
-                List<v_TableInit> v_TableInits = new List<v_TableInit> { };
-                v_TableInits.Add(new v_TableInit { columnName = "ID", columnTypeAndLimit = "NUMBER(10) primary key", columnDesc = "ID" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_KMBM", columnTypeAndLimit = "varchar2(128) not null", columnDesc = "科目编码" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_KMMC", columnTypeAndLimit = "varchar2(60) not null", columnDesc = "科目名称" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_ZY", columnTypeAndLimit = "varchar2(40) not null", columnDesc = "摘要" });
-                v_TableInits.Add(new v_TableInit { columnName = "DT_RQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "操作日期" });
-                v_TableInits.Add(new v_TableInit { columnName = "JZPZH", columnTypeAndLimit = "varchar2(20) not null", columnDesc = "借款凭证号" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_FLH", columnTypeAndLimit = "number(5) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "DC_JFJE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "DC_DFJE", columnTypeAndLimit = "NUMBER(18, 2) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_ZD", columnTypeAndLimit = "varchar2(10) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_FH", columnTypeAndLimit = "varchar2(10) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "S_JZ", columnTypeAndLimit = "varchar2(10) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_OP", columnTypeAndLimit = "number(5) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "I_RECHECKED", columnTypeAndLimit = "number(5) not null", columnDesc = "" });
-                v_TableInits.Add(new v_TableInit { columnName = "DT_JZRQ", columnTypeAndLimit = "TIMESTAMP not null", columnDesc = "记账日期" });
-
-                this.TableInit("PZK", v_TableInits, true, "单位汇缴_借款凭证库表");
-            }
         }
 
         #endregion

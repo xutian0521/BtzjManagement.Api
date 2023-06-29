@@ -13,14 +13,14 @@ namespace BtzjManagement.Api.Models.DBModel
         public int ID { get; set; }
 
         /// <summary>
-        /// 科目编码
+        /// 科目编号
         /// </summary>
-        public string S_KMBM { get; set; }
+        public string KMBH { get; set; }
 
         /// <summary>
         /// 科目名称
         /// </summary>
-        public string S_KMMC { get; set; }
+        public string KMMC { get; set; }
 
         /// <summary>
         /// 摘要
@@ -80,7 +80,7 @@ namespace BtzjManagement.Api.Models.DBModel
         /// <summary>
         /// 记账日期
         /// </summary>
-        public DateTime DT_JZRQ { get; set; }
+        public DateTime JZRQ { get; set; }
     }
 
 }

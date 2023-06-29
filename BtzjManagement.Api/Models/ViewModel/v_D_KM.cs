@@ -10,84 +10,84 @@ namespace BtzjManagement.Api.Models.ViewModel
     public class v_KM
     {
         /// <summary>
-        /// 科目编码
+        /// 科目编号
         /// </summary>
-        public string S_KMBM { get; set; }
+        public string KMBH { get; set; }
 
         /// <summary>
         /// 科目级别
         /// </summary>
-        public int I_GRADE { get; set; }
+        public int KMJB { get; set; }
 
         /// <summary>
         /// 一级科目编码
         /// </summary>
-        public string S_BM1 { get; set; }
+        public string BH1 { get; set; }
 
         /// <summary>
         /// 二级科目编码
         /// </summary>
-        public string S_BM2 { get; set; }
+        public string BH2 { get; set; }
 
         /// <summary>
         /// 三级科目编码
         /// </summary>
-        public string S_BM3 { get; set; }
+        public string BH3 { get; set; }
 
         /// <summary>
         /// 四级科目编码
         /// </summary>
-        public string S_BM4 { get; set; }
+        public string BH4 { get; set; }
 
         /// <summary>
         /// 一级科目名称
         /// </summary>
-        public string S_MC1 { get; set; }
+        public string MC1 { get; set; }
 
         /// <summary>
         /// 二级科目名称
         /// </summary>
-        public string S_MC2 { get; set; }
+        public string MC2 { get; set; }
 
         /// <summary>
         /// 三级科目名称
         /// </summary>
-        public string S_MC3 { get; set; }
+        public string MC3 { get; set; }
 
         /// <summary>
         /// 四级科目名称
         /// </summary>
-        public string S_MC4 { get; set; }
+        public string MC4 { get; set; }
 
         /// <summary>
         /// 科目名称
         /// </summary>
-        public string S_KMMC { get; set; }
+        public string KMMC { get; set; }
 
         /// <summary>
         /// 科目性质
         /// </summary>
-        public int I_KMXZ { get; set; }
+        public int KMXZ { get; set; }
 
         /// <summary>
         /// 科目类型
         /// </summary>
-        public int I_KMLX { get; set; }
+        public int KMLX { get; set; }
 
         /// <summary>
         /// 记账日期
         /// </summary>
-        public DateTime DT_JZRQ { get; set; }
+        public DateTime JZRQ { get; set; }
 
         /// <summary>
         /// 科目借贷
         /// </summary>
-        public int I_KMJD { get; set; }
+        public int KMJD { get; set; }
 
         /// <summary>
         /// 备注
         /// </summary>
-        public string S_MEMO { get; set; }
+        public string MEMO { get; set; }
         /// <summary>
         /// <summary>
         /// 子集合
@@ -97,22 +97,22 @@ namespace BtzjManagement.Api.Models.ViewModel
         /// 科目借贷display
         /// </summary>
 
-        public string I_KMJD_display { get; set; }
+        public string KMJD_display { get; set; }
         /// <summary>
         /// 科目名称display
         /// </summary>
-        public string S_KMMC_display { get; set; }
+        public string KMMC_display { get; set; }
         /// <summary>
         /// 科目编号display
         /// </summary>
-        public string S_KMBM_display { get; set; }
+        public string KMBH_display { get; set; }
         /// <summary>
         /// 科目编号-科目名称display
         /// </summary>
-        public string S_KMBM_KMMC_display { get; set; }
+        public string KMBH_KMMC_display { get; set; }
         /// <summary>
         /// 科目类型
         /// </summary>
-        public string I_KMLX_display { get; set; }
+        public string KMLX_display { get; set; }
     }
 }

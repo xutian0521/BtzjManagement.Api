@@ -294,16 +294,14 @@ namespace BtzjManagement.Api.Controllers
         }
 
         /// <summary>
-        /// 新增或修改枚举字典
+        /// 新增或修改字典
         /// </summary>
         /// <param name="p">p</param>
         /// <returns></returns>
-        [HttpPost("AddOrModifyEnum")]
-        public async Task<v_ApiResult> AddOrModifyEnum(P_AddOrModifyEnum p)
+        [HttpPost("AddOrModifyDictionary")]
+        public async Task<v_ApiResult> AddOrModifyDictionary(P_AddOrModifyDictionary p)
         {
-            var result = await _ruleService.AddOrModifyEnum(p.id, p.dataKey, p.dataKeyAlias,
-                p.pId == null ? 0 : p.pId.GetValueOrDefault(), p.dataValue, p.dataDescription,
-                p.sortId == null ? 0 : p.sortId.GetValueOrDefault());
+            var result = await _ruleService.AddOrModifyDictionary(p);
             return new v_ApiResult(result.code, result.message);
         }
         /// <summary>

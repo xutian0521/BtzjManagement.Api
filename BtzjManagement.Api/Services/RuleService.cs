@@ -21,6 +21,7 @@ using System.Security.Cryptography;
 using System.Configuration;
 using System.Reflection;
 using System.ComponentModel.Design.Serialization;
+using BtzjManagement.Api.Models.QueryModel;
 
 namespace BtzjManagement.Api.Services
 {
@@ -329,26 +330,25 @@ namespace BtzjManagement.Api.Services
         /// 新增或修改枚举字典
         /// </summary>
         /// <returns></returns>
-        public async Task<(int code, string message)> AddOrModifyEnum(int id, string TYPEKEY,
-            string LABEL, int PARENTID, string VAL, string DESCRIPTION, int SORT)
+        public async Task<(int code, string message)> AddOrModifyDictionary(P_AddOrModifyDictionary p)
         {
             D_SYS_DATA_DICTIONARY model = null;
-            model = await SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY>().Where(u => u.ID == id).FirstAsync();
+            model = await SugarSimple.Instance().Queryable<D_SYS_DATA_DICTIONARY>().Where(u => u.ID == p.id).FirstAsync();
             if (model == null)
             {
                 model = new D_SYS_DATA_DICTIONARY();
             }
-            model.ID = id;
-            model.TYPE_KEY = TYPEKEY;
-            model.LABEL = LABEL;
-            model.PARENT_ID = PARENTID;
-            model.DESCRIPTION = DESCRIPTION;
-            model.SORT_ID = SORT;
-            model.VAL = VAL;
+            model.ID = p.id;
+            model.TYPE_KEY = p.TYPEKEY;
+            model.LABEL = p.LABEL;
+            model.PARENT_ID = p.PARENTID;
+            model.DESCRIPTION = p.DESCRIPTION;
+            model.SORT_ID = p.SORTID;
+            model.VAL = p.VAL;
 
             int insertResult = 0;
             int updateResult = 0;
-            if (id > 0) //修改
+            if (p.id > 0) //修改
             {
                 updateResult = await SugarSimple.Instance().Updateable(model).ExecuteCommandAsync();
             }

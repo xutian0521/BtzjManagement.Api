@@ -10,55 +10,55 @@ namespace BtzjManagement.Api.Models.QueryModel
         /// <summary>
         /// 科目等级
         /// </summary>
-        public int i_grade { get; set; }
+        public int KMJB { get; set; }
         /// <summary>
         /// 科目编号1
         /// </summary>
-        public string s_bm1 { get; set; }
+        public string BH1 { get; set; }
         /// <summary>
         /// 科目编号2
         /// </summary>
-        public string s_bm2 { get; set; }
+        public string BH2 { get; set; }
         /// <summary>
         /// 科目编号3
         /// </summary>
-        public string s_bm3 { get; set; }
+        public string BH3 { get; set; }
         /// <summary>
         /// 科目编号4
         /// </summary>
-        public string s_bm4 { get; set; }
+        public string BH4 { get; set; }
         /// <summary>
         /// 科目名称1
         /// </summary>
-        public string s_mc1 { get; set; }
+        public string MC1 { get; set; }
         /// <summary>
         /// 科目名称2
         /// </summary>
-        public string s_mc2 { get; set; }
+        public string MC2 { get; set; }
         /// <summary>
         /// 科目名称3
         /// </summary>
-        public string s_mc3 { get; set; }
+        public string MC3 { get; set; }
         /// <summary>
         /// 科目名称4
         /// </summary>
-        public string s_mc4 { get; set; }
+        public string MC4 { get; set; }
         /// <summary>
-        /// 科目编码
+        /// 科目编号
         /// </summary>
-        public string s_kmbm { get; set; }
+        public string KMBH { get; set; }
         /// <summary>
         /// 科目类型
         /// </summary>
-        public int i_kmlx { get; set; }
+        public int KMLX { get; set; }
         /// <summary>
         /// 科目性质
         /// </summary>
-        public int i_kmxz { get; set; }
+        public int KMXZ { get; set; }
         /// <summary>
         /// 记账日期
         /// </summary>
-        public DateTime dt_jzrq { get; set; }
+        public DateTime JZRQ { get; set; }
         /// <summary>
         /// 科目借贷
         /// </summary>
